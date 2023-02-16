@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 
 using CouchPotato.DbModel;
-using CouchPotato.Properties;
-using CouchPotato.Views.DummyTestDialog;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -51,7 +48,7 @@ public class MigratorViewModel : ContentViewModel
         //if (Directory.Exists("Images"))
         //    Directory.Delete("Images", recursive: true);
 #endif
-        await Task.Delay(2000);
+        await Task.Delay(500);
 
         if (!AreMigrationsPending())
         {

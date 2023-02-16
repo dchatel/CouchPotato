@@ -22,7 +22,7 @@ namespace CouchPotato.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Localization {
+    public class Localization {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace CouchPotato.Properties {
         ///   Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CouchPotato.Properties.Localization", typeof(Localization).Assembly);
@@ -51,7 +51,7 @@ namespace CouchPotato.Properties {
         ///   les recherches de ressources à l'aide de cette classe de ressource fortement typée.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace CouchPotato.Properties {
         /// <summary>
         ///   Recherche une chaîne localisée semblable à Importing episodes.
         /// </summary>
-        internal static string DatabaseImportEpisodes {
+        public static string DatabaseImportEpisodes {
             get {
                 return ResourceManager.GetString("DatabaseImportEpisodes", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace CouchPotato.Properties {
         /// <summary>
         ///   Recherche une chaîne localisée semblable à Importing genres.
         /// </summary>
-        internal static string DatabaseImportGenres {
+        public static string DatabaseImportGenres {
             get {
                 return ResourceManager.GetString("DatabaseImportGenres", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace CouchPotato.Properties {
         /// <summary>
         ///   Recherche une chaîne localisée semblable à Importing images.
         /// </summary>
-        internal static string DatabaseImportImages {
+        public static string DatabaseImportImages {
             get {
                 return ResourceManager.GetString("DatabaseImportImages", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace CouchPotato.Properties {
         /// <summary>
         ///   Recherche une chaîne localisée semblable à Importing actors.
         /// </summary>
-        internal static string DatabaseImportPersons {
+        public static string DatabaseImportPersons {
             get {
                 return ResourceManager.GetString("DatabaseImportPersons", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace CouchPotato.Properties {
         /// <summary>
         ///   Recherche une chaîne localisée semblable à Importing roles.
         /// </summary>
-        internal static string DatabaseImportRoles {
+        public static string DatabaseImportRoles {
             get {
                 return ResourceManager.GetString("DatabaseImportRoles", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace CouchPotato.Properties {
         /// <summary>
         ///   Recherche une chaîne localisée semblable à Importing seasons.
         /// </summary>
-        internal static string DatabaseImportSeasons {
+        public static string DatabaseImportSeasons {
             get {
                 return ResourceManager.GetString("DatabaseImportSeasons", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace CouchPotato.Properties {
         /// <summary>
         ///   Recherche une chaîne localisée semblable à Importing videos.
         /// </summary>
-        internal static string DatabaseImportVideos {
+        public static string DatabaseImportVideos {
             get {
                 return ResourceManager.GetString("DatabaseImportVideos", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace CouchPotato.Properties {
         /// <summary>
         ///   Recherche une chaîne localisée semblable à Database initialization.
         /// </summary>
-        internal static string DatabaseInitialization {
+        public static string DatabaseInitialization {
             get {
                 return ResourceManager.GetString("DatabaseInitialization", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace CouchPotato.Properties {
         /// <summary>
         ///   Recherche une chaîne localisée semblable à The migration has failed. The application will now close..
         /// </summary>
-        internal static string DatabaseMigrationFailed {
+        public static string DatabaseMigrationFailed {
             get {
                 return ResourceManager.GetString("DatabaseMigrationFailed", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace CouchPotato.Properties {
         /// <summary>
         ///   Recherche une chaîne localisée semblable à Migration service not found.
         /// </summary>
-        internal static string DatabaseMigrationServiceNotFound {
+        public static string DatabaseMigrationServiceNotFound {
             get {
                 return ResourceManager.GetString("DatabaseMigrationServiceNotFound", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace CouchPotato.Properties {
         /// <summary>
         ///   Recherche une chaîne localisée semblable à Saving database.
         /// </summary>
-        internal static string DatabaseSaving {
+        public static string DatabaseSaving {
             get {
                 return ResourceManager.GetString("DatabaseSaving", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace CouchPotato.Properties {
         /// <summary>
         ///   Recherche une chaîne localisée semblable à Updating database.
         /// </summary>
-        internal static string DatabaseUpdating {
+        public static string DatabaseUpdating {
             get {
                 return ResourceManager.GetString("DatabaseUpdating", resourceCulture);
             }
@@ -171,9 +171,18 @@ namespace CouchPotato.Properties {
         /// <summary>
         ///   Recherche une chaîne localisée semblable à Select the folder containing Videlib images.
         /// </summary>
-        internal static string FileSystemSelectVidelibImageFolder {
+        public static string FileSystemSelectVidelibImageFolder {
             get {
                 return ResourceManager.GetString("FileSystemSelectVidelibImageFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Search.
+        /// </summary>
+        public static string VideoExplorerSearchHint {
+            get {
+                return ResourceManager.GetString("VideoExplorerSearchHint", resourceCulture);
             }
         }
     }

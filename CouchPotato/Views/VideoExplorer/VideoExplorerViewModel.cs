@@ -14,33 +14,66 @@ namespace CouchPotato.Views.VideoExplorer;
 
 public class VideoExplorerViewModel : ContentViewModel
 {
+    private SearchResultViewModel? selectedResult;
+
     public VideoExplorerViewModel()
     {
-        SearchCommand = new AsyncRelayCommand(SearchAsync);
-        SearchBox = new SearchBox();
+        SearchBox = new SearchBoxViewModel();
+        SearchCommand = new AsyncRelayCommand(SearchBox.SearchAsync);
         TitleBarRegion = SearchBox;
     }
 
     public ICommand SearchCommand { get; }
-    public SearchBox SearchBox { get; }
-    public IEnumerable<SearchResult>? SearchResults { get; set; }
-    public SearchResult? SelectedResult { get; set; }
+    public SearchBoxViewModel SearchBox { get; }
+    public IEnumerable<SearchResultViewModel>? SearchResults => SearchBox.SearchResults;
+    public SearchResultViewModel? SelectedResult
+    {
+        get => selectedResult;
+        set {
+            if (selectedResult is not null)
+                selectedResult.IsSelected = false;
+            selectedResult = value;
+            if (selectedResult is not null)
+                selectedResult.IsSelected = true;
+        }
+    }
+
+    //public async Task SearchAsync()
+    //{
+    //    using var db = new DataContext();
+
+    //    SearchResults = await Task.Run(() => db.Videos
+    //        .Where(video => video.Title.Contains(SearchBox.SearchText))
+    //        .Select(video => SearchResultViewModel.Create(video))
+    //        .ToArray());
+    //}
+}
+
+public class SearchBoxViewModel
+{
+    private string searchText = "";
+
+    public string SearchText
+    {
+        get => searchText;
+        set {
+            searchText = value;
+            Task.Run(SearchAsync);
+        }
+    }
+    public IEnumerable<SearchResultViewModel>? SearchResults { get; set; }
+
+    public SearchBoxViewModel()
+    {
+    }
 
     public async Task SearchAsync()
     {
         using var db = new DataContext();
 
         SearchResults = await Task.Run(() => db.Videos
-            .Where(video => video.Title.Contains(SearchBox.SearchText))
-            .Select(video => new SearchResult(video))
+            .Where(video => video.Title.ToLower().Contains(SearchText.ToLower()))
+            .Select(video => SearchResultViewModel.Create(video))
             .ToArray());
     }
-}
-
-public class SearchBox
-{
-    public SearchBox()
-    {
-    }
-    public string SearchText { get; set; } = "";
 }

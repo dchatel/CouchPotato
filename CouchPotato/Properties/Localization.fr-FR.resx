@@ -156,4 +156,7 @@
   <data name="FileSystemSelectVidelibImageFolder" xml:space="preserve">
     <value>Sélectionnez le dossier contenant les images de Videlib</value>
   </data>
+  <data name="VideoExplorerSearchHint" xml:space="preserve">
+    <value>Recherche</value>
+  </data>
 </root>

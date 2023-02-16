@@ -3,21 +3,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:clr="clr-namespace:System;assembly=mscorlib"
-    xmlns:db="clr-namespace:CouchPotato.DbModel"
     xmlns:e="clr-namespace:CouchPotato.Extensions"
     xmlns:l="clr-namespace:CouchPotato.Views.VideoExplorer"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:prop="clr-namespace:CouchPotato.Properties"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase">
 
-    <DataTemplate DataType="{x:Type l:SearchBox}">
+    <DataTemplate DataType="{x:Type l:SearchBoxViewModel}">
         <Grid e:Grid.Cols="*,auto">
             <TextBox
                 VerticalAlignment="Center"
                 VerticalContentAlignment="Center"
-                md:HintAssist.Hint="Search"
+                md:HintAssist.Hint="{x:Static prop:Localization.VideoExplorerSearchHint}"
                 md:TextFieldAssist.HasLeadingIcon="True"
                 md:TextFieldAssist.LeadingIcon="Search"
-                Text="{Binding SearchText}" />
+                Text="{Binding SearchText, Mode=TwoWay, Delay=800, UpdateSourceTrigger=PropertyChanged}" />
             <ToggleButton
                 Grid.Column="1"
                 Content="{md:PackIcon Kind=MovieSearchOutline}"
@@ -28,7 +28,7 @@
 
     <DataTemplate DataType="{x:Type l:VideoExplorerViewModel}">
 
-        <Grid e:Grid.Cols="200(200-600), *">
+        <Grid e:Grid.Cols="auto, *">
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="Loaded">
                     <b:InvokeCommandAction Command="{Binding SearchCommand}" />
@@ -51,7 +51,7 @@
             <ListBox
                 ItemsSource="{Binding Source={StaticResource SearchResults}}"
                 SelectedItem="{Binding SelectedResult}"
-                Style="{StaticResource MaterialDesignNavigationAccentListBox}">
+                Style="{StaticResource MaterialDesignNavigationListBox}">
                 <ListBox.Resources>
                     <ResourceDictionary>
                         <Style BasedOn="{StaticResource RoundScrollBar}" TargetType="ScrollBar" />
@@ -60,21 +60,32 @@
                         </ResourceDictionary.MergedDictionaries>
                     </ResourceDictionary>
                 </ListBox.Resources>
-                <ListBox.ItemTemplate>
-                    <DataTemplate DataType="{x:Type l:SearchResult}">
-                        <ContentControl Content="{Binding Video}" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel
+                            VirtualizingPanel.CacheLength="100"
+                            VirtualizingPanel.CacheLengthUnit="Page"
+                            VirtualizingPanel.VirtualizationMode="Recycling" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
             </ListBox>
 
-            <GridSplitter
+            <!--<GridSplitter
                 Grid.Column="0"
                 Width="5"
                 Background="Transparent"
                 ResizeBehavior="BasedOnAlignment"
-                ResizeDirection="Columns" />
+                ResizeDirection="Columns" />-->
 
-            <ContentControl Grid.Column="1" Content="{Binding SelectedResult.Video}" />
+            <ContentControl Grid.Column="1" Content="{Binding SelectedResult}">
+                <ContentControl.Resources>
+                    <ResourceDictionary>
+                        <ResourceDictionary.MergedDictionaries>
+                            <ResourceDictionary Source="SearchResultViewTemplates.xaml" />
+                        </ResourceDictionary.MergedDictionaries>
+                    </ResourceDictionary>
+                </ContentControl.Resources>
+            </ContentControl>
         </Grid>
     </DataTemplate>
 </ResourceDictionary>

@@ -5,17 +5,15 @@
     <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>couchpotato.ico</ApplicationIcon>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="couchpotato.png" />
     <None Remove="logo.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="couchpotato.ico" />
-    <Resource Include="couchpotato.png" />
+    <Content Include="logo.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -75,7 +73,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\Localization.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Localization.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

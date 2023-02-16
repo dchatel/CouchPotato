@@ -16,6 +16,11 @@ public class DataContext : DbContext
     public DbSet<Movie> Movies { get; set; } = null!;
     public DbSet<TVShow> TVShows { get; set; } = null!;
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.UseCollation("NOCASE");
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite("Data Source=couchpotato.db");

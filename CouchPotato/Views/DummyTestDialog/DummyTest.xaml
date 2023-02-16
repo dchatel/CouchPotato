@@ -15,13 +15,13 @@
                 <Button
                     Margin="20"
                     Command="{Binding OkCommand}"
-                    Style="{StaticResource MaterialDesignFloatingActionAccentButton}"
-                    Content="{md:PackIcon Kind=Check}" />
+                    Content="{md:PackIcon Kind=Check}"
+                    Style="{StaticResource MaterialDesignFloatingActionAccentButton}" />
                 <Button
                     Margin="20"
                     Command="{Binding CancelCommand}"
-                    Style="{StaticResource MaterialDesignFloatingActionButton}"
-                    Content="{md:PackIcon Kind=Cancel}" />
+                    Content="{md:PackIcon Kind=Cancel}"
+                    Style="{StaticResource MaterialDesignFloatingActionButton}" />
             </StackPanel>
 
         </Border>

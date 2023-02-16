@@ -11,14 +11,16 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CouchPotato.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221129141201_CouchPotato_v0")]
+    [Migration("20221219143425_CouchPotato_v0")]
     partial class CouchPotatov0
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
+            modelBuilder
+                .UseCollation("NOCASE")
+                .HasAnnotation("ProductVersion", "7.0.0");
 
             modelBuilder.Entity("CouchPotato.DbModel.Episode", b =>
                 {
