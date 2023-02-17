@@ -1,8 +1,6 @@
-﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -35,18 +33,9 @@ public class VideoExplorerViewModel : ContentViewModel
             selectedResult = value;
             if (selectedResult is not null)
                 selectedResult.IsSelected = true;
+            base.OnPropertyChanged(nameof(SelectedResult));
         }
     }
-
-    //public async Task SearchAsync()
-    //{
-    //    using var db = new DataContext();
-
-    //    SearchResults = await Task.Run(() => db.Videos
-    //        .Where(video => video.Title.Contains(SearchBox.SearchText))
-    //        .Select(video => SearchResultViewModel.Create(video))
-    //        .ToArray());
-    //}
 }
 
 public class SearchBoxViewModel

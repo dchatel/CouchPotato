@@ -5,11 +5,7 @@ namespace CouchPotato.DbModel;
 
 public class TVShow : Video
 {
-    public TVShow() : base()
-    {
-        Seasons = new HashSet<Season>();
-    }
-
+    public TVShow() : base() { }
     public TVShow(Video video) : this()
     {
         Title = video.Title!.Normalize();
@@ -37,5 +33,5 @@ public class TVShow : Video
         TmdbRatingCount = video.TmdbRatingCount;
     }
 
-    public ICollection<Season> Seasons { get; set; }
+    public ICollection<Season> Seasons { get; set; } = new HashSet<Season>();
 }

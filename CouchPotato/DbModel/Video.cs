@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace CouchPotato.DbModel;
 
 public class Video
 {
-    public Video()
-    {
-        Genres = new HashSet<Genre>();
-        Roles = new HashSet<Role>();
-    }
-
     public int Id { get; set; }
 
     public string Title { get; set; } = null!;
@@ -41,6 +34,6 @@ public class Video
     public double? TmdbRating { get; set; }
     public int? TmdbRatingCount { get; set; }
 
-    public ICollection<Genre> Genres { get; set; }
-    public ICollection<Role> Roles { get; set; }
+    public ICollection<Genre> Genres { get; set; } = new HashSet<Genre>();
+    public ICollection<Role> Roles { get; set; } = new HashSet<Role>();
 }

@@ -6,7 +6,7 @@
     xmlns:e="clr-namespace:CouchPotato.Extensions"
     xmlns:l="clr-namespace:CouchPotato.Views.VideoExplorer"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-    xmlns:prop="clr-namespace:CouchPotato.Properties"
+    xmlns:p="clr-namespace:CouchPotato.Properties"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase">
 
     <DataTemplate DataType="{x:Type l:SearchBoxViewModel}">
@@ -14,7 +14,7 @@
             <TextBox
                 VerticalAlignment="Center"
                 VerticalContentAlignment="Center"
-                md:HintAssist.Hint="{x:Static prop:Localization.VideoExplorerSearchHint}"
+                md:HintAssist.Hint="{x:Static p:Loc.VideoExplorerSearchHint}"
                 md:TextFieldAssist.HasLeadingIcon="True"
                 md:TextFieldAssist.LeadingIcon="Search"
                 Text="{Binding SearchText, Mode=TwoWay, Delay=800, UpdateSourceTrigger=PropertyChanged}" />
@@ -27,13 +27,13 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type l:VideoExplorerViewModel}">
-
         <Grid e:Grid.Cols="auto, *">
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="Loaded">
                     <b:InvokeCommandAction Command="{Binding SearchCommand}" />
                 </b:EventTrigger>
             </b:Interaction.Triggers>
+
             <Grid.Resources>
                 <CollectionViewSource
                     x:Key="SearchResults"
@@ -69,13 +69,6 @@
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>
-
-            <!--<GridSplitter
-                Grid.Column="0"
-                Width="5"
-                Background="Transparent"
-                ResizeBehavior="BasedOnAlignment"
-                ResizeDirection="Columns" />-->
 
             <ContentControl Grid.Column="1" Content="{Binding SelectedResult}">
                 <ContentControl.Resources>

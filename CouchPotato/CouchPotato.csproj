@@ -17,21 +17,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
-    <PackageReference Include="gong-wpf-dragdrop" Version="3.2.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
+    <PackageReference Include="gong-wpf-dragdrop" Version="3.2.1" />
     <PackageReference Include="MaterialDesignExtensions" Version="3.3.0" />
-    <PackageReference Include="MaterialDesignThemes" Version="4.6.1" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.7.1" />
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-    <PackageReference Include="PostSharp.Patterns.Model" Version="6.10.16" />
+    <PackageReference Include="PostSharp.Patterns.Model" Version="2023.0.3" />
     <PackageReference Include="System.Data.OleDb" Version="7.0.0" />
-    <PackageReference Include="TMDbLib" Version="1.9.2" />
+    <PackageReference Include="TMDbLib" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,15 +39,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Properties\Localization.fr-FR.Designer.cs">
-      <DependentUpon>Localization.fr-FR.resx</DependentUpon>
+    <Compile Update="Properties\Loc.fr-FR.Designer.cs">
+      <DependentUpon>Loc.fr-FR.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="Properties\Localization.Designer.cs">
+    <Compile Update="Properties\Loc.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Localization.resx</DependentUpon>
+      <DependentUpon>Loc.resx</DependentUpon>
     </Compile>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -68,13 +68,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Properties\Localization.fr-FR.resx">
-      <LastGenOutput>Localization.fr-FR.Designer.cs</LastGenOutput>
+    <EmbeddedResource Update="Properties\Loc.fr-FR.resx">
+      <LastGenOutput>Loc.fr-FR.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\Localization.resx">
+    <EmbeddedResource Update="Properties\Loc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Localization.Designer.cs</LastGenOutput>
+      <LastGenOutput>Loc.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

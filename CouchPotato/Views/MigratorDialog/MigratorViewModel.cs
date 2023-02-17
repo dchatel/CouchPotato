@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
-using Localization = CouchPotato.Properties.Localization;
+using Loc = CouchPotato.Properties.Loc;
 
 namespace CouchPotato.Views.MigratorDialog;
 
@@ -70,14 +70,14 @@ public class MigratorViewModel : ContentViewModel
                     throw;
                 }
             }
-            TaskName = Localization.DatabaseUpdating;
+            TaskName = Loc.DatabaseUpdating;
             TaskIsIndeterminate = true;
             await db.Database.MigrateAsync();
             Close(true);
         }
         catch
         {
-            TaskName = Localization.DatabaseMigrationFailed;
+            TaskName = Loc.DatabaseMigrationFailed;
             await Task.Delay(5000);
             App.Current.MainWindow.Close();
             Close(false);
@@ -86,7 +86,7 @@ public class MigratorViewModel : ContentViewModel
 
     private async Task Migrate_v0()
     {
-        TaskName = Localization.DatabaseInitialization;
+        TaskName = Loc.DatabaseInitialization;
         TaskIsIndeterminate = true;
         if (db.GetInfrastructure().GetService<IMigrator>() is IMigrator migrator)
         {
@@ -94,7 +94,7 @@ public class MigratorViewModel : ContentViewModel
         }
         else
         {
-            throw new ApplicationException(Localization.DatabaseMigrationServiceNotFound);
+            throw new ApplicationException(Loc.DatabaseMigrationServiceNotFound);
         }
 
         await MigrateGenres();
@@ -104,7 +104,7 @@ public class MigratorViewModel : ContentViewModel
         await MigrateSeasons();
         await MigrateEpisodes();
 
-        TaskName = Localization.DatabaseSaving;
+        TaskName = Loc.DatabaseSaving;
         TaskIsIndeterminate = true;
         await db.SaveChangesAsync();
 
@@ -113,7 +113,7 @@ public class MigratorViewModel : ContentViewModel
 
     private async Task MigrateEpisodes()
     {
-        TaskName = Localization.DatabaseImportEpisodes;
+        TaskName = Loc.DatabaseImportEpisodes;
         TaskIsIndeterminate = false;
         TaskMaximum = videlib.Episodes.Count();
         TaskProgression = 0;
@@ -144,7 +144,7 @@ public class MigratorViewModel : ContentViewModel
 
     private async Task MigrateSeasons()
     {
-        TaskName = Localization.DatabaseImportSeasons;
+        TaskName = Loc.DatabaseImportSeasons;
         TaskIsIndeterminate = false;
         TaskMaximum = videlib.Seasons.Count();
         TaskProgression = 0;
@@ -174,7 +174,7 @@ public class MigratorViewModel : ContentViewModel
 
     private async Task MigrateRoles()
     {
-        TaskName = Localization.DatabaseImportRoles;
+        TaskName = Loc.DatabaseImportRoles;
         TaskIsIndeterminate = false;
         TaskMaximum = videlib.Casts.Count();
         TaskProgression = 0;
@@ -205,14 +205,16 @@ public class MigratorViewModel : ContentViewModel
 
     private async Task MigrateVideos()
     {
-        TaskName = Localization.DatabaseImportVideos;
+        TaskName = Loc.DatabaseImportVideos;
         TaskIsIndeterminate = false;
         TaskMaximum = videlib.Films.Count();
         TaskProgression = 0;
 
         await Task.Run(() =>
         {
-            foreach (var film in videlib.Films.ToArray())
+            foreach (var film in videlib.Films
+                .Include(f => f.Genres)
+                .ToArray())
             {
                 Video video = new()
                 {
@@ -273,7 +275,7 @@ public class MigratorViewModel : ContentViewModel
     {
         var ofd = new CommonOpenFileDialog
         {
-            Title = Localization.FileSystemSelectVidelibImageFolder,
+            Title = Loc.FileSystemSelectVidelibImageFolder,
             IsFolderPicker = true,
         };
         if (ofd.ShowDialog() != CommonFileDialogResult.Ok)
@@ -281,7 +283,7 @@ public class MigratorViewModel : ContentViewModel
 
         var files = Directory.GetFiles(ofd.FileName);
 
-        TaskName = Localization.DatabaseImportImages;
+        TaskName = Loc.DatabaseImportImages;
         TaskIsIndeterminate = false;
         TaskMaximum = files.Length;
         TaskProgression = 0;
@@ -300,7 +302,7 @@ public class MigratorViewModel : ContentViewModel
 
     private async Task MigratePersons()
     {
-        TaskName = Localization.DatabaseImportPersons;
+        TaskName = Loc.DatabaseImportPersons;
         TaskIsIndeterminate = false;
         TaskMaximum = videlib.Persons.Count();
         TaskProgression = 0;
@@ -327,7 +329,7 @@ public class MigratorViewModel : ContentViewModel
 
     private async Task MigrateGenres()
     {
-        TaskName = Localization.DatabaseImportGenres;
+        TaskName = Loc.DatabaseImportGenres;
         TaskIsIndeterminate = false;
         TaskMaximum = videlib.Genres.Count();
         TaskProgression = 0;

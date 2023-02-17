@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 using CommunityToolkit.Mvvm.Input;
 
 using CouchPotato.Views;
+using CouchPotato.Views.DummyTestDialog;
 using CouchPotato.Views.MigratorDialog;
 using CouchPotato.Views.VideoExplorer;
-
-using PostSharp.Patterns.Model;
 
 namespace CouchPotato;
 
@@ -25,7 +20,7 @@ public class MainWindowViewModel
 
     public ObservableCollection<ContentViewModel> Pages { get; } = new();
     public ContentViewModel? CurrentPage { get; set; }
-    public ICommand OnLoadedCommand { get; init; }
+    public ICommand OnLoadedCommand { get; }
 
     public async Task OnLoaded()
     {
@@ -34,5 +29,7 @@ public class MainWindowViewModel
 
         var videoExplorer = new VideoExplorerViewModel();
         _ = videoExplorer.Show();
+
+        _ = new DummyTestViewModel().Show();
     }
 }

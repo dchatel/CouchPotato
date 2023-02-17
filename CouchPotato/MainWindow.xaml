@@ -12,19 +12,29 @@
     xmlns:p="clr-namespace:CouchPotato.Properties"
     xmlns:v="clr-namespace:CouchPotato.Views"
     Title="Couch Potato"
-    Width="{Binding MainWindowWidth, Source={x:Static p:Settings.Default}, Mode=TwoWay}"
-    Height="{Binding MainWindowHeight, Source={x:Static p:Settings.Default}, Mode=TwoWay}"
+    Width="{Binding MainWindowWidth,
+                    Source={x:Static p:Settings.Default},
+                    Mode=TwoWay}"
+    Height="{Binding MainWindowHeight,
+                     Source={x:Static p:Settings.Default},
+                     Mode=TwoWay}"
     d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}"
-    Left="{Binding MainWindowLeft, Source={x:Static p:Settings.Default}, Mode=TwoWay}"
+    Left="{Binding MainWindowLeft,
+                   Source={x:Static p:Settings.Default},
+                   Mode=TwoWay}"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
-    Top="{Binding MainWindowTop, Source={x:Static p:Settings.Default}, Mode=TwoWay}"
-    WindowState="{Binding MainWindowState, Source={x:Static p:Settings.Default}, Mode=TwoWay}"
+    Top="{Binding MainWindowTop,
+                  Source={x:Static p:Settings.Default},
+                  Mode=TwoWay}"
+    WindowState="{Binding MainWindowState,
+                          Source={x:Static p:Settings.Default},
+                          Mode=TwoWay}"
     mc:Ignorable="d">
     <Window.DataContext>
         <local:MainWindowViewModel />
@@ -58,7 +68,8 @@
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
                     Foreground="White"
-                    IsEnabled="{Binding CurrentPage.HamburgerMenu, Converter={c:NotNullConverter}}"
+                    IsEnabled="{Binding CurrentPage.HamburgerMenu,
+                                        Converter={c:NotNullConverter}}"
                     IsTabStop="False"
                     WindowChrome.IsHitTestVisibleInChrome="True">
                     <ToggleButton.Style>
@@ -146,9 +157,9 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type v:ContentViewModel}">
-                        <Grid Background="Transparent">
+                        <Grid Name="grid" Background="Transparent">
                             <Grid.Effect>
-                                <BlurEffect Radius="0" />
+                                <BlurEffect Radius="0"/>
                             </Grid.Effect>
                             <Grid Background="Transparent">
                                 <b:Interaction.Triggers>
@@ -158,31 +169,39 @@
                                 </b:Interaction.Triggers>
                             </Grid>
                             <ContentPresenter Content="{Binding}" />
-                            <Grid.Style>
-                                <Style TargetType="Grid">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.IsCurrent}" Value="false">
-                                            <DataTrigger.EnterActions>
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.Effect).(BlurEffect.Radius)" To="20" />
-                                                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.Opacity)" To=".2" />
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </DataTrigger.EnterActions>
-                                            <DataTrigger.ExitActions>
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.Effect).(BlurEffect.Radius)" To="0" />
-                                                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.Opacity)" To="1" />
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </DataTrigger.ExitActions>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Grid.Style>
                         </Grid>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsCurrent}" Value="false">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="grid"
+                                                Storyboard.TargetProperty="(UIElement.Effect).(BlurEffect.Radius)"
+                                                To="20" />
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="grid"
+                                                Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                To=".2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="grid"
+                                                Storyboard.TargetProperty="(UIElement.Effect).(BlurEffect.Radius)"
+                                                To="0" />
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="grid"
+                                                Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                To="1" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -192,7 +211,8 @@
                 Grid.RowSpan="1"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                IsLeftDrawerOpen="{Binding ElementName=mainmenu_toggle, Path=IsChecked}"
+                IsLeftDrawerOpen="{Binding ElementName=mainmenu_toggle,
+                                           Path=IsChecked}"
                 OpenMode="Modal">
                 <md:DrawerHost.LeftDrawerContent>
                     <ContentControl Margin="5" Content="{Binding CurrentPage.HamburgerMenu}" />

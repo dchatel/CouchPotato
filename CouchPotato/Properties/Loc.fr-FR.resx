@@ -153,8 +153,38 @@
   <data name="DatabaseUpdating" xml:space="preserve">
     <value>Mise à jour de la base de données</value>
   </data>
+  <data name="DigitalLocation" xml:space="preserve">
+    <value>Emplacement digital</value>
+  </data>
   <data name="FileSystemSelectVidelibImageFolder" xml:space="preserve">
     <value>Sélectionnez le dossier contenant les images de Videlib</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Emplacement</value>
+  </data>
+  <data name="Origin" xml:space="preserve">
+    <value>Origine</value>
+  </data>
+  <data name="OriginalTitle" xml:space="preserve">
+    <value>Titre original</value>
+  </data>
+  <data name="PersonalRating" xml:space="preserve">
+    <value>Côte d'amour perso</value>
+  </data>
+  <data name="ReleaseDate" xml:space="preserve">
+    <value>Date de sortie</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="TmdbRating" xml:space="preserve">
+    <value>Côte d'amour TMDB</value>
+  </data>
+  <data name="TmdbRatingCount" xml:space="preserve">
+    <value>Nombre de votes sur TMDB</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
   </data>
   <data name="VideoExplorerSearchHint" xml:space="preserve">
     <value>Recherche</value>

@@ -4,12 +4,6 @@ namespace CouchPotato.DbModel;
 
 public class Season
 {
-    public Season()
-    {
-        Episodes = new HashSet<Episode>();
-    }
-
-    public ICollection<Episode> Episodes { get; set; }
     public int Id { get; set; }
 
     public string Name { get; set; } = null!;
@@ -18,5 +12,6 @@ public class Season
     public int SeasonNumber { get; set; }
     public int? TmdbId { get; set; }
 
+    public ICollection<Episode> Episodes { get; set; } = new HashSet<Episode>();
     public TVShow TVShow { get; set; } = null!;
 }

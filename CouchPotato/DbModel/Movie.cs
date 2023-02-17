@@ -8,7 +8,6 @@ namespace CouchPotato.DbModel;
 public class Movie : Video
 {
     public Movie() : base() { }
-
     public Movie(Video video) : this()
     {
         Title = video.Title!.Normalize();
