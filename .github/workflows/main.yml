@@ -1,4 +1,4 @@
-name: Build and Release WPF App
+name: Build and Release
 
 on:
   push:
@@ -25,16 +25,20 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Publish
-      run: dotnet publish --configuration Release --no-build --output ./publish
+      run: dotnet publish --configuration Release --no-build --output ./publish -r win-x64 --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true
 
+    - name: Get short commit SHA
+      id: short_sha
+      run: echo "::set-output name=sha_short::$(echo ${GITHUB_SHA:0:7})"
+      
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v${{ github.run_number }}
-        release_name: Release v${{ github.run_number }}
+        tag_name: ${{ steps.short_sha.outputs.sha_short }}
+        release_name: Release ${{ steps.short_sha.outputs.sha_short }}
         draft: false
         prerelease: false
 
@@ -44,6 +48,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./publish/CouchPotato.zip
-        asset_name: CouchPotato.zip
-        asset_content_type: application/zip
+        asset_path: ./publish/CouchPotato.exe
+        asset_name: CouchPotato.exe
+        asset_content_type: application/vnd.microsoft.portable-executable
