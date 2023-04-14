@@ -259,6 +259,15 @@ namespace CouchPotato.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à TV Show Info.
+        /// </summary>
+        public static string TVShowInfo {
+            get {
+                return ResourceManager.GetString("TVShowInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Version.
         /// </summary>
         public static string Version {

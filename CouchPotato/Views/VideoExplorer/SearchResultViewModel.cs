@@ -1,4 +1,15 @@
-﻿using CouchPotato.DbModel;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Documents;
+using System.Windows.Input;
+
+using CommunityToolkit.Mvvm.Input;
+
+using CouchPotato.DbModel;
+using CouchPotato.Views.OkDialog;
+
+using PostSharp.Patterns.Model;
 
 namespace CouchPotato.Views.VideoExplorer;
 
@@ -26,8 +37,11 @@ public class SearchResultViewModel
     {
         get => isSelected;
         set {
-            LoadData();
             isSelected = value;
+            if (isSelected)
+            {
+                LoadData();
+            }
         }
     }
 
@@ -54,6 +68,8 @@ public class TVShowSearchResultViewModel : SearchResultViewModel
     public TVShowSearchResultViewModel(Video video) : base(video) { }
 
     public TVShow TVShow => (TVShow)Video;
+    public IEnumerable<object> Pages { get; set; } = null!;
+    public object CurrentPage { get; set; } = null!;
 
     protected override void LoadData()
     {
@@ -68,6 +84,53 @@ public class TVShowSearchResultViewModel : SearchResultViewModel
             db.Entry(tv).Collection(v => v.Seasons).LoadAsync();
             foreach (var season in tv.Seasons)
                 db.Entry(season).Collection(s => s.Episodes).LoadAsync();
+
+            var list = new List<object>
+            {
+                tv
+            };
+            list.AddRange(tv.Seasons.Select(s => new SeasonViewModel(s)));
+            Pages = list;
+            CurrentPage = Pages.First();
         }
+    }
+}
+
+public class SeasonViewModel
+{
+    private IEnumerable<EpisodeViewModel> episodes = null!;
+
+    public SeasonViewModel(Season season)
+    {
+        Season = season;
+    }
+
+    public Season Season { get; }
+    [SafeForDependencyAnalysis]
+    public IEnumerable<EpisodeViewModel> Episodes
+    {
+        get {
+            episodes ??= Season.Episodes.Select(e => new EpisodeViewModel(e)).ToList();
+            return episodes;
+        }
+        set => episodes = value;
+    }
+}
+
+public class EpisodeViewModel:ContentViewModel
+{
+    public Episode Episode { get; init; } = null!;
+    public ICommand Zoom { get; }
+    public bool Zoomed { get; set; }
+
+    public EpisodeViewModel(Episode episode)
+    {
+        Episode = episode;
+        Zoom = new AsyncRelayCommand(async () =>
+        {
+            Zoomed = true;
+            await Show();
+            Zoomed = false;
+        });
     }
 }

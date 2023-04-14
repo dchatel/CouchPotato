@@ -183,6 +183,9 @@
   <data name="TmdbRatingCount" xml:space="preserve">
     <value>Nombre de votes sur TMDB</value>
   </data>
+  <data name="TVShowInfo" xml:space="preserve">
+    <value>Infos sur la Série</value>
+  </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>
   </data>

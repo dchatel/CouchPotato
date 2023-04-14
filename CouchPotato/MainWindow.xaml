@@ -159,7 +159,7 @@
                     <DataTemplate DataType="{x:Type v:ContentViewModel}">
                         <Grid Name="grid" Background="Transparent">
                             <Grid.Effect>
-                                <BlurEffect Radius="0"/>
+                                <BlurEffect Radius="0" />
                             </Grid.Effect>
                             <Grid Background="Transparent">
                                 <b:Interaction.Triggers>
@@ -171,7 +171,7 @@
                             <ContentPresenter Content="{Binding}" />
                         </Grid>
                         <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding IsCurrent}" Value="false">
+                            <DataTrigger Binding="{Binding IsCurrent}" Value="False">
                                 <DataTrigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>

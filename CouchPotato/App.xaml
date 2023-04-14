@@ -21,7 +21,9 @@
 
                 <ResourceDictionary Source="Views/DummyTestDialog/DummyTest.xaml" />
                 <ResourceDictionary Source="Views/MigratorDialog/MigratorDialog.xaml" />
+                <ResourceDictionary Source="Views/VideoExplorer/SearchResultViewTemplates.xaml" />
                 <ResourceDictionary Source="Views/VideoExplorer/VideoExplorer.xaml" />
+                <ResourceDictionary Source="Views/OkDialog/OkDialog.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

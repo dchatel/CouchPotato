@@ -37,9 +37,9 @@ public abstract class ContentViewModel : INotifyPropertyChanged
         var mainWindowViewModel = (MainWindowViewModel)App.Current.MainWindow.DataContext;
 
         mainWindowViewModel.Pages.Add(this);
+        mainWindowViewModel.CurrentPage?.OnPropertyChanged(nameof(IsCurrent));
         mainWindowViewModel.CurrentPage = this;
-        foreach (var page in mainWindowViewModel.Pages)
-            page.OnPropertyChanged(nameof(IsCurrent));
+        mainWindowViewModel.CurrentPage.OnPropertyChanged(nameof(IsCurrent));
         OnLoaded();
         try
         {
@@ -55,13 +55,12 @@ public abstract class ContentViewModel : INotifyPropertyChanged
 
         mainWindowViewModel.Pages.Remove(this);
         mainWindowViewModel.CurrentPage = mainWindowViewModel.Pages.LastOrDefault();
-        foreach (var page in mainWindowViewModel.Pages)
-            page.OnPropertyChanged(nameof(IsCurrent));
+        mainWindowViewModel.CurrentPage?.OnPropertyChanged(nameof(IsCurrent));
         dialogResult = result;
         cancellationTokenSource.Cancel();
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
-    protected void OnPropertyChanged([CallerMemberName] string propertyName = null!)
+    public void OnPropertyChanged([CallerMemberName] string propertyName = null!)
         => PropertyChanged?.Invoke(this, new(propertyName));
 }

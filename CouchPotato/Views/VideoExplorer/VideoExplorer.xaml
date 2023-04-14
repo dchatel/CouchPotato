@@ -71,13 +71,13 @@
             </ListBox>
 
             <ContentControl Grid.Column="1" Content="{Binding SelectedResult}">
-                <ContentControl.Resources>
+                <!--<ContentControl.Resources>
                     <ResourceDictionary>
                         <ResourceDictionary.MergedDictionaries>
                             <ResourceDictionary Source="SearchResultViewTemplates.xaml" />
                         </ResourceDictionary.MergedDictionaries>
                     </ResourceDictionary>
-                </ContentControl.Resources>
+                </ContentControl.Resources>-->
             </ContentControl>
         </Grid>
     </DataTemplate>

@@ -29,7 +29,5 @@ public class MainWindowViewModel
 
         var videoExplorer = new VideoExplorerViewModel();
         _ = videoExplorer.Show();
-
-        _ = new DummyTestViewModel().Show();
     }
 }
