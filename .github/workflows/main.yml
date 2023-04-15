@@ -1,4 +1,4 @@
-name: Build and Release
+name: Release
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  build-and-release:
+  build:
     runs-on: windows-latest
 
     steps:
@@ -19,26 +19,27 @@ jobs:
         dotnet-version: '7.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore -v d
+      run: dotnet restore
 
     - name: Build
       run: dotnet build --configuration Release --no-restore
 
     - name: Publish
-      run: dotnet publish --configuration Release --no-build --output ./publish -r win-x64 --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true
+      run: dotnet publish --configuration Release --no-build --output publish
 
-    - name: Get short commit SHA
-      id: short_sha
-      run: echo "::set-output name=sha_short::$(echo ${GITHUB_SHA:0:7})"
-      
-    - name: Create Release
+    - name: Package with Squirrel
+      run: |
+        nuget install Squirrel.Windows -Version 2.0.1
+        .\Squirrel.Windows.2.0.1\tools\Squirrel.exe --releasify publish\*.nupkg
+
+    - name: Create GitHub Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.short_sha.outputs.sha_short }}
-        release_name: Release ${{ steps.short_sha.outputs.sha_short }}
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
         draft: false
         prerelease: false
 
@@ -48,6 +49,14 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./publish/CouchPotato.exe
-        asset_name: CouchPotato.exe
-        asset_content_type: application/vnd.microsoft.portable-executable
+        asset_path: ./Releases/RELEASES
+        asset_name: RELEASES
+        asset_content_type: application/octet-stream
+
+    - name: Upload Setup.exe
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./
