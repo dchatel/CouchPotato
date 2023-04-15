@@ -184,22 +184,44 @@
                                     <md:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
                                     <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2" />
                                 </md:TransitioningContent.OpeningEffects>
-                                <Border Margin="5" Background="{StaticResource MaterialDesignDarkBackground}">
+                                <Border Margin="5">
                                     <Border.Effect>
                                         <DropShadowEffect BlurRadius="20" ShadowDepth="0" />
                                     </Border.Effect>
-                                    <Border Width="138" Height="175">
+                                    <Border
+                                        Width="138"
+                                        Height="175"
+                                        CornerRadius="20,0,0,0">
                                         <Border.Background>
                                             <ImageBrush ImageSource="{Binding Person.PortraitUrl, Converter={c:ImageConverter}, IsAsync=True}" />
                                         </Border.Background>
                                         <Grid>
                                             <Border VerticalAlignment="Bottom" Background="#b000">
-                                                <Viewbox StretchDirection="DownOnly">
+                                                <StackPanel>
+                                                    <Viewbox StretchDirection="DownOnly">
+                                                        <TextBlock
+                                                            FontSize="16"
+                                                            Text="{Binding Person.Name}"
+                                                            TextAlignment="Center" />
+                                                    </Viewbox>
                                                     <TextBlock
-                                                        FontSize="16"
-                                                        Text="{Binding Person.Name}"
-                                                        TextAlignment="Center" />
-                                                </Viewbox>
+                                                        x:Name="characters"
+                                                        FontSize="14"
+                                                        Text="{Binding Characters}"
+                                                        TextAlignment="Center"
+                                                        TextWrapping="Wrap">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Border, AncestorLevel=1}, Path=IsMouseOver}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </StackPanel>
                                             </Border>
                                         </Grid>
                                     </Border>
