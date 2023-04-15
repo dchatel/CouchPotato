@@ -30,7 +30,8 @@ jobs:
     - name: Package with Squirrel
       run: |
         nuget install Squirrel.Windows -Version 2.0.1
-        .\Squirrel.Windows.2.0.1\tools\Squirrel.exe --releasify publish\*.nupkg
+        .\Squirrel.Windows.2.0.1\tools\Squirrel.exe --releasify publish\*.nupkg --outputDir ./Releases
+
 
     - name: Create GitHub Release
       id: create_release
