@@ -5,7 +5,6 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 
 using CouchPotato.Views;
-using CouchPotato.Views.DummyTestDialog;
 using CouchPotato.Views.MigratorDialog;
 using CouchPotato.Views.VideoExplorer;
 
