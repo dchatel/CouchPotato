@@ -27,6 +27,7 @@ jobs:
     - name: Extract version
       id: extract-version
       run: |
+        dotnet tool install -g nbgv
         dotnet tool restore
         $version = dotnet nbgv get-version -f json | ConvertFrom-Json
         echo "Assembly version: $($version.AssemblySemFileVer)"
