@@ -27,9 +27,10 @@ jobs:
     - name: Extract version
       id: extract-version
       run: |
-        $version = [System.Reflection.AssemblyName]::GetAssemblyName("${{ github.workspace }}/CouchPotato/bin/Release/net7.0-windows/win-x64/CouchPotato.exe").Version
-        echo "Assembly version: $version"
-        echo "VERSION_NUMBER=$version" >> $GITHUB_ENV
+        dotnet tool restore
+        $version = dotnet nbgv get-version -f json | ConvertFrom-Json
+        echo "Assembly version: $($version.AssemblySemFileVer)"
+        echo "VERSION_NUMBER=$($version.AssemblySemFileVer)" >> $GITHUB_ENV
       shell: pwsh
 
     - name: Package application
