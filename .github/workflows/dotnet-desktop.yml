@@ -27,7 +27,7 @@ jobs:
     - name: Extract version
       id: extract-version
       run: |
-        $version = [System.Reflection.AssemblyName]::GetAssemblyName("${{ github.workspace }}/bin/Release/CouchPotato.exe").Version
+        $version = [System.Reflection.AssemblyName]::GetAssemblyName("${{ github.workspace }}/bin/Release/net7.0-windows/CouchPotato.exe").Version
         echo "Assembly version: $version"
         echo "VERSION_NUMBER=$version" >> $GITHUB_ENV
       shell: pwsh
