@@ -24,14 +24,6 @@ jobs:
     - name: Build application
       run: dotnet build --configuration Release
 
-    - name: Extract version
-      id: extract-version
-      run: |
-        $version = [System.Reflection.AssemblyName]::GetAssemblyName("${{ github.workspace }}/CouchPotato/bin/Release/net7.0-windows/win-x64/CouchPotato.exe").Version
-        echo "Assembly version: $version"
-        echo "VERSION_NUMBER=$version" >> $GITHUB_ENV
-      shell: pwsh
-
     - name: Package application
       run: |
         dotnet tool install --global Clowd.Squirrel
@@ -44,8 +36,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v${{ env.VERSION_NUMBER }}
-        release_name: Release v${{ env.VERSION_NUMBER }}
+        tag_name: ${{ github.ref}}
+        release_name: Release ${{ github.ref}}
         draft: false
         prerelease: false
 

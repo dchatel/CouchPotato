@@ -5,6 +5,11 @@ VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CouchPotato", "CouchPotato\CouchPotato.csproj", "{49B2DA37-B0ED-474D-B037-E1AC5EFA95CA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Éléments de solution", "Éléments de solution", "{9888A854-CBC3-4DDF-8776-F920A0ED5AFD}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnet-desktop.yml = .github\workflows\dotnet-desktop.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
