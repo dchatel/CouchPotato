@@ -163,7 +163,7 @@
                             </Grid.Effect>
                             <Grid Background="Transparent">
                                 <b:Interaction.Triggers>
-                                    <b:EventTrigger EventName="MouseDown">
+                                    <b:EventTrigger EventName="MouseUp">
                                         <b:InvokeCommandAction Command="{Binding CancelCommand}" />
                                     </b:EventTrigger>
                                 </b:Interaction.Triggers>

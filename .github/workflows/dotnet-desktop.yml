@@ -22,12 +22,19 @@ jobs:
       run: dotnet restore
 
     - name: Build application
-      run: dotnet build --configuration Release
+      run: dotnet publish -c Release -o ".\publish"
 
+    - name: Bump release version
+      id: bump_version
+      uses: christian-draeger/increment-semantic-version@1.1.0
+      with:
+        current-version: '1.0.0-alpha.1' # also accepted: 'v2.11.7-alpha.3' | '2.11.7-alpha3'
+        version-fragment: 'alpha'
+    
     - name: Package application
       run: |
         dotnet tool install --global Clowd.Squirrel
-        Squirrel --releasify CouchPotato.nupkg --releaseDir="/CouchPotato/Releases"
+        Squirrel.exe pack --packId "CouchPotato" --packVersion "${{ steps.bump_version.outputs.next-version }}" --packDirectory "publish" --releaseDir "releases"
       shell: pwsh
 
     - name: Create Release
@@ -36,8 +43,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref}}
-        release_name: Release ${{ github.ref}}
+        tag_name: ${{ steps.bump_version.outputs.next-version }}
+        release_name: Release ${{ steps.bump_version.outputs.next-version }}
         draft: false
         prerelease: false
 

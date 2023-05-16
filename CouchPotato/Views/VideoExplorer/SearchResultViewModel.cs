@@ -117,7 +117,7 @@ public class SeasonViewModel
     }
 }
 
-public class EpisodeViewModel:ContentViewModel
+public class EpisodeViewModel : ContentViewModel
 {
     public Episode Episode { get; init; } = null!;
     public ICommand Zoom { get; }

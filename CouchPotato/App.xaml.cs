@@ -15,16 +15,28 @@ namespace CouchPotato
     {
         protected override async void OnStartup(StartupEventArgs e)
         {
+            SquirrelAwareApp.HandleEvents(
+                onEveryRun: OnAppRun);
+
             bool enableAutoUpdates = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableAutoUpdates"]);
             if (enableAutoUpdates)
             {
                 using var mgr = new UpdateManager("https://github.com/dchatel/CouchPotato/releases");
-                await mgr.UpdateApp();
+                var newVersion = await mgr.UpdateApp();
+                if(newVersion is not null)
+                {
+                    UpdateManager.RestartApp();
+                }
             }
 
             FrameworkElement.LanguageProperty.OverrideMetadata(
                 typeof(FrameworkElement),
                 new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
+        }
+
+        private void OnAppRun(SemanticVersion version, IAppTools tools, bool firstRun)
+        {
+            tools.SetProcessAppUserModelId();
         }
     }
 }
