@@ -25,11 +25,8 @@ jobs:
       run: dotnet publish -c Release -o ".\publish"
 
     - name: Bump release version
-      id: bump_version
-      uses: christian-draeger/increment-semantic-version@1.1.0
-      with:
-        current-version: '1.0.0-alpha.1' # also accepted: 'v2.11.7-alpha.3' | '2.11.7-alpha3'
-        version-fragment: 'alpha'
+      run: |
+        echo "VERSION_NUMBER=$(("1.0.0-alpha-"+GITHUB_RUN_NUMBER)) >> $GITHUB_ENV"
     
     - name: Package application
       run: |
