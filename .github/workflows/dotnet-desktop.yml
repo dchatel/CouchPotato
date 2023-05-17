@@ -51,8 +51,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.packageapp.outputs.upload_url }}
-        asset_path: ./CouchPotatoSetup.exe
-        asset_name: CouchPotato
-        asset_content_type: application/octet-stream
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./releases/CouchPotatoSetup.exe
+        asset_name: CouchPotatoSetup.exe
+        asset_content_type: application/vnd.microsoft.portable-executable
         
