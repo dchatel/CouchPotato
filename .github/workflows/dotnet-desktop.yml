@@ -13,10 +13,6 @@ jobs:
       version: 1.0.0
 
     steps:
-    - name: Display version
-      run: |
-        echo "version is: ${{ env.version }}.${{ github.run_number }}"
-
     - name: Checkout repository
       uses: actions/checkout@v3.5.2
 
@@ -48,6 +44,10 @@ jobs:
         release_name: Release ${{ env.version }}.${{ github.run_number }}
         draft: false
         prerelease: false
+    
+    - name: Zip
+      run: |
+        Compress-Archive .\publish\* CouchPotato.zip
 
     - name: Upload Release Asset
       id: upload-release-asset
@@ -56,7 +56,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./publish
+        asset_path: ./CouchPotato.zip
         asset_name: CouchPotato.zip
         asset_content_type: application/zip
         
