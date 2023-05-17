@@ -25,7 +25,7 @@ jobs:
       run: dotnet restore
 
     - name: Build application
-      run: dotnet publish -c Release -o ".\publish" -r win-x64 -p:PublishSingleFile=true --self-contained false /p:AssemblyVersion="${{ env.version }}.${{ github.run_number }}" /p:Version="${{ env.version }}.${{ github.run_number }}" -p:DebugType=embedded
+      run: dotnet publish -c Release -o ".\publish" -r win-x64 -p:PublishSingleFile=true --self-contained false /p:AssemblyVersion="${{ env.version }}.${{ github.run_number }}" /p:Version="${{ env.version }}.${{ github.run_number }}"
         
     #- name: Package application
     #  id: package-app
