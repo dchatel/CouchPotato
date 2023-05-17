@@ -9,10 +9,10 @@ jobs:
   build:
     runs-on: windows-latest
 
+    env:
+      version: 1.0.0.${{ github.run_number }}
+
     steps:
-    - name: Version test
-      run: |
-        echo "1.0.0-alpha.${{ github.run_number }}"
     - name: Checkout repository
       uses: actions/checkout@v3.5.2
 
@@ -25,14 +25,14 @@ jobs:
       run: dotnet restore
 
     - name: Build application
-      run: dotnet publish -c Release -o ".\publish"
+      run: dotnet publish -c Release -o ".\publish" -r win-x64 -p:PublishSingleFile=true --self-contained false /p:AssemblyVersion=${{ version }} /p:Version=${{ version }} -p:DebugType=embedded
         
-    - name: Package application
-      id: package-app
-      run: |
-        Set-Alias Squirrel ($env:USERPROFILE + "\.nuget\packages\clowd.squirrel\2.9.42\tools\Squirrel.exe");
-        Squirrel pack --packId "CouchPotato" --packVersion "1.0.${{ github.run_number }}" --packDirectory "publish" --releaseDir "releases"
-      shell: pwsh
+    #- name: Package application
+    #  id: package-app
+    #  run: |
+    #    Set-Alias Squirrel ($env:USERPROFILE + "\.nuget\packages\clowd.squirrel\2.9.42\tools\Squirrel.exe");
+    #    Squirrel pack --packId "CouchPotato" --packVersion "1.0.${{ github.run_number }}" --packDirectory "publish" --releaseDir "releases"
+    #  shell: pwsh
 
     - name: Create Release
       id: create_release
@@ -40,8 +40,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: 1.0.${{ github.run_number }}
-        release_name: Release 1.0.${{ github.run_number }}
+        tag_name: ${{ version }}
+        release_name: Release ${{ version }}
         draft: false
         prerelease: false
 
@@ -52,7 +52,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./releases/CouchPotatoSetup.exe
-        asset_name: CouchPotatoSetup.exe
-        asset_content_type: application/vnd.microsoft.portable-executable
+        asset_path: ./publish
+        asset_name: CouchPotato.zip
+        asset_content_type: application/zip
         

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.Globalization;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Markup;
 
-using Squirrel;
+//using Squirrel;
 
 namespace CouchPotato
 {
@@ -13,30 +15,43 @@ namespace CouchPotato
     /// </summary>
     public partial class App : Application
     {
-        protected override async void OnStartup(StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
-            SquirrelAwareApp.HandleEvents(
-                onEveryRun: OnAppRun);
+            MessageBox.Show(FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion);
+            //SquirrelAwareApp.HandleEvents(
+            //    onInitialInstall: OnAppInstall,
+            //    onAppUninstall: OnAppUninstall,
+            //    onEveryRun: OnAppRun);
 
-            bool enableAutoUpdates = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableAutoUpdates"]);
-            if (enableAutoUpdates)
-            {
-                using var mgr = new UpdateManager("https://github.com/dchatel/CouchPotato/releases");
-                var newVersion = await mgr.UpdateApp();
-                if(newVersion is not null)
-                {
-                    UpdateManager.RestartApp();
-                }
-            }
+            //bool enableAutoUpdates = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableAutoUpdates"]);
+            //if (enableAutoUpdates)
+            //{
+            //    using var mgr = new UpdateManager("https://github.com/dchatel/CouchPotato/releases");
+            //    var newVersion = await mgr.UpdateApp();
+            //    if(newVersion is not null)
+            //    {
+            //        UpdateManager.RestartApp();
+            //    }
+            //}
 
             FrameworkElement.LanguageProperty.OverrideMetadata(
                 typeof(FrameworkElement),
                 new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
         }
 
-        private void OnAppRun(SemanticVersion version, IAppTools tools, bool firstRun)
-        {
-            tools.SetProcessAppUserModelId();
-        }
+        //private void OnAppInstall(SemanticVersion version, IAppTools tools)
+        //{
+        //    tools.CreateShortcutForThisExe(ShortcutLocation.StartMenu | ShortcutLocation.Desktop);
+        //}
+
+        //private void OnAppUninstall(SemanticVersion version, IAppTools tools)
+        //{
+        //    tools.RemoveShortcutForThisExe(ShortcutLocation.StartMenu | ShortcutLocation.Desktop);
+        //}
+
+        //private void OnAppRun(SemanticVersion version, IAppTools tools, bool firstRun)
+        //{
+        //    tools.SetProcessAppUserModelId();
+        //}
     }
 }
