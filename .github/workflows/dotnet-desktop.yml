@@ -10,12 +10,12 @@ jobs:
     runs-on: windows-latest
 
     env:
-      version: 1.0.0.${{ github.run_number }}
+      version: "1.0.0.${{ github.run_number }}"
 
     steps:
     - name: check version
       run: |
-        echo $version
+        echo "version is: $version"
 
     - name: Checkout repository
       uses: actions/checkout@v3.5.2
