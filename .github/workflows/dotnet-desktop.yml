@@ -10,6 +10,9 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    - name: Version test
+      run: |
+        echo "1.0.0-alpha.$((github.run_number))"
     - name: Checkout repository
       uses: actions/checkout@v3.5.2
 
@@ -23,15 +26,11 @@ jobs:
 
     - name: Build application
       run: dotnet publish -c Release -o ".\publish"
-
-    - name: Bump release version
-      run: |
-        echo "VERSION_NUMBER=$(("1.0.0-alpha-"+GITHUB_RUN_NUMBER)) >> $GITHUB_ENV"
-    
+        
     - name: Package application
       run: |
         dotnet tool install --global Clowd.Squirrel
-        Squirrel.exe pack --packId "CouchPotato" --packVersion "${{ steps.bump_version.outputs.next-version }}" --packDirectory "publish" --releaseDir "releases"
+        Squirrel.exe pack --packId "CouchPotato" --packVersion "1.0.0-alpha.$((github.run_number))" --packDirectory "publish" --releaseDir "releases"
       shell: pwsh
 
     - name: Create Release
