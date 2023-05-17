@@ -30,7 +30,7 @@ jobs:
     - name: Package application
       run: |
         Set-Alias Squirrel ($env:USERPROFILE + "\.nuget\packages\clowd.squirrel\2.9.42\tools\Squirrel.exe");
-        Squirrel pack --packId "CouchPotato" --packVersion "1.0.0.${{ github.run_number }}" --packDirectory "publish" --releaseDir "releases"
+        Squirrel pack --packId "CouchPotato" --packVersion "1.0.${{ github.run_number }}" --packDirectory "publish" --releaseDir "releases"
       shell: pwsh
 
     - name: Create Release
