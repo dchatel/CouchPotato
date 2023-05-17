@@ -28,6 +28,7 @@ jobs:
       run: dotnet publish -c Release -o ".\publish"
         
     - name: Package application
+      id: package-app
       run: |
         Set-Alias Squirrel ($env:USERPROFILE + "\.nuget\packages\clowd.squirrel\2.9.42\tools\Squirrel.exe");
         Squirrel pack --packId "CouchPotato" --packVersion "1.0.${{ github.run_number }}" --packDirectory "publish" --releaseDir "releases"
@@ -50,8 +51,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./CouchPotato.zip
+        upload_url: ${{ steps.packageapp.outputs.upload_url }}
+        asset_path: ./CouchPotatoSetup.exe
         asset_name: CouchPotato
-        asset_content_type: application/zip
+        asset_content_type: application/octet-stream
         
