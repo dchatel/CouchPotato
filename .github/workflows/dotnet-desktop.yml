@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
 
     env:
-      Version: 1.0.0.${{ github.run_number }}
+      version: 1.0.0.${{ github.run_number }}
 
     steps:
     - name: Checkout repository
@@ -25,7 +25,7 @@ jobs:
       run: dotnet restore
 
     - name: Build application
-      run: dotnet publish -c Release -o ".\publish" -r win-x64 -p:PublishSingleFile=true --self-contained false /p:AssemblyVersion=${{ version }} /p:Version=${{ version }} -p:DebugType=embedded
+      run: dotnet publish -c Release -o ".\publish" -r win-x64 -p:PublishSingleFile=true --self-contained false /p:AssemblyVersion=$version /p:Version=$version -p:DebugType=embedded
         
     #- name: Package application
     #  id: package-app
@@ -40,8 +40,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ version }}
-        release_name: Release ${{ version }}
+        tag_name: $version
+        release_name: Release $version
         draft: false
         prerelease: false
 
