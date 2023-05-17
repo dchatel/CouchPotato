@@ -17,7 +17,7 @@ namespace CouchPotato
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            MessageBox.Show(FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion);
+            MessageBox.Show($"Version: {Assembly.GetExecutingAssembly().GetName().Version}");
             //SquirrelAwareApp.HandleEvents(
             //    onInitialInstall: OnAppInstall,
             //    onAppUninstall: OnAppUninstall,
