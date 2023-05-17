@@ -8,13 +8,11 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-
-    env:
-      version: "1.0.0.${{ github.run_number }}"
-
+    
     steps:
-    - name: check version
+    - name: Set version
       run: |
+        echo "version=1.0.0.${{ github.run_number }}" >> $GITHUB_ENV
         echo "version is: $version"
 
     - name: Checkout repository
