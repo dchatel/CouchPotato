@@ -13,7 +13,7 @@ jobs:
     - name: Set version
       run: |
         echo "version=1.0.0.${{ github.run_number }}" >> $GITHUB_ENV
-        echo "version is: $version"
+        echo "version is: $env.version"
 
     - name: Checkout repository
       uses: actions/checkout@v3.5.2
