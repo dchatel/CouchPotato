@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
 
     env:
-      version: 1.0.0.${{ github.run_number }}
+      Version: 1.0.0.${{ github.run_number }}
 
     steps:
     - name: Checkout repository
