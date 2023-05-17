@@ -12,7 +12,7 @@ jobs:
     steps:
     - name: Version test
       run: |
-        echo "1.0.0-alpha.$((github.run_number))"
+        echo "1.0.0-alpha.${{ github.run_number }}"
     - name: Checkout repository
       uses: actions/checkout@v3.5.2
 
