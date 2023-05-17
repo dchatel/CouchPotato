@@ -19,7 +19,7 @@
                      Source={x:Static p:Settings.Default},
                      Mode=TwoWay}"
     d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}"
-    Background="{DynamicResource MaterialDesignPaper}"
+    Background="blue"
     FontFamily="{DynamicResource MaterialDesignFont}"
     Left="{Binding MainWindowLeft,
                    Source={x:Static p:Settings.Default},
