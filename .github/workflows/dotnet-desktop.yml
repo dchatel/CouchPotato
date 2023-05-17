@@ -51,7 +51,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: /CouchPotato/Releases/CouchPotato.nupkg
-        asset_name: CouchPotato.nupkg
-        asset_content_type: application/octet-stream
+        asset_path: ./CouchPotato.zip
+        asset_name: CouchPotato
+        asset_content_type: application/zip
         
