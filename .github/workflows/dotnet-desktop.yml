@@ -9,11 +9,13 @@ jobs:
   build:
     runs-on: windows-latest
     
+    env:
+      version: 1.0.0
+
     steps:
-    - name: Set version
+    - name: Display version
       run: |
-        echo "version=\"1.0.0.${{ github.run_number }}\"" >> $GITHUB_ENV
-        echo "version is: ${{env.version}}"
+        echo "version is: ${{ env.version }}.${{ github.run_number }}"
 
     - name: Checkout repository
       uses: actions/checkout@v3.5.2
@@ -27,7 +29,7 @@ jobs:
       run: dotnet restore
 
     - name: Build application
-      run: dotnet publish -c Release -o ".\publish" -r win-x64 -p:PublishSingleFile=true --self-contained false /p:AssemblyVersion=$version /p:Version=$version -p:DebugType=embedded
+      run: dotnet publish -c Release -o ".\publish" -r win-x64 -p:PublishSingleFile=true --self-contained false /p:AssemblyVersion="${{ env.version }}.${{ github.run_number }}" /p:Version="${{ env.version }}.${{ github.run_number }}" -p:DebugType=embedded
         
     #- name: Package application
     #  id: package-app
@@ -42,8 +44,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: $version
-        release_name: Release $version
+        tag_name: ${{ env.version }}.${{ github.run_number }}
+        release_name: Release ${{ env.version }}.${{ github.run_number }}
         draft: false
         prerelease: false
 
