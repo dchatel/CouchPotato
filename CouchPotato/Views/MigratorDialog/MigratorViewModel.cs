@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 using CouchPotato.DbModel;
 
@@ -75,8 +76,9 @@ public class MigratorViewModel : ContentViewModel
             await db.Database.MigrateAsync();
             Close(true);
         }
-        catch
+        catch(Exception e)
         {
+            MessageBox.Show(e.ToString());
             TaskName = Loc.DatabaseMigrationFailed;
             await Task.Delay(5000);
             App.Current.MainWindow.Close();
