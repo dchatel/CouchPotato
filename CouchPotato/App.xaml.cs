@@ -19,7 +19,9 @@ namespace CouchPotato
         protected override void OnStartup(StartupEventArgs e)
         {
             MessageBox.Show("test");
+#if DEBUG
             CheckForUpdates();
+#endif
 
             FrameworkElement.LanguageProperty.OverrideMetadata(
                 typeof(FrameworkElement),
@@ -31,9 +33,6 @@ namespace CouchPotato
 
         private async void CheckForUpdates()
         {
-#if DEBUG
-            return;
-#endif
             using var client = new HttpClient();
 
             // Compare versions
@@ -55,8 +54,8 @@ namespace CouchPotato
                 App.Current.Shutdown();
                 System.Diagnostics.Process.Start("powershell",
                     $"""
+                    Start-Sleep -Seconds 1
                     Expand-Archive -LiteralPath '{AppDomain.CurrentDomain.BaseDirectory}\\CouchPotato.zip' -DestinationPath '{AppDomain.CurrentDomain.BaseDirectory} -Force';
-                    Read-Host
                     {AppDomain.CurrentDomain.BaseDirectory}\\CouchPotato.exe;
                     """);
             }
