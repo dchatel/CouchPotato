@@ -7,6 +7,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
 
@@ -20,9 +21,8 @@ namespace CouchPotato
         protected override void OnStartup(StartupEventArgs e)
         {
 #if !DEBUG
-            CheckForUpdates();
+            await CheckForUpdates();
 #endif
-            MessageBox.Show("test");
             FrameworkElement.LanguageProperty.OverrideMetadata(
                 typeof(FrameworkElement),
                 new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
@@ -31,7 +31,7 @@ namespace CouchPotato
             win.Show();
         }
 
-        private async void CheckForUpdates()
+        private async Task CheckForUpdates()
         {
             var root = AppDomain.CurrentDomain.BaseDirectory;
             // Remove old files
