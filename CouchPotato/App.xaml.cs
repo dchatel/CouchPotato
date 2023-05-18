@@ -22,6 +22,7 @@ namespace CouchPotato
 #if !DEBUG
             CheckForUpdates();
 #endif
+            MessageBox.Show("test");
             FrameworkElement.LanguageProperty.OverrideMetadata(
                 typeof(FrameworkElement),
                 new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
