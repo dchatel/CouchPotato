@@ -268,6 +268,15 @@ namespace CouchPotato.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à CouchPotato got updated. Please restart app..
+        /// </summary>
+        public static string UpdatedRestartPlease {
+            get {
+                return ResourceManager.GetString("UpdatedRestartPlease", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Version.
         /// </summary>
         public static string Version {

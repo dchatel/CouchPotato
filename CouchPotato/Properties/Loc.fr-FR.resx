@@ -186,6 +186,9 @@
   <data name="TVShowInfo" xml:space="preserve">
     <value>Infos sur la Série</value>
   </data>
+  <data name="UpdatedRestartPlease" xml:space="preserve">
+    <value>CouchPotato a été mis à jour. Redémarrez le programme, s'il vous plait.</value>
+  </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>
   </data>

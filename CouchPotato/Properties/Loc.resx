@@ -186,6 +186,9 @@
   <data name="TVShowInfo" xml:space="preserve">
     <value>TV Show Info</value>
   </data>
+  <data name="UpdatedRestartPlease" xml:space="preserve">
+    <value>CouchPotato got updated. Please restart app.</value>
+  </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>
   </data>

@@ -70,7 +70,7 @@ namespace CouchPotato
                     }
 
                     App.Current.Shutdown();
-                    Process.Start($"{root}\\CouchPotato.exe");
+                    MessageBox.Show(CouchPotato.Properties.Loc.UpdatedRestartPlease);
                 }
             }
         }
