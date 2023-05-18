@@ -18,7 +18,6 @@ namespace CouchPotato
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            MessageBox.Show("test");
 #if DEBUG
             CheckForUpdates();
 #endif
