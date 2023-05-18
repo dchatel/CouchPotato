@@ -67,7 +67,7 @@ namespace CouchPotato
                     }
 
                     App.Current.Shutdown();
-                    Process.Start(Environment.GetCommandLineArgs()[0]);
+                    Process.Start(Environment.ProcessPath!);
                 }
             }
         }
