@@ -18,6 +18,7 @@ namespace CouchPotato
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            MessageBox.Show("test");
             CheckForUpdates();
 
             FrameworkElement.LanguageProperty.OverrideMetadata(
