@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
@@ -32,6 +33,11 @@ namespace CouchPotato
 
         private async void CheckForUpdates()
         {
+            var root = AppDomain.CurrentDomain.BaseDirectory;
+            // Remove old files
+            foreach (var oldFile in Directory.GetFiles(root, "*.old"))
+                File.Delete(oldFile);
+
             using var client = new HttpClient();
 
             // Compare versions
@@ -48,15 +54,22 @@ namespace CouchPotato
             {
                 // New version available
                 using (var s = client.GetStreamAsync($"https://github.com/dchatel/CouchPotato/releases/download/{lastVersion}/CouchPotato.zip"))
-                using (var fs = new FileStream($"{AppDomain.CurrentDomain.BaseDirectory}\\CouchPotato.zip", FileMode.OpenOrCreate))
-                    s.Result.CopyTo(fs);
-                App.Current.Shutdown();
-                System.Diagnostics.Process.Start("powershell",
-                    $"""
-                    Start-Sleep -Seconds 1
-                    Expand-Archive -LiteralPath '{AppDomain.CurrentDomain.BaseDirectory}\\CouchPotato.zip' -DestinationPath '{AppDomain.CurrentDomain.BaseDirectory} -Force';
-                    {AppDomain.CurrentDomain.BaseDirectory}\\CouchPotato.exe;
-                    """);
+                using (var stream = new MemoryStream())
+                {
+                    s.Result.CopyTo(stream);
+
+                    var zip = new ZipArchive(stream);
+                    foreach (var entry in zip.Entries)
+                    {
+                        var maybeFile = Path.Combine(root, entry.Name);
+                        if (Path.Exists(maybeFile))
+                            File.Move(maybeFile, $"{maybeFile}.old");
+                        entry.ExtractToFile(maybeFile);
+                    }
+
+                    App.Current.Shutdown();
+                    Process.Start(Environment.GetCommandLineArgs()[0]);
+                }
             }
         }
     }
