@@ -57,7 +57,7 @@ public class MigratorViewModel : ContentViewModel
 
         if (Config.Default.EnableAutoUpdates)
         {
-            UpdateApp();
+            await UpdateApp();
         }
 
         if (!AreMigrationsPending())
