@@ -13,16 +13,16 @@
     xmlns:v="clr-namespace:CouchPotato.Views"
     Title="Couch Potato"
     Width="{Binding MainWindowWidth,
-                    Source={x:Static p:Settings.Default},
+                    Source={x:Static p:Config.Default},
                     Mode=TwoWay}"
     Height="{Binding MainWindowHeight,
-                     Source={x:Static p:Settings.Default},
+                     Source={x:Static p:Config.Default},
                      Mode=TwoWay}"
     d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}"
     Left="{Binding MainWindowLeft,
-                   Source={x:Static p:Settings.Default},
+                   Source={x:Static p:Config.Default},
                    Mode=TwoWay}"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
@@ -30,10 +30,10 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     Top="{Binding MainWindowTop,
-                  Source={x:Static p:Settings.Default},
+                  Source={x:Static p:Config.Default},
                   Mode=TwoWay}"
     WindowState="{Binding MainWindowState,
-                          Source={x:Static p:Settings.Default},
+                          Source={x:Static p:Config.Default},
                           Mode=TwoWay}"
     mc:Ignorable="d">
     <Window.DataContext>

@@ -76,6 +76,4 @@
   </dependency>
   -->
 
-	<SquirrelAwareVersion xmlns="urn:schema-squirrel-com:asm.v1">1</SquirrelAwareVersion>
-
 </assembly>

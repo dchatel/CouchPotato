@@ -26,7 +26,7 @@ public partial class DataContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;ApplicationIntent=ReadOnly;AttachDbFilename=C:\Users\dchat\Videlib.mdf");
+        optionsBuilder.UseSqlServer(Properties.Config.Default.VidelibConnectionString);
         base.OnConfiguring(optionsBuilder);
     }
 

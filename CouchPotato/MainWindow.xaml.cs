@@ -31,7 +31,5 @@ namespace CouchPotato
         private void RestoreButton_Click(object sender, RoutedEventArgs e) => WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
 
         private void CloseButton_Click(object sender, RoutedEventArgs e) => Close();
-
-        protected override void OnClosing(CancelEventArgs e) => Properties.Settings.Default.Save();
     }
 }

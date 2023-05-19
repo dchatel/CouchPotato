@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CheckForUpdates" xml:space="preserve">
+    <value>Digging for updates for your loyal couch companion, CouchPotato.</value>
+  </data>
   <data name="DatabaseImportEpisodes" xml:space="preserve">
     <value>Importing episodes</value>
   </data>
@@ -188,6 +191,9 @@
   </data>
   <data name="UpdatedRestartPlease" xml:space="preserve">
     <value>CouchPotato got updated. Please restart app.</value>
+  </data>
+  <data name="UpdateFound" xml:space="preserve">
+    <value>New update on the horizon! Get ready for an even more flavorful cinematic adventure with CouchPotato from the comfort of your favorite couch.</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>

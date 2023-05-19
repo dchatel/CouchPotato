@@ -61,6 +61,15 @@ namespace CouchPotato.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Digging for updates for your loyal couch companion, CouchPotato..
+        /// </summary>
+        public static string CheckForUpdates {
+            get {
+                return ResourceManager.GetString("CheckForUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Importing episodes.
         /// </summary>
         public static string DatabaseImportEpisodes {
@@ -273,6 +282,15 @@ namespace CouchPotato.Properties {
         public static string UpdatedRestartPlease {
             get {
                 return ResourceManager.GetString("UpdatedRestartPlease", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à New update on the horizon! Get ready for an even more flavorful cinematic adventure with CouchPotato from the comfort of your favorite couch..
+        /// </summary>
+        public static string UpdateFound {
+            get {
+                return ResourceManager.GetString("UpdateFound", resourceCulture);
             }
         }
         
