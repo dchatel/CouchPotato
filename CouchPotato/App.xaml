@@ -22,6 +22,7 @@
                 <ResourceDictionary Source="Views/MigratorDialog/MigratorDialog.xaml" />
                 <ResourceDictionary Source="Views/VideoExplorer/SearchResultViewTemplates.xaml" />
                 <ResourceDictionary Source="Views/VideoExplorer/VideoExplorer.xaml" />
+                <ResourceDictionary Source="Views/VideoEditor/VideoEditor.xaml" />
                 <ResourceDictionary Source="Views/OkDialog/OkDialog.xaml" />
 
             </ResourceDictionary.MergedDictionaries>

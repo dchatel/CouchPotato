@@ -19,7 +19,9 @@ public abstract class ContentViewModel : INotifyPropertyChanged
     [SafeForDependencyAnalysis]
     public bool IsCurrent => ((MainWindowViewModel)App.Current.MainWindow.DataContext).Pages.Last() == this;
     public ICommand OkCommand { get; }
-    public ICommand CancelCommand { get; }
+    public ICommand CloseCommand { get; }
+    public virtual bool CanAutoClose => true;
+    public ICommand AutoCloseCommand { get; }
 
     protected virtual void OnLoaded() { }
 
@@ -29,7 +31,8 @@ public abstract class ContentViewModel : INotifyPropertyChanged
     protected ContentViewModel()
     {
         OkCommand = new RelayCommand(() => Close(true));
-        CancelCommand = new RelayCommand(() => Close(false));
+        CloseCommand = new RelayCommand(() => Close(false));
+        AutoCloseCommand = new RelayCommand(() => Close(false, true));
     }
 
     public async Task<bool> Show()
@@ -49,8 +52,10 @@ public abstract class ContentViewModel : INotifyPropertyChanged
         return dialogResult;
     }
 
-    public void Close(bool result)
+    public void Close(bool result, bool autoClose=false)
     {
+        if (autoClose && !CanAutoClose) return;
+
         var mainWindowViewModel = (MainWindowViewModel)App.Current.MainWindow.DataContext;
 
         mainWindowViewModel.Pages.Remove(this);

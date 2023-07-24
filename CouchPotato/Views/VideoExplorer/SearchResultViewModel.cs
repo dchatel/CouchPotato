@@ -15,8 +15,6 @@ namespace CouchPotato.Views.VideoExplorer;
 
 public class SearchResultViewModel
 {
-    private bool isSelected;
-
     public static SearchResultViewModel Create(Video video)
     {
         SearchResultViewModel result = video switch
@@ -28,7 +26,11 @@ public class SearchResultViewModel
         return result;
     }
 
-    public SearchResultViewModel(Video video)
+    private bool isSelected;
+
+    public Video Video { get; set; }
+
+    protected SearchResultViewModel(Video video)
     {
         Video = video;
     }
@@ -45,6 +47,19 @@ public class SearchResultViewModel
         }
     }
 
+    public int PersonalRating
+    {
+        get => Video?.PersonalRating ?? 0;
+        set {
+            if (Video is null) return;
+
+            using var db = new DataContext();
+            db.Attach(Video);
+            Video.PersonalRating = value;
+            db.SaveChangesAsync();
+        }
+    }
+
     protected virtual void LoadData()
     {
         using var db = new DataContext();
@@ -54,8 +69,6 @@ public class SearchResultViewModel
         foreach (var role in Video.Roles)
             db.Entry(role).Reference(r => r.Person).LoadAsync();
     }
-
-    public Video Video { get; }
 }
 
 public class MovieSearchResultViewModel : SearchResultViewModel

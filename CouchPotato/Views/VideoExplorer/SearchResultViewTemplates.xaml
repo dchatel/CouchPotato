@@ -89,10 +89,10 @@
                     Foreground="Yellow"
                     Header="{x:Static p:Loc.PersonalRating}">
                     <md:RatingBar
-                        IsReadOnly="True"
+                        IsReadOnly="False"
                         Max="10"
-                        Value="{Binding Video.PersonalRating,
-                                        TargetNullValue=0}">
+                        Value="{Binding PersonalRating,
+                                        TargetNullValue=0, Mode=TwoWay}">
                         <md:RatingBar.Resources>
                             <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="Yellow" />
                         </md:RatingBar.Resources>
@@ -178,55 +178,65 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="db:Role">
-                            <md:TransitioningContent OpeningEffectsOffset="{md:IndexedItemOffsetMultiplier 0:0:0.05}">
+                            <!--<md:TransitioningContent OpeningEffectsOffset="{md:IndexedItemOffsetMultiplier 0:0:0.05}">
                                 <md:TransitioningContent.OpeningEffects>
                                     <md:TransitionEffect Kind="ExpandIn" />
                                     <md:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
                                     <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2" />
-                                </md:TransitioningContent.OpeningEffects>
-                                <Border Margin="5">
-                                    <Border.Effect>
-                                        <DropShadowEffect BlurRadius="20" ShadowDepth="0" />
-                                    </Border.Effect>
-                                    <Border
-                                        Width="138"
-                                        Height="175"
-                                        CornerRadius="20,0,0,0">
-                                        <Border.Background>
-                                            <ImageBrush ImageSource="{Binding Person.PortraitUrl, Converter={c:ImageConverter}, IsAsync=True}" />
-                                        </Border.Background>
-                                        <Grid>
-                                            <Border VerticalAlignment="Bottom" Background="#b000">
-                                                <StackPanel>
-                                                    <Viewbox StretchDirection="DownOnly">
-                                                        <TextBlock
-                                                            FontSize="16"
-                                                            Text="{Binding Person.Name}"
-                                                            TextAlignment="Center" />
-                                                    </Viewbox>
-                                                    <TextBlock
-                                                        x:Name="characters"
-                                                        FontSize="14"
-                                                        Text="{Binding Characters}"
-                                                        TextAlignment="Center"
-                                                        TextWrapping="Wrap">
-                                                        <TextBlock.Style>
-                                                            <Style TargetType="TextBlock">
-                                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Border, AncestorLevel=1}, Path=IsMouseOver}" Value="True">
-                                                                        <Setter Property="Visibility" Value="Visible" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </TextBlock.Style>
-                                                    </TextBlock>
-                                                </StackPanel>
-                                            </Border>
-                                        </Grid>
+                                </md:TransitioningContent.OpeningEffects>-->
+                            <Border
+                                Width="138"
+                                Height="175"
+                                Margin="5"
+                                CornerRadius="20,0,0,0">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="20" ShadowDepth="0" />
+                                </Border.Effect>
+                                <Border.Style>
+                                    <Style TargetType="{x:Type Border}">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="{Binding Person.PortraitUrl, Converter={c:ImageConverter}, IsAsync=True}" />
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource self}, Path=DataContext.Person.PortraitUrl}" Value="{x:Null}">
+                                                <Setter Property="Background" Value="{StaticResource MaterialDesignCardBackground}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <Grid>
+                                    <Border VerticalAlignment="Bottom" Background="#b000">
+                                        <StackPanel>
+                                            <Viewbox StretchDirection="DownOnly">
+                                                <TextBlock
+                                                    FontSize="16"
+                                                    Text="{Binding Person.Name}"
+                                                    TextAlignment="Center" />
+                                            </Viewbox>
+                                            <TextBlock
+                                                x:Name="characters"
+                                                FontSize="14"
+                                                Text="{Binding Characters}"
+                                                TextAlignment="Center"
+                                                TextWrapping="Wrap">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Border, AncestorLevel=2}, Path=IsMouseOver}" Value="True">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </StackPanel>
                                     </Border>
-                                </Border>
-                            </md:TransitioningContent>
+                                </Grid>
+                            </Border>
+                            <!--</md:TransitioningContent>-->
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -243,7 +253,8 @@
                 Margin="5"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Background="{StaticResource MaterialDesignCardBackground}">
+                Background="{StaticResource MaterialDesignCardBackground}"
+                CornerRadius="40,0,0,0">
                 <b:Interaction.Triggers>
                     <b:EventTrigger EventName="MouseLeftButtonUp">
                         <b:InvokeCommandAction Command="{Binding Zoom}" />
@@ -280,6 +291,7 @@
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         Margin="15,5"
+                        FontSize="18"
                         Text="{Binding Episode.Overview}"
                         TextAlignment="Justify"
                         TextTrimming="WordEllipsis"
@@ -339,7 +351,8 @@
                                     Margin="5"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Background="{StaticResource MaterialDesignCardBackground}">
+                                    Background="{StaticResource MaterialDesignCardBackground}"
+                                    CornerRadius="20,0,0,0">
                                     <b:Interaction.Triggers>
                                         <b:EventTrigger EventName="MouseLeftButtonUp">
                                             <b:InvokeCommandAction Command="{Binding Zoom}" />
@@ -362,10 +375,7 @@
                                                 <RotateTransform Angle="-90" />
                                             </TextBlock.LayoutTransform>
                                         </TextBlock>
-                                        <Border
-                                            Grid.Column="1"
-                                            Margin="0,5,5,5"
-                                            CornerRadius="5">
+                                        <Border Grid.Column="1" Margin="0,2,2,2">
                                             <Border.Background>
                                                 <ImageBrush ImageSource="{Binding Episode.ImageUrl, Converter={c:ImageConverter}}" Stretch="UniformToFill" />
                                             </Border.Background>
@@ -404,12 +414,11 @@
 
             <Grid e:Grid.Rows="auto,*">
                 <ContentControl
-                    Background="#555f"
+                    Grid.Column="1"
                     Content="{Binding}"
                     ContentTemplate="{StaticResource header}" />
 
                 <ContentControl Grid.Row="1" Content="{Binding Video}" />
-
             </Grid>
         </Border>
     </DataTemplate>
@@ -426,7 +435,7 @@
 
             <Grid e:Grid.Rows="auto,auto,*">
                 <ContentControl
-                    Background="#5f55"
+                    Grid.Column="1"
                     Content="{Binding}"
                     ContentTemplate="{StaticResource header}" />
 
@@ -458,7 +467,6 @@
                 </ListBox>
 
                 <ContentControl Grid.Row="2" Content="{Binding ElementName=list, Path=SelectedItem}" />
-
             </Grid>
         </Border>
     </DataTemplate>

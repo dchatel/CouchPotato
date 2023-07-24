@@ -19,7 +19,7 @@
                     Style="{StaticResource MaterialDesignFloatingActionAccentButton}" />
                 <Button
                     Margin="20"
-                    Command="{Binding CancelCommand}"
+                    Command="{Binding CloseCommand}"
                     Content="{md:PackIcon Kind=Cancel}"
                     Style="{StaticResource MaterialDesignFloatingActionButton}" />
             </StackPanel>

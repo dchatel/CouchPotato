@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
   <data name="CheckForUpdates" xml:space="preserve">
     <value>Épluchage des mises à jour pour votre fidèle compagnon de canapé, CouchPotato.</value>
   </data>
@@ -156,8 +159,14 @@
   <data name="DatabaseUpdating" xml:space="preserve">
     <value>Mise à jour de la base de données</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
   <data name="DigitalLocation" xml:space="preserve">
     <value>Emplacement digital</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Modifier</value>
   </data>
   <data name="FileSystemSelectVidelibImageFolder" xml:space="preserve">
     <value>Sélectionnez le dossier contenant les images de Videlib</value>
@@ -176,6 +185,9 @@
   </data>
   <data name="ReleaseDate" xml:space="preserve">
     <value>Date de sortie</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Sauvegarder</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Status</value>

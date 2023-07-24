@@ -25,12 +25,12 @@ public class ImageConverter : MarkupExtension, IValueConverter
         else return FileSystemLoader(str);
     }
 
-    private BitmapImage? TmdbLoader(string str)
-    {
+    private static BitmapImage? TmdbLoader(string str)
+    { 
         return HttpLoader($"https://www.themoviedb.org/t/p/w138_and_h175_face{str}");
     }
 
-    private BitmapImage? HttpLoader(string url)
+    private static BitmapImage? HttpLoader(string url)
     {
         BitmapImage bmi = new();
         bmi.BeginInit();
@@ -39,7 +39,7 @@ public class ImageConverter : MarkupExtension, IValueConverter
         return bmi;
     }
 
-    private BitmapImage? FileSystemLoader(string path)
+    private static BitmapImage? FileSystemLoader(string path)
     {
         if (!File.Exists(path)) return null;
         try

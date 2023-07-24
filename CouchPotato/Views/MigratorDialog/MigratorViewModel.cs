@@ -41,6 +41,8 @@ public class MigratorViewModel : ContentViewModel
         videlib = new();
     }
 
+    public override bool CanAutoClose => false;
+
     private bool AreMigrationsPending()
     {
         return db.Database.GetPendingMigrations().Any();
@@ -49,9 +51,13 @@ public class MigratorViewModel : ContentViewModel
     protected override async void OnLoaded()
     {
 #if DEBUG
-        //db.Database.EnsureDeleted();
-        //if (Directory.Exists("Images"))
-        //    Directory.Delete("Images", recursive: true);
+        var result = MessageBox.Show("Reset Data?", "Reset", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+        if (result == MessageBoxResult.Yes)
+        {
+            db.Database.EnsureDeleted();
+            if (Directory.Exists("Images"))
+                Directory.Delete("Images", recursive: true);
+        }
 #endif
         await Task.Delay(500);
 

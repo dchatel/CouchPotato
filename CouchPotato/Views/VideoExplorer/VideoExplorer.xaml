@@ -9,17 +9,28 @@
     xmlns:p="clr-namespace:CouchPotato.Properties"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase">
 
-    <DataTemplate DataType="{x:Type l:SearchBoxViewModel}">
-        <Grid e:Grid.Cols="*,auto">
+    <DataTemplate DataType="{x:Type l:VideoExplorerToolbarViewModel}">
+        <Grid e:Grid.Cols="auto,*,auto">
+            <Button
+                Grid.Column="0"
+                Command="{Binding EditCommand}"
+                Content="{md:PackIcon Kind=Edit}"
+                Style="{StaticResource MaterialDesignFlatAccentButton}"
+                ToolTip="{Binding Source={x:Static p:Loc.Edit}}"
+                ToolTipService.InitialShowDelay="0" />
             <TextBox
+                Grid.Column="1"
                 VerticalAlignment="Center"
                 VerticalContentAlignment="Center"
                 md:HintAssist.Hint="{x:Static p:Loc.VideoExplorerSearchHint}"
                 md:TextFieldAssist.HasLeadingIcon="True"
                 md:TextFieldAssist.LeadingIcon="Search"
-                Text="{Binding SearchText, Mode=TwoWay, Delay=800, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding SearchText,
+                               Mode=TwoWay,
+                               Delay=800,
+                               UpdateSourceTrigger=PropertyChanged}" />
             <ToggleButton
-                Grid.Column="1"
+                Grid.Column="2"
                 Content="{md:PackIcon Kind=MovieSearchOutline}"
                 Foreground="DarkOrange"
                 Style="{StaticResource MaterialDesignFlatToggleButton}" />

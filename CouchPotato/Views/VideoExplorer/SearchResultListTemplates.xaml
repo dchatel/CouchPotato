@@ -19,7 +19,7 @@
                             <DoubleAnimation
                                 Storyboard.TargetProperty="Height"
                                 To="266"
-                                Duration="0:0:0.15" />
+                                Duration="0:0:0.5" />
                         </Storyboard>
                     </BeginStoryboard>
                 </DataTrigger.EnterActions>
@@ -29,7 +29,7 @@
                             <DoubleAnimation
                                 Storyboard.TargetProperty="Height"
                                 To="24"
-                                Duration="0:0:0.15" />
+                                Duration="0:0:0.5" />
                         </Storyboard>
                     </BeginStoryboard>
                 </DataTrigger.ExitActions>

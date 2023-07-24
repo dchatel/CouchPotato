@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 using CommunityToolkit.Mvvm.Input;
 
 using CouchPotato.DbModel;
+using CouchPotato.Views.VideoEditor;
 
 namespace CouchPotato.Views.VideoExplorer;
 
@@ -16,14 +19,14 @@ public class VideoExplorerViewModel : ContentViewModel
 
     public VideoExplorerViewModel()
     {
-        SearchBox = new SearchBoxViewModel();
-        SearchCommand = new AsyncRelayCommand(SearchBox.SearchAsync);
-        TitleBarRegion = SearchBox;
+        Toolbar = new VideoExplorerToolbarViewModel(this);
+        SearchCommand = new AsyncRelayCommand(Toolbar.SearchAsync);
+        TitleBarRegion = Toolbar;
     }
 
     public ICommand SearchCommand { get; }
-    public SearchBoxViewModel SearchBox { get; }
-    public IEnumerable<SearchResultViewModel>? SearchResults => SearchBox.SearchResults;
+    public VideoExplorerToolbarViewModel Toolbar { get; }
+    public IEnumerable<SearchResultViewModel>? SearchResults => Toolbar.SearchResults;
     public SearchResultViewModel? SelectedResult
     {
         get => selectedResult;
@@ -38,10 +41,11 @@ public class VideoExplorerViewModel : ContentViewModel
     }
 }
 
-public class SearchBoxViewModel
+public class VideoExplorerToolbarViewModel
 {
-    private string searchText = "";
+    private readonly VideoExplorerViewModel videoExplorer;
 
+    private string searchText = "";
     public string SearchText
     {
         get => searchText;
@@ -50,10 +54,29 @@ public class SearchBoxViewModel
             Task.Run(SearchAsync);
         }
     }
+    public ICommand EditCommand { get; }
     public IEnumerable<SearchResultViewModel>? SearchResults { get; set; }
 
-    public SearchBoxViewModel()
+    public VideoExplorerToolbarViewModel(VideoExplorerViewModel videoExplorer)
     {
+        this.videoExplorer = videoExplorer;
+        EditCommand = new AsyncRelayCommand(Edit);
+    }
+
+    private async Task Edit()
+    {
+        if (videoExplorer.SelectedResult is null) return;
+
+        using var db = new DataContext();
+        var video = db.Videos
+            .Where(video => video.Id == videoExplorer.SelectedResult.Video.Id)
+            .Single();
+        var videoEditor = new VideoEditorViewModel(video);
+        if (await videoEditor.Show())
+        {
+            await db.SaveChangesAsync();
+            videoExplorer.SelectedResult.Video = video;
+        }
     }
 
     public async Task SearchAsync()
