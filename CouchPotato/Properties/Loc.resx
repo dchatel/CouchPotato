@@ -120,6 +120,12 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="ChangeBackground" xml:space="preserve">
+    <value>Change background</value>
+  </data>
+  <data name="ChangePoster" xml:space="preserve">
+    <value>Change poster</value>
+  </data>
   <data name="CheckForUpdates" xml:space="preserve">
     <value>Digging for updates for your loyal couch companion, CouchPotato.</value>
   </data>
@@ -162,8 +168,14 @@
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
-  <data name="DigitalLocation" xml:space="preserve">
-    <value>Digital location</value>
+  <data name="DigitalFileFormat" xml:space="preserve">
+    <value>File Format</value>
+  </data>
+  <data name="DigitalResolution" xml:space="preserve">
+    <value>Resolution</value>
+  </data>
+  <data name="DigitalStorageCode" xml:space="preserve">
+    <value>Digital Storage</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
@@ -180,8 +192,17 @@
   <data name="OriginalTitle" xml:space="preserve">
     <value>Original title</value>
   </data>
+  <data name="Overview" xml:space="preserve">
+    <value>Overview</value>
+  </data>
   <data name="PersonalRating" xml:space="preserve">
     <value>Personal rating</value>
+  </data>
+  <data name="PhysicalStorage" xml:space="preserve">
+    <value>Physical Storage</value>
+  </data>
+  <data name="PhysicalStorageCode" xml:space="preserve">
+    <value>Code</value>
   </data>
   <data name="ReleaseDate" xml:space="preserve">
     <value>Release date</value>
@@ -191,6 +212,12 @@
   </data>
   <data name="Status" xml:space="preserve">
     <value>Status</value>
+  </data>
+  <data name="Tagline" xml:space="preserve">
+    <value>Tagline</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
   </data>
   <data name="TmdbRating" xml:space="preserve">
     <value>TMDB Rating</value>

@@ -70,6 +70,24 @@ namespace CouchPotato.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Change background.
+        /// </summary>
+        public static string ChangeBackground {
+            get {
+                return ResourceManager.GetString("ChangeBackground", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Change poster.
+        /// </summary>
+        public static string ChangePoster {
+            get {
+                return ResourceManager.GetString("ChangePoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Digging for updates for your loyal couch companion, CouchPotato..
         /// </summary>
         public static string CheckForUpdates {
@@ -196,11 +214,29 @@ namespace CouchPotato.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Digital location.
+        ///   Recherche une chaîne localisée semblable à File Format.
         /// </summary>
-        public static string DigitalLocation {
+        public static string DigitalFileFormat {
             get {
-                return ResourceManager.GetString("DigitalLocation", resourceCulture);
+                return ResourceManager.GetString("DigitalFileFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Resolution.
+        /// </summary>
+        public static string DigitalResolution {
+            get {
+                return ResourceManager.GetString("DigitalResolution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Digital Storage.
+        /// </summary>
+        public static string DigitalStorageCode {
+            get {
+                return ResourceManager.GetString("DigitalStorageCode", resourceCulture);
             }
         }
         
@@ -250,11 +286,38 @@ namespace CouchPotato.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Overview.
+        /// </summary>
+        public static string Overview {
+            get {
+                return ResourceManager.GetString("Overview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Personal rating.
         /// </summary>
         public static string PersonalRating {
             get {
                 return ResourceManager.GetString("PersonalRating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Physical Storage.
+        /// </summary>
+        public static string PhysicalStorage {
+            get {
+                return ResourceManager.GetString("PhysicalStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Code.
+        /// </summary>
+        public static string PhysicalStorageCode {
+            get {
+                return ResourceManager.GetString("PhysicalStorageCode", resourceCulture);
             }
         }
         
@@ -282,6 +345,24 @@ namespace CouchPotato.Properties {
         public static string Status {
             get {
                 return ResourceManager.GetString("Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Tagline.
+        /// </summary>
+        public static string Tagline {
+            get {
+                return ResourceManager.GetString("Tagline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Title.
+        /// </summary>
+        public static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
             }
         }
         

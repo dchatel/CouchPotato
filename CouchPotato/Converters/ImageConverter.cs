@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using System.Security.Policy;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Markup;
 using System.Windows.Media.Imaging;
@@ -26,7 +24,7 @@ public class ImageConverter : MarkupExtension, IValueConverter
     }
 
     private static BitmapImage? TmdbLoader(string str)
-    { 
+    {
         return HttpLoader($"https://www.themoviedb.org/t/p/w138_and_h175_face{str}");
     }
 

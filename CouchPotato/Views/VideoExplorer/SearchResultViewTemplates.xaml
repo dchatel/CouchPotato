@@ -92,7 +92,8 @@
                         IsReadOnly="False"
                         Max="10"
                         Value="{Binding PersonalRating,
-                                        TargetNullValue=0, Mode=TwoWay}">
+                                        TargetNullValue=0,
+                                        Mode=TwoWay}">
                         <md:RatingBar.Resources>
                             <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="Yellow" />
                         </md:RatingBar.Resources>
@@ -102,7 +103,7 @@
                     Grid.Row="2"
                     Grid.Column="5"
                     Foreground="Yellow"
-                    Header="{x:Static p:Loc.Location}">
+                    Header="{x:Static p:Loc.PhysicalStorage}">
                     <TextBlock FontSize="18">
                         <Run Text="{Binding Video.PhysicalStorage}" />
                         <Run Text="{Binding Video.PhysicalStorageCode}" />
@@ -112,7 +113,7 @@
                     Grid.Row="2"
                     Grid.Column="6"
                     Foreground="Yellow"
-                    Header="{x:Static p:Loc.DigitalLocation}">
+                    Header="{x:Static p:Loc.DigitalStorageCode}">
                     <TextBlock FontSize="18">
                         <Run Text="{Binding Video.DigitalStorageCode}" />
                         <Run Text="{Binding Video.DigitalResolution}" />
@@ -143,6 +144,68 @@
                 </HeaderedContentControl>
             </Grid>
         </Border>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type db:Role}">
+        <!--<md:TransitioningContent OpeningEffectsOffset="{md:IndexedItemOffsetMultiplier 0:0:0.05}">
+        <md:TransitioningContent.OpeningEffects>
+            <md:TransitionEffect Kind="ExpandIn" />
+            <md:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
+            <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2" />
+        </md:TransitioningContent.OpeningEffects>-->
+        <Border
+            Width="138"
+            Height="175"
+            Margin="5"
+            CornerRadius="20,0,0,0">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="20" ShadowDepth="0" />
+            </Border.Effect>
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="{Binding Person.PortraitUrl, Converter={c:ImageConverter}, IsAsync=True}" />
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource self}, Path=DataContext.Person.PortraitUrl}" Value="{x:Null}">
+                            <Setter Property="Background" Value="{StaticResource MaterialDesignCardBackground}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Grid>
+                <Border VerticalAlignment="Bottom" Background="#b000">
+                    <StackPanel>
+                        <Viewbox StretchDirection="DownOnly">
+                            <TextBlock
+                                FontSize="16"
+                                Text="{Binding Person.Name}"
+                                TextAlignment="Center" />
+                        </Viewbox>
+                        <TextBlock
+                            x:Name="characters"
+                            FontSize="14"
+                            Text="{Binding Characters}"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Border, AncestorLevel=2}, Path=IsMouseOver}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+        <!--</md:TransitioningContent>-->
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type db:Video}">
@@ -176,69 +239,6 @@
                             <WrapPanel />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="db:Role">
-                            <!--<md:TransitioningContent OpeningEffectsOffset="{md:IndexedItemOffsetMultiplier 0:0:0.05}">
-                                <md:TransitioningContent.OpeningEffects>
-                                    <md:TransitionEffect Kind="ExpandIn" />
-                                    <md:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
-                                    <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2" />
-                                </md:TransitioningContent.OpeningEffects>-->
-                            <Border
-                                Width="138"
-                                Height="175"
-                                Margin="5"
-                                CornerRadius="20,0,0,0">
-                                <Border.Effect>
-                                    <DropShadowEffect BlurRadius="20" ShadowDepth="0" />
-                                </Border.Effect>
-                                <Border.Style>
-                                    <Style TargetType="{x:Type Border}">
-                                        <Setter Property="Background">
-                                            <Setter.Value>
-                                                <ImageBrush ImageSource="{Binding Person.PortraitUrl, Converter={c:ImageConverter}, IsAsync=True}" />
-                                            </Setter.Value>
-                                        </Setter>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource self}, Path=DataContext.Person.PortraitUrl}" Value="{x:Null}">
-                                                <Setter Property="Background" Value="{StaticResource MaterialDesignCardBackground}" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Border.Style>
-                                <Grid>
-                                    <Border VerticalAlignment="Bottom" Background="#b000">
-                                        <StackPanel>
-                                            <Viewbox StretchDirection="DownOnly">
-                                                <TextBlock
-                                                    FontSize="16"
-                                                    Text="{Binding Person.Name}"
-                                                    TextAlignment="Center" />
-                                            </Viewbox>
-                                            <TextBlock
-                                                x:Name="characters"
-                                                FontSize="14"
-                                                Text="{Binding Characters}"
-                                                TextAlignment="Center"
-                                                TextWrapping="Wrap">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Border, AncestorLevel=2}, Path=IsMouseOver}" Value="True">
-                                                                <Setter Property="Visibility" Value="Visible" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
-                                        </StackPanel>
-                                    </Border>
-                                </Grid>
-                            </Border>
-                            <!--</md:TransitioningContent>-->
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </StackPanel>
         </ScrollViewer>

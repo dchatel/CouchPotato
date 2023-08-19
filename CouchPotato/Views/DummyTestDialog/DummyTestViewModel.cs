@@ -8,4 +8,8 @@ namespace CouchPotato.Views.DummyTestDialog;
 
 public class DummyTestViewModel : ContentViewModel
 {
+    public DummyTestViewModel() : base(autoClose: true)
+    {
+
+    }
 }

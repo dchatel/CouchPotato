@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 using CommunityToolkit.Mvvm.Input;
@@ -7,6 +9,8 @@ using CommunityToolkit.Mvvm.Input;
 using CouchPotato.Views;
 using CouchPotato.Views.MigratorDialog;
 using CouchPotato.Views.VideoExplorer;
+
+using Microsoft.Extensions.DependencyModel;
 
 namespace CouchPotato;
 

@@ -10,7 +10,7 @@
 
                 <md:BundledTheme
                     BaseTheme="Dark"
-                    PrimaryColor="Indigo"
+                    PrimaryColor="LightBlue"
                     SecondaryColor="Amber" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/Generic.xaml" />
@@ -26,6 +26,8 @@
                 <ResourceDictionary Source="Views/OkDialog/OkDialog.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate x:Key="emptyDataTemplate" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

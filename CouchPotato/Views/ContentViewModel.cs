@@ -20,16 +20,16 @@ public abstract class ContentViewModel : INotifyPropertyChanged
     public bool IsCurrent => ((MainWindowViewModel)App.Current.MainWindow.DataContext).Pages.Last() == this;
     public ICommand OkCommand { get; }
     public ICommand CloseCommand { get; }
-    public virtual bool CanAutoClose => true;
     public ICommand AutoCloseCommand { get; }
 
     protected virtual void OnLoaded() { }
 
-    public object? TitleBarRegion { get; protected init; } = null;
+    public bool CanAutoClose { get; }
     public object? HamburgerMenu { get; protected init; } = null;
 
-    protected ContentViewModel()
+    protected ContentViewModel(bool autoClose)
     {
+        CanAutoClose = autoClose;
         OkCommand = new RelayCommand(() => Close(true));
         CloseCommand = new RelayCommand(() => Close(false));
         AutoCloseCommand = new RelayCommand(() => Close(false, true));
@@ -52,7 +52,7 @@ public abstract class ContentViewModel : INotifyPropertyChanged
         return dialogResult;
     }
 
-    public void Close(bool result, bool autoClose=false)
+    public void Close(bool result, bool autoClose = false)
     {
         if (autoClose && !CanAutoClose) return;
 

@@ -15,7 +15,7 @@ namespace CouchPotato.Views.OkDialog
     {
         public object Content { get; }
 
-        public OkDialogViewModel(object content)
+        public OkDialogViewModel(object content) : base(autoClose: true)
         {
             Content = content;
         }

@@ -14,22 +14,43 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CouchPotato
+using PostSharp.Aspects.Advices;
+
+namespace CouchPotato;
+
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        public MainWindow()
+        InitializeComponent();
+    }
+
+    private void MinimizeButton_Click(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
+
+    private void RestoreButton_Click(object sender, RoutedEventArgs e) => WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+
+    private void CloseButton_Click(object sender, RoutedEventArgs e) => Close();
+}
+
+
+public class ContentDataTemplateSelector : DataTemplateSelector
+{
+    public override DataTemplate SelectTemplate(object item, DependencyObject container)
+    {
+        if (item is null) return null!;
+
+        var name = (string)container.GetValue(FrameworkElement.NameProperty);
+        var template = name switch
         {
-            InitializeComponent();
-        }
+            "toolbar" => App.Current.TryFindResource(item.GetType().Name.Replace("ViewModel", "Toolbar")),
+            "content" => App.Current.TryFindResource(item.GetType().Name.Replace("ViewModel", "View")),
+            "menu" => App.Current.TryFindResource(item.GetType().Name.Replace("ViewModel", "Menu")),
+            _ => null
+        };
 
-        private void MinimizeButton_Click(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
-
-        private void RestoreButton_Click(object sender, RoutedEventArgs e) => WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-
-        private void CloseButton_Click(object sender, RoutedEventArgs e) => Close();
+        return (DataTemplate)(template ?? App.Current.TryFindResource("emptyDataTemplate"));
     }
 }

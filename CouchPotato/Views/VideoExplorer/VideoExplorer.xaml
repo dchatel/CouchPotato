@@ -9,13 +9,13 @@
     xmlns:p="clr-namespace:CouchPotato.Properties"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase">
 
-    <DataTemplate DataType="{x:Type l:VideoExplorerToolbarViewModel}">
+    <DataTemplate x:Key="VideoExplorerToolbar" DataType="{x:Type l:VideoExplorerViewModel}">
         <Grid e:Grid.Cols="auto,*,auto">
             <Button
                 Grid.Column="0"
                 Command="{Binding EditCommand}"
                 Content="{md:PackIcon Kind=Edit}"
-                Style="{StaticResource MaterialDesignFlatAccentButton}"
+                Style="{StaticResource MaterialDesignFlatButton}"
                 ToolTip="{Binding Source={x:Static p:Loc.Edit}}"
                 ToolTipService.InitialShowDelay="0" />
             <TextBox
@@ -32,12 +32,11 @@
             <ToggleButton
                 Grid.Column="2"
                 Content="{md:PackIcon Kind=MovieSearchOutline}"
-                Foreground="DarkOrange"
-                Style="{StaticResource MaterialDesignFlatToggleButton}" />
+                Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" />
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type l:VideoExplorerViewModel}">
+    <DataTemplate x:Key="VideoExplorerView" DataType="{x:Type l:VideoExplorerViewModel}">
         <Grid e:Grid.Cols="auto, *">
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="Loaded">

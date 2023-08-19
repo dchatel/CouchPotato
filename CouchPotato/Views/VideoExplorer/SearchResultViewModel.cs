@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Documents;
 using System.Windows.Input;
 
@@ -26,7 +27,7 @@ public class SearchResultViewModel
         return result;
     }
 
-    private bool isSelected;
+    //private bool isSelected;
 
     public Video Video { get; set; }
 
@@ -35,17 +36,17 @@ public class SearchResultViewModel
         Video = video;
     }
 
-    public bool IsSelected
-    {
-        get => isSelected;
-        set {
-            isSelected = value;
-            if (isSelected)
-            {
-                LoadData();
-            }
-        }
-    }
+    //public bool IsSelected
+    //{
+    //    get => isSelected;
+    //    set {
+    //        isSelected = value;
+    //        if (isSelected)
+    //        {
+    //            LoadData();
+    //        }
+    //    }
+    //}
 
     public int PersonalRating
     {
@@ -60,14 +61,14 @@ public class SearchResultViewModel
         }
     }
 
-    protected virtual void LoadData()
+    public virtual async Task LoadData()
     {
         using var db = new DataContext();
         db.Attach(Video);
-        db.Entry(Video).Collection(v => v.Genres).LoadAsync();
-        db.Entry(Video).Collection(v => v.Roles).LoadAsync();
+        await db.Entry(Video).Collection(v => v.Genres).LoadAsync();
+        await db.Entry(Video).Collection(v => v.Roles).LoadAsync();
         foreach (var role in Video.Roles)
-            db.Entry(role).Reference(r => r.Person).LoadAsync();
+            await db.Entry(role).Reference(r => r.Person).LoadAsync();
     }
 }
 
@@ -84,19 +85,19 @@ public class TVShowSearchResultViewModel : SearchResultViewModel
     public IEnumerable<object> Pages { get; set; } = null!;
     public object CurrentPage { get; set; } = null!;
 
-    protected override void LoadData()
+    public override async Task LoadData()
     {
         using var db = new DataContext();
         db.Attach(Video);
-        db.Entry(Video).Collection(v => v.Genres).LoadAsync();
-        db.Entry(Video).Collection(v => v.Roles).LoadAsync();
+        await db.Entry(Video).Collection(v => v.Genres).LoadAsync();
+        await db.Entry(Video).Collection(v => v.Roles).LoadAsync();
         foreach (var role in Video.Roles)
-            db.Entry(role).Reference(r => r.Person).LoadAsync();
+            await db.Entry(role).Reference(r => r.Person).LoadAsync();
         if (Video is TVShow tv)
         {
-            db.Entry(tv).Collection(v => v.Seasons).LoadAsync();
+            await db.Entry(tv).Collection(v => v.Seasons).LoadAsync();
             foreach (var season in tv.Seasons)
-                db.Entry(season).Collection(s => s.Episodes).LoadAsync();
+                await db.Entry(season).Collection(s => s.Episodes).LoadAsync();
 
             var list = new List<object>
             {
@@ -136,7 +137,7 @@ public class EpisodeViewModel : ContentViewModel
     public ICommand Zoom { get; }
     public bool Zoomed { get; set; }
 
-    public EpisodeViewModel(Episode episode)
+    public EpisodeViewModel(Episode episode) : base(autoClose: true)
     {
         Episode = episode;
         Zoom = new AsyncRelayCommand(async () =>

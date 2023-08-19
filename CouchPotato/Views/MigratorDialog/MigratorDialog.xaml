@@ -4,7 +4,7 @@
     xmlns:c="clr-namespace:CouchPotato.Converters"
     xmlns:l="clr-namespace:CouchPotato.Views.MigratorDialog">
 
-    <DataTemplate DataType="{x:Type l:MigratorViewModel}">
+    <DataTemplate x:Key="MigratorView" DataType="{x:Type l:MigratorViewModel}">
 
         <Border HorizontalAlignment="Center">
             <StackPanel>

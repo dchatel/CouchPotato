@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 using CommunityToolkit.Mvvm.Input;
@@ -11,39 +10,32 @@ using CommunityToolkit.Mvvm.Input;
 using CouchPotato.DbModel;
 using CouchPotato.Views.VideoEditor;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace CouchPotato.Views.VideoExplorer;
 
 public class VideoExplorerViewModel : ContentViewModel
 {
-    private SearchResultViewModel? selectedResult;
-
-    public VideoExplorerViewModel()
+    public VideoExplorerViewModel() : base(autoClose: false)
     {
-        Toolbar = new VideoExplorerToolbarViewModel(this);
-        SearchCommand = new AsyncRelayCommand(Toolbar.SearchAsync);
-        TitleBarRegion = Toolbar;
+        SearchCommand = new AsyncRelayCommand(SearchAsync);
+        EditCommand = new AsyncRelayCommand(Edit);
     }
 
+    public ICommand EditCommand { get; }
     public ICommand SearchCommand { get; }
-    public VideoExplorerToolbarViewModel Toolbar { get; }
-    public IEnumerable<SearchResultViewModel>? SearchResults => Toolbar.SearchResults;
+    public IEnumerable<SearchResultViewModel>? SearchResults { get; set; }
+
+    private SearchResultViewModel? selectedResult;
     public SearchResultViewModel? SelectedResult
     {
         get => selectedResult;
         set {
-            if (selectedResult is not null)
-                selectedResult.IsSelected = false;
             selectedResult = value;
             if (selectedResult is not null)
-                selectedResult.IsSelected = true;
-            base.OnPropertyChanged(nameof(SelectedResult));
+                Task.Run(selectedResult.LoadData);
         }
     }
-}
-
-public class VideoExplorerToolbarViewModel
-{
-    private readonly VideoExplorerViewModel videoExplorer;
 
     private string searchText = "";
     public string SearchText
@@ -54,32 +46,19 @@ public class VideoExplorerToolbarViewModel
             Task.Run(SearchAsync);
         }
     }
-    public ICommand EditCommand { get; }
-    public IEnumerable<SearchResultViewModel>? SearchResults { get; set; }
-
-    public VideoExplorerToolbarViewModel(VideoExplorerViewModel videoExplorer)
-    {
-        this.videoExplorer = videoExplorer;
-        EditCommand = new AsyncRelayCommand(Edit);
-    }
 
     private async Task Edit()
     {
-        if (videoExplorer.SelectedResult is null) return;
+        if (SelectedResult is null) return;
 
-        using var db = new DataContext();
-        var video = db.Videos
-            .Where(video => video.Id == videoExplorer.SelectedResult.Video.Id)
-            .Single();
-        var videoEditor = new VideoEditorViewModel(video);
+        var videoEditor = new VideoEditorViewModel(SelectedResult.Video.Id);
         if (await videoEditor.Show())
         {
-            await db.SaveChangesAsync();
-            videoExplorer.SelectedResult.Video = video;
+            SelectedResult.Video = videoEditor.Video;
         }
     }
 
-    public async Task SearchAsync()
+    private async Task SearchAsync()
     {
         using var db = new DataContext();
 
@@ -87,5 +66,6 @@ public class VideoExplorerToolbarViewModel
             .Where(video => video.Title.ToLower().Contains(SearchText.ToLower()))
             .Select(video => SearchResultViewModel.Create(video))
             .ToArray());
+        SelectedResult = SearchResults.FirstOrDefault();
     }
 }

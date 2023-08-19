@@ -35,13 +35,13 @@ public class MigratorViewModel : ContentViewModel
     private readonly Dictionary<int, Video> dvideos = new();
     private readonly Dictionary<int, Season> dseasons = new();
 
-    public MigratorViewModel()
+    public MigratorViewModel() : base(autoClose: false)
     {
         db = new();
         videlib = new();
     }
 
-    public override bool CanAutoClose => false;
+    //public override bool CanAutoClose => false;
 
     private bool AreMigrationsPending()
     {
