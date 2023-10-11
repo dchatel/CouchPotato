@@ -280,7 +280,7 @@ public class MigratorViewModel : ContentViewModel
             {
                 Video video = new()
                 {
-                    Title = film.Title!.Normalize(),
+                    Title = film.Title?.Normalize() ?? "",
                     Tagline = film.Tagline?.Normalize(),
                     Overview = film.Overview?.Normalize(),
                     ReleaseDate = film.ReleaseDate,
@@ -324,7 +324,7 @@ public class MigratorViewModel : ContentViewModel
                 dvideos[(int)film.FilmId!] = video;
                 foreach (var g in film.Genres)
                 {
-                    if (dgenres.TryGetValue((int)g.GenreId!, out Genre? genre))
+                    if (g.GenreId is not null && dgenres.TryGetValue((int)g.GenreId, out Genre? genre))
                         video.Genres.Add(genre);
                 }
                 db.Videos.Add(video);
