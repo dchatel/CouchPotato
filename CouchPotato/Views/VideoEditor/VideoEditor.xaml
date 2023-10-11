@@ -204,6 +204,7 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </StackPanel.Style>
+
                                         <Button
                                             Margin="0,0,0,5"
                                             HorizontalAlignment="Right"
@@ -232,26 +233,33 @@
     </DataTemplate>
 
     <DataTemplate x:Key="VideoEditorView" DataType="{x:Type l:VideoEditorViewModel}">
-        <Border
-            Margin="20"
-            Padding="20"
-            Background="{StaticResource MaterialDesignCardBackground}"
-            CornerRadius="20,0,0,0">
-            <Border.Effect>
-                <DropShadowEffect
-                    BlurRadius="5"
-                    Opacity=".3"
-                    ShadowDepth="2" />
-            </Border.Effect>
+        <md:TransitioningContent>
+            <md:TransitioningContent.OpeningEffects>
+                <md:TransitionEffect Kind="ExpandIn" />
+                <md:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
+                <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2" />
+            </md:TransitioningContent.OpeningEffects>
+            <Border
+                Margin="20"
+                Padding="20"
+                Background="{StaticResource MaterialDesignCardBackground}"
+                CornerRadius="20,0,0,0">
+                <Border.Effect>
+                    <DropShadowEffect
+                        BlurRadius="5"
+                        Opacity=".3"
+                        ShadowDepth="2" />
+                </Border.Effect>
 
-            <ContentPresenter Content="{Binding}">
-                <ContentPresenter.Style>
-                    <Style TargetType="ContentPresenter">
-                        <Setter Property="ContentTemplate" Value="{StaticResource MovieEditorView}" />
-                    </Style>
-                </ContentPresenter.Style>
-            </ContentPresenter>
+                <ContentPresenter Content="{Binding}">
+                    <ContentPresenter.Style>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="ContentTemplate" Value="{StaticResource MovieEditorView}" />
+                        </Style>
+                    </ContentPresenter.Style>
+                </ContentPresenter>
 
-        </Border>
+            </Border>
+        </md:TransitioningContent>
     </DataTemplate>
 </ResourceDictionary>

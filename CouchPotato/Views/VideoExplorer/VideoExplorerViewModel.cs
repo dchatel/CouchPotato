@@ -20,11 +20,13 @@ public class VideoExplorerViewModel : ContentViewModel
     {
         SearchCommand = new AsyncRelayCommand(SearchAsync);
         EditCommand = new AsyncRelayCommand(Edit);
+        IsSearching = false;
     }
 
     public ICommand EditCommand { get; }
     public ICommand SearchCommand { get; }
     public IEnumerable<SearchResultViewModel>? SearchResults { get; set; }
+    public bool IsSearching { get; set; }
 
     private SearchResultViewModel? selectedResult;
     public SearchResultViewModel? SelectedResult
@@ -60,6 +62,7 @@ public class VideoExplorerViewModel : ContentViewModel
 
     private async Task SearchAsync()
     {
+        IsSearching = true;
         using var db = new DataContext();
 
         SearchResults = await Task.Run(() => db.Videos
@@ -67,5 +70,6 @@ public class VideoExplorerViewModel : ContentViewModel
             .Select(video => SearchResultViewModel.Create(video))
             .ToArray());
         SelectedResult = SearchResults.FirstOrDefault();
+        IsSearching = false;
     }
 }

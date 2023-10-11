@@ -31,6 +31,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2045.28" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
 		<PackageReference Include="PostSharp.Patterns.Model" Version="2023.0.4" />
 		<PackageReference Include="System.Data.OleDb" Version="7.0.0" />
