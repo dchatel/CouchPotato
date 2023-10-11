@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CouchPotato.DbModel.OtherDbModels.Videlib;
 
+[Table("Films")]
 public partial class Film
 {
     public Film()

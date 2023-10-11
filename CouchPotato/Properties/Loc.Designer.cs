@@ -259,6 +259,24 @@ namespace CouchPotato.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Enter the name of an actor.
+        /// </summary>
+        public static string InputActorName {
+            get {
+                return ResourceManager.GetString("InputActorName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Enter the name of the character for this role.
+        /// </summary>
+        public static string InputCharacterRole {
+            get {
+                return ResourceManager.GetString("InputCharacterRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Location.
         /// </summary>
         public static string Location {
@@ -336,6 +354,15 @@ namespace CouchPotato.Properties {
         public static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Select new image.
+        /// </summary>
+        public static string SelectNewImage {
+            get {
+                return ResourceManager.GetString("SelectNewImage", resourceCulture);
             }
         }
         

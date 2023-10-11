@@ -1,0 +1,88 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:CouchPotato.Converters"
+    xmlns:db="clr-namespace:CouchPotato.DbModel"
+    xmlns:e="clr-namespace:CouchPotato.Extensions"
+    xmlns:l="clr-namespace:CouchPotato.Views.ActorFinderDialog"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:p="clr-namespace:CouchPotato.Properties">
+
+    <DataTemplate x:Key="ActorFinderView" DataType="{x:Type l:ActorFinderViewModel}">
+        <md:TransitioningContent>
+            <md:TransitioningContent.OpeningEffects>
+                <md:TransitionEffect Kind="ExpandIn" />
+                <md:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
+                <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2" />
+            </md:TransitioningContent.OpeningEffects>
+            <Border
+                Margin="160,80"
+                Padding="20"
+                Background="{StaticResource MaterialDesignCardBackground}"
+                CornerRadius="20,0,0,0">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="5" ShadowDepth="2" />
+                </Border.Effect>
+                <Grid e:Grid.Rows="auto,*,auto">
+
+                    <TextBox
+                        md:HintAssist.Hint="{Binding Source={x:Static p:Loc.InputActorName}}"
+                        md:HintAssist.IsFloating="True"
+                        Text="{Binding SearchText,
+                                       UpdateSourceTrigger=PropertyChanged,
+                                       Delay=800}" />
+
+                    <ListBox
+                        Grid.Row="1"
+                        ItemsSource="{Binding SearchResults}"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        SelectedValue="{Binding SelectedPerson}"
+                        Visibility="{Binding Searching,
+                                             Converter={c:VisibilityConverter Reversed=True}}">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel HorizontalAlignment="Center" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type db:Person}">
+                                <Border
+                                    Width="138"
+                                    Height="175"
+                                    CornerRadius="20,0,0,0">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
+                                    </Border.Effect>
+                                    <Border.Background>
+                                        <ImageBrush ImageSource="{Binding PortraitUrl, Converter={c:ImageConverter}, IsAsync=True}" />
+                                    </Border.Background>
+                                    <TextBlock
+                                        VerticalAlignment="Bottom"
+                                        Background="#b000"
+                                        Text="{Binding Name}"
+                                        TextAlignment="Center"
+                                        TextWrapping="Wrap" />
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Control
+                        Grid.Row="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource BusyAnimationStyle}"
+                        Visibility="{Binding Searching,
+                                             Converter={c:VisibilityConverter}}" />
+
+                    <Button
+                        Grid.Row="2"
+                        Command="{Binding OkCommand}"
+                        Content="Ok"
+                        IsDefault="True"
+                        Style="{StaticResource MaterialDesignFlatLightButton}" />
+                </Grid>
+            </Border>
+        </md:TransitioningContent>
+    </DataTemplate>
+
+</ResourceDictionary>

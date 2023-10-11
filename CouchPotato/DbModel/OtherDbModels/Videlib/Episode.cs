@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CouchPotato.DbModel.OtherDbModels.Videlib;
 
+[Table("Episodes")]
 public partial class Episode
 {
     public DateTime? AirDate { get; set; }

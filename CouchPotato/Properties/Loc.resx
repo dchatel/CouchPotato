@@ -183,6 +183,12 @@
   <data name="FileSystemSelectVidelibImageFolder" xml:space="preserve">
     <value>Select the folder containing Videlib images</value>
   </data>
+  <data name="InputActorName" xml:space="preserve">
+    <value>Enter the name of an actor</value>
+  </data>
+  <data name="InputCharacterRole" xml:space="preserve">
+    <value>Enter the name of the character for this role</value>
+  </data>
   <data name="Location" xml:space="preserve">
     <value>Location</value>
   </data>
@@ -209,6 +215,9 @@
   </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
+  </data>
+  <data name="SelectNewImage" xml:space="preserve">
+    <value>Select new image</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Status</value>

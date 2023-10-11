@@ -1,5 +1,8 @@
-﻿namespace CouchPotato.DbModel.OtherDbModels.Videlib;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
+namespace CouchPotato.DbModel.OtherDbModels.Videlib;
+
+[Table("Casts")]
 public partial class Cast
 {
     public string? Characters { get; set; }

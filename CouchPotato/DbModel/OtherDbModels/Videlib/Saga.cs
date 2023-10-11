@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CouchPotato.DbModel.OtherDbModels.Videlib;
 
+[Table("Sagas")]
 public partial class Saga
 {
     public Saga()

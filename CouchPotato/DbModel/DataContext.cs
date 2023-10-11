@@ -23,6 +23,6 @@ public class DataContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data Source=couchpotato.db");
+        optionsBuilder.UseSqlite(@"Data Source=couchpotato.db");
     }
 }

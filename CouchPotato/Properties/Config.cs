@@ -12,6 +12,7 @@ public partial class Config
 {
     public string VidelibConnectionString { get; private set; } = @"Data Source=(localdb)\MSSQLLocalDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;ApplicationIntent=ReadOnly;AttachDbFilename=C:\Users\dchat\Videlib.mdf";
     public string TMDbAPIKey { get; private set; } = "ae1e1d6d8fc9e53d1bb3f5501c690acd";
+    public string Language { get; private set; } = "fr";
 
     public bool EnableAutoUpdates { get; set; } = false;
 

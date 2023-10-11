@@ -8,6 +8,7 @@
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 		<ApplicationIcon>logo.ico</ApplicationIcon>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<SignAssembly>False</SignAssembly>
 	</PropertyGroup>
 
 	<ItemGroup>

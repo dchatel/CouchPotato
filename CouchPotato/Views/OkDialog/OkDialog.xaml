@@ -5,12 +5,12 @@
     xmlns:l="clr-namespace:CouchPotato.Views.OkDialog"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
 
-    <DataTemplate DataType="{x:Type l:OkDialogViewModel}">
+    <DataTemplate x:Key="OkDialogView" DataType="{x:Type l:OkDialogViewModel}">
         <md:TransitioningContent>
             <md:TransitioningContent.OpeningEffects>
                 <md:TransitionEffect Kind="ExpandIn" />
                 <md:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
-                <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2"/>
+                <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2" />
             </md:TransitioningContent.OpeningEffects>
             <Grid
                 HorizontalAlignment="Center"

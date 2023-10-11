@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CouchPotato.Migrations
 {
     /// <inheritdoc />
-    public partial class CouchPotatov0 : Migration
+    public partial class CouchPotato_v0 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Genres",
+                name: "Genre",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -22,11 +22,11 @@ namespace CouchPotato.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Genres", x => x.Id);
+                    table.PrimaryKey("PK_Genre", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Persons",
+                name: "Person",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -37,11 +37,11 @@ namespace CouchPotato.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Persons", x => x.Id);
+                    table.PrimaryKey("PK_Person", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Videos",
+                name: "Video",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -70,7 +70,7 @@ namespace CouchPotato.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Videos", x => x.Id);
+                    table.PrimaryKey("PK_Video", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -84,21 +84,21 @@ namespace CouchPotato.Migrations
                 {
                     table.PrimaryKey("PK_GenreVideo", x => new { x.GenresId, x.VideosId });
                     table.ForeignKey(
-                        name: "FK_GenreVideo_Genres_GenresId",
+                        name: "FK_GenreVideo_Genre_GenresId",
                         column: x => x.GenresId,
-                        principalTable: "Genres",
+                        principalTable: "Genre",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GenreVideo_Videos_VideosId",
+                        name: "FK_GenreVideo_Video_VideosId",
                         column: x => x.VideosId,
-                        principalTable: "Videos",
+                        principalTable: "Video",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Roles",
+                name: "Role",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -110,23 +110,23 @@ namespace CouchPotato.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
+                    table.PrimaryKey("PK_Role", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Roles_Persons_PersonId",
+                        name: "FK_Role_Person_PersonId",
                         column: x => x.PersonId,
-                        principalTable: "Persons",
+                        principalTable: "Person",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Roles_Videos_VideoId",
+                        name: "FK_Role_Video_VideoId",
                         column: x => x.VideoId,
-                        principalTable: "Videos",
+                        principalTable: "Video",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Seasons",
+                name: "Season",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -140,17 +140,17 @@ namespace CouchPotato.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Seasons", x => x.Id);
+                    table.PrimaryKey("PK_Season", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Seasons_Videos_TVShowId",
+                        name: "FK_Season_Video_TVShowId",
                         column: x => x.TVShowId,
-                        principalTable: "Videos",
+                        principalTable: "Video",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Episodes",
+                name: "Episode",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -170,18 +170,18 @@ namespace CouchPotato.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Episodes", x => x.Id);
+                    table.PrimaryKey("PK_Episode", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Episodes_Seasons_SeasonId",
+                        name: "FK_Episode_Season_SeasonId",
                         column: x => x.SeasonId,
-                        principalTable: "Seasons",
+                        principalTable: "Season",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Episodes_SeasonId",
-                table: "Episodes",
+                name: "IX_Episode_SeasonId",
+                table: "Episode",
                 column: "SeasonId");
 
             migrationBuilder.CreateIndex(
@@ -190,18 +190,18 @@ namespace CouchPotato.Migrations
                 column: "VideosId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Roles_PersonId",
-                table: "Roles",
+                name: "IX_Role_PersonId",
+                table: "Role",
                 column: "PersonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Roles_VideoId",
-                table: "Roles",
+                name: "IX_Role_VideoId",
+                table: "Role",
                 column: "VideoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Seasons_TVShowId",
-                table: "Seasons",
+                name: "IX_Season_TVShowId",
+                table: "Season",
                 column: "TVShowId");
         }
 
@@ -209,25 +209,25 @@ namespace CouchPotato.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Episodes");
+                name: "Episode");
 
             migrationBuilder.DropTable(
                 name: "GenreVideo");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "Role");
 
             migrationBuilder.DropTable(
-                name: "Seasons");
+                name: "Season");
 
             migrationBuilder.DropTable(
-                name: "Genres");
+                name: "Genre");
 
             migrationBuilder.DropTable(
-                name: "Persons");
+                name: "Person");
 
             migrationBuilder.DropTable(
-                name: "Videos");
+                name: "Video");
         }
     }
 }

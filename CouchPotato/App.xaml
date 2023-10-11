@@ -17,6 +17,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/MaterialDesignDarkTheme.xaml" />
 
                 <ResourceDictionary Source="Styles/ScrollBars/RoundScrollBar.xaml" />
+                <ResourceDictionary Source="Styles/BusyAnimation.xaml" />
 
                 <ResourceDictionary Source="Views/DummyTestDialog/DummyTest.xaml" />
                 <ResourceDictionary Source="Views/MigratorDialog/MigratorDialog.xaml" />
@@ -24,6 +25,8 @@
                 <ResourceDictionary Source="Views/VideoExplorer/VideoExplorer.xaml" />
                 <ResourceDictionary Source="Views/VideoEditor/VideoEditor.xaml" />
                 <ResourceDictionary Source="Views/OkDialog/OkDialog.xaml" />
+                <ResourceDictionary Source="Views/InputDialog/InputDialog.xaml" />
+                <ResourceDictionary Source="Views/ActorFinderDialog/ActorFinderDialog.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 

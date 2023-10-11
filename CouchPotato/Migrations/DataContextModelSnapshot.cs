@@ -17,7 +17,7 @@ namespace CouchPotato.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .UseCollation("NOCASE")
-                .HasAnnotation("ProductVersion", "7.0.0");
+                .HasAnnotation("ProductVersion", "7.0.5");
 
             modelBuilder.Entity("CouchPotato.DbModel.Episode", b =>
                 {
@@ -66,7 +66,7 @@ namespace CouchPotato.Migrations
 
                     b.HasIndex("SeasonId");
 
-                    b.ToTable("Episodes");
+                    b.ToTable("Episode");
                 });
 
             modelBuilder.Entity("CouchPotato.DbModel.Genre", b =>
@@ -84,7 +84,7 @@ namespace CouchPotato.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres");
+                    b.ToTable("Genre");
                 });
 
             modelBuilder.Entity("CouchPotato.DbModel.Person", b =>
@@ -105,7 +105,7 @@ namespace CouchPotato.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Persons");
+                    b.ToTable("Person");
                 });
 
             modelBuilder.Entity("CouchPotato.DbModel.Role", b =>
@@ -132,7 +132,7 @@ namespace CouchPotato.Migrations
 
                     b.HasIndex("VideoId");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("CouchPotato.DbModel.Season", b =>
@@ -164,7 +164,7 @@ namespace CouchPotato.Migrations
 
                     b.HasIndex("TVShowId");
 
-                    b.ToTable("Seasons");
+                    b.ToTable("Season");
                 });
 
             modelBuilder.Entity("CouchPotato.DbModel.Video", b =>
@@ -237,7 +237,7 @@ namespace CouchPotato.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Videos");
+                    b.ToTable("Video");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Video");
 

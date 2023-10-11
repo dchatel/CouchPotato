@@ -55,6 +55,7 @@ public abstract class ContentViewModel : INotifyPropertyChanged
     public void Close(bool result, bool autoClose = false)
     {
         if (autoClose && !CanAutoClose) return;
+        if (App.Current.MainWindow is null) return;
 
         var mainWindowViewModel = (MainWindowViewModel)App.Current.MainWindow.DataContext;
 
