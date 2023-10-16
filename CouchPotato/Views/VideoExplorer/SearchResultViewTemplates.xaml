@@ -215,7 +215,7 @@
             HorizontalScrollBarVisibility="Disabled"
             VerticalScrollBarVisibility="Auto">
             <ScrollViewer.Resources>
-                <CollectionViewSource x:Key="roles" Source="{Binding Roles, IsAsync=True}">
+                <CollectionViewSource x:Key="roles" Source="{Binding Roles}">
                     <CollectionViewSource.SortDescriptions>
                         <scm:SortDescription Direction="Ascending" PropertyName="Order" />
                     </CollectionViewSource.SortDescriptions>
@@ -446,7 +446,7 @@
                     SelectedValue="{Binding CurrentPage}"
                     Style="{StaticResource MaterialDesignNavigationAccentListBox}">
                     <ListBox.Resources>
-                        <CollectionViewSource x:Key="seasons" Source="{Binding TVShow.Seasons, IsAsync=True}">
+                        <CollectionViewSource x:Key="seasons" Source="{Binding TVShow.Seasons}">
                             <CollectionViewSource.SortDescriptions>
                                 <scm:SortDescription PropertyName="Name" />
                             </CollectionViewSource.SortDescriptions>

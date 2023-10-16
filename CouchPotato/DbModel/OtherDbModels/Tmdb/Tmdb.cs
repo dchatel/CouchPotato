@@ -12,7 +12,7 @@ namespace CouchPotato.DbModel.OtherDbModels.Tmdb;
 
 public class Tmdb
 {
-    public static async Task<IEnumerable<Person>> SearchActors(string searchText)
+    public static async Task<IEnumerable<Person>> SearchActors(string searchText, IEnumerable<Person> excludedPeople)
     {
         using var tmdb = new TMDbClient(Config.Default.TMDbAPIKey);
         using var db = new DataContext();
@@ -27,6 +27,7 @@ public class Tmdb
                                               PortraitUrl = tp.ProfilePath,
                                               TmdbId = tp.Id,
                                           });
+        people = people.Where(p => excludedPeople.All(e => p.TmdbId != e.TmdbId));
         return people.ToArray();
     }
 }

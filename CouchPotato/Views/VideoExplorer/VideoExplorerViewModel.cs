@@ -35,7 +35,7 @@ public class VideoExplorerViewModel : ContentViewModel
         set {
             selectedResult = value;
             if (selectedResult is not null)
-                Task.Run(selectedResult.LoadData);
+                selectedResult.LoadData();
         }
     }
 

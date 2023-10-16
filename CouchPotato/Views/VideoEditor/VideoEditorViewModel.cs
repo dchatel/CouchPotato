@@ -71,7 +71,7 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
 
     private async Task AddRole()
     {
-        var addRoleViewModel = new ActorFinderViewModel();
+        var addRoleViewModel = new ActorFinderViewModel(Video.Roles.Select(r=>r.Person));
         if (await addRoleViewModel.Show() && addRoleViewModel.SelectedPerson is not null)
         {
             var role = new Role

@@ -13,6 +13,7 @@ namespace CouchPotato.Views.ActorFinderDialog;
 
 public class ActorFinderViewModel : ContentViewModel
 {
+    private IEnumerable<Person> _excludedPeople;
     private string? searchText;
     private Person? selectedPerson;
 
@@ -26,6 +27,7 @@ public class ActorFinderViewModel : ContentViewModel
     }
 
     public string? Characters { get; set; }
+
     public IEnumerable<Person> SearchResults { get; set; }
     public Person? SelectedPerson
     {
@@ -39,8 +41,9 @@ public class ActorFinderViewModel : ContentViewModel
     public string Url { get; set; }
     public bool Searching { get; set; }
 
-    public ActorFinderViewModel() : base(autoClose: true)
+    public ActorFinderViewModel(IEnumerable<Person> excludedPeople) : base(autoClose: true)
     {
+        _excludedPeople = excludedPeople;
         SearchResults = Enumerable.Empty<Person>();
         Url = "";
     }
@@ -54,7 +57,7 @@ public class ActorFinderViewModel : ContentViewModel
         }
         else
         {
-            var results = await Tmdb.SearchActors(searchText);
+            var results = await Tmdb.SearchActors(searchText, _excludedPeople);
             SearchResults = results;
         }
         Searching = false;
@@ -66,7 +69,7 @@ public partial class ResourceDictionary : System.Windows.ResourceDictionary
 {
     private void WebView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
-        if(sender is WebView2 webView && webView.DataContext is null)
+        if (sender is WebView2 webView && webView.DataContext is null)
         {
             webView.Source = new Uri("about:blank");
         }

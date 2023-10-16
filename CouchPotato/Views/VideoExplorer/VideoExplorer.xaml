@@ -49,8 +49,7 @@
                 <CollectionViewSource
                     x:Key="SearchResults"
                     IsLiveSortingRequested="True"
-                    Source="{Binding SearchResults,
-                                     IsAsync=True}">
+                    Source="{Binding SearchResults}">
                     <CollectionViewSource.LiveSortingProperties>
                         <clr:String>Video.Title</clr:String>
                     </CollectionViewSource.LiveSortingProperties>

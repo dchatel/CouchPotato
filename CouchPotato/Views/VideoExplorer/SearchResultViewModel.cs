@@ -61,14 +61,14 @@ public class SearchResultViewModel
         }
     }
 
-    public virtual async Task LoadData()
+    public virtual void LoadData()
     {
         using var db = new DataContext();
         db.Attach(Video);
-        await db.Entry(Video).Collection(v => v.Genres).LoadAsync();
-        await db.Entry(Video).Collection(v => v.Roles).LoadAsync();
+        db.Entry(Video).Collection(v => v.Genres).Load();
+        db.Entry(Video).Collection(v => v.Roles).Load();
         foreach (var role in Video.Roles)
-            await db.Entry(role).Reference(r => r.Person).LoadAsync();
+            db.Entry(role).Reference(r => r.Person).Load();
     }
 }
 
@@ -85,19 +85,19 @@ public class TVShowSearchResultViewModel : SearchResultViewModel
     public IEnumerable<object> Pages { get; set; } = null!;
     public object CurrentPage { get; set; } = null!;
 
-    public override async Task LoadData()
+    public override void LoadData()
     {
         using var db = new DataContext();
         db.Attach(Video);
-        await db.Entry(Video).Collection(v => v.Genres).LoadAsync();
-        await db.Entry(Video).Collection(v => v.Roles).LoadAsync();
+        db.Entry(Video).Collection(v => v.Genres).Load();
+        db.Entry(Video).Collection(v => v.Roles).Load();
         foreach (var role in Video.Roles)
-            await db.Entry(role).Reference(r => r.Person).LoadAsync();
+            db.Entry(role).Reference(r => r.Person).Load();
         if (Video is TVShow tv)
         {
-            await db.Entry(tv).Collection(v => v.Seasons).LoadAsync();
+            db.Entry(tv).Collection(v => v.Seasons).Load();
             foreach (var season in tv.Seasons)
-                await db.Entry(season).Collection(s => s.Episodes).LoadAsync();
+                db.Entry(season).Collection(s => s.Episodes).Load();
 
             var list = new List<object>
             {
