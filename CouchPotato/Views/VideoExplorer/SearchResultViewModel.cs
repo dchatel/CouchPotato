@@ -1,14 +1,13 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Documents;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 using CommunityToolkit.Mvvm.Input;
 
 using CouchPotato.DbModel;
-using CouchPotato.Views.OkDialog;
 
 using PostSharp.Patterns.Model;
 
@@ -35,18 +34,6 @@ public class SearchResultViewModel
     {
         Video = video;
     }
-
-    //public bool IsSelected
-    //{
-    //    get => isSelected;
-    //    set {
-    //        isSelected = value;
-    //        if (isSelected)
-    //        {
-    //            LoadData();
-    //        }
-    //    }
-    //}
 
     public int PersonalRating
     {
@@ -103,7 +90,8 @@ public class TVShowSearchResultViewModel : SearchResultViewModel
             {
                 tv
             };
-            list.AddRange(tv.Seasons.Select(s => new SeasonViewModel(s)));
+            //list.AddRange(tv.Seasons.Select(s => new SeasonViewModel(s)));
+            list.AddRange(tv.Seasons);
             Pages = list;
             CurrentPage = Pages.First();
         }

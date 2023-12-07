@@ -13,8 +13,8 @@ namespace CouchPotato.Views;
 
 public abstract class ContentViewModel : INotifyPropertyChanged
 {
-    readonly CancellationTokenSource cancellationTokenSource = new();
-    bool dialogResult = false;
+    readonly CancellationTokenSource _cancellationTokenSource = new();
+    bool _dialogResult = false;
 
     [SafeForDependencyAnalysis]
     public bool IsCurrent => ((MainWindowViewModel)App.Current.MainWindow.DataContext).Pages.Last() == this;
@@ -25,7 +25,7 @@ public abstract class ContentViewModel : INotifyPropertyChanged
     protected virtual void OnLoaded() { }
 
     public bool CanAutoClose { get; }
-    public object? HamburgerMenu { get; protected init; } = null;
+    public object? HamburgerMenu { get; protected init; }
 
     protected ContentViewModel(bool autoClose)
     {
@@ -46,10 +46,10 @@ public abstract class ContentViewModel : INotifyPropertyChanged
         OnLoaded();
         try
         {
-            await Task.Delay(-1, cancellationTokenSource.Token);
+            await Task.Delay(-1, _cancellationTokenSource.Token);
         }
         catch (TaskCanceledException) { }
-        return dialogResult;
+        return _dialogResult;
     }
 
     public void Close(bool result, bool autoClose = false)
@@ -62,11 +62,11 @@ public abstract class ContentViewModel : INotifyPropertyChanged
         mainWindowViewModel.Pages.Remove(this);
         mainWindowViewModel.CurrentPage = mainWindowViewModel.Pages.LastOrDefault();
         mainWindowViewModel.CurrentPage?.OnPropertyChanged(nameof(IsCurrent));
-        dialogResult = result;
-        cancellationTokenSource.Cancel();
+        _dialogResult = result;
+        _cancellationTokenSource.Cancel();
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
-    public void OnPropertyChanged([CallerMemberName] string propertyName = null!)
+    public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         => PropertyChanged?.Invoke(this, new(propertyName));
 }

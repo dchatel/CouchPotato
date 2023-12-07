@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CouchPotato.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231010155429_CouchPotato_v0")]
+    [Migration("20231206185409_CouchPotato_v0")]
     partial class CouchPotato_v0
     {
         /// <inheritdoc />

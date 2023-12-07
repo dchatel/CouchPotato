@@ -6,21 +6,26 @@ using System.Threading.Tasks;
 
 namespace CouchPotato.Views
 {
-    public class Selectable
+    public class Selectable<T>
     {
-        private bool isSelected;
+        private bool _isSelected;
+        private readonly Action<T, bool>? _selectionChanged;
 
-        public object Value { get; }
+        public T Value { get; }
         public bool IsSelected
         {
-            get => isSelected;
-            set => isSelected = value;
+            get => _isSelected;
+            set {
+                _isSelected = value;
+                _selectionChanged?.Invoke(Value, value);
+            }
         }
 
-        public Selectable(object value, bool isSelected = false)
+        public Selectable(T value, bool isSelected = false, Action<T, bool>? selectionChanged = null)
         {
             Value = value;
             IsSelected = isSelected;
+            _selectionChanged = selectionChanged;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -16,47 +17,82 @@ namespace CouchPotato.Views.VideoExplorer;
 
 public class VideoExplorerViewModel : ContentViewModel
 {
-    public VideoExplorerViewModel() : base(autoClose: false)
-    {
-        SearchCommand = new AsyncRelayCommand(SearchAsync);
-        EditCommand = new AsyncRelayCommand(Edit);
-        IsSearching = false;
-    }
+    private SearchResultViewModel? _selectedResult;
+    private string _searchText;
 
     public ICommand EditCommand { get; }
     public ICommand SearchCommand { get; }
     public IEnumerable<SearchResultViewModel>? SearchResults { get; set; }
     public bool IsSearching { get; set; }
 
-    private SearchResultViewModel? selectedResult;
     public SearchResultViewModel? SelectedResult
     {
-        get => selectedResult;
+        get => _selectedResult;
         set {
-            selectedResult = value;
-            if (selectedResult is not null)
-                selectedResult.LoadData();
+            _selectedResult = value;
+            _selectedResult?.LoadData();
         }
     }
 
-    private string searchText = "";
     public string SearchText
     {
-        get => searchText;
+        get => _searchText;
         set {
-            searchText = value;
+            _searchText = value;
             Task.Run(SearchAsync);
         }
+    }
+
+    public VideoExplorerViewModel() : base(autoClose: false)
+    {
+        SearchCommand = new AsyncRelayCommand(SearchAsync);
+        EditCommand = new AsyncRelayCommand(Edit);
+        IsSearching = false;
+        _searchText = "";
     }
 
     private async Task Edit()
     {
         if (SelectedResult is null) return;
 
-        var videoEditor = new VideoEditorViewModel(SelectedResult.Video.Id);
+        var db = new DataContext();
+        VideoEditorViewModel videoEditor = VideoEditorViewModel.Create(db, SelectedResult.Video);
         if (await videoEditor.Show())
         {
             SelectedResult.Video = videoEditor.Video;
+
+            ChangeImage("poster", videoEditor.PosterUrl, videoEditor.Video.PosterUrl);
+            ChangeImage("background", videoEditor.BackgroundUrl, videoEditor.Video.BackgroundUrl);
+
+            await db.SaveChangesAsync();
+
+            void ChangeImage(string type, string? newUrl, string? oldUrl)
+            {
+                if (oldUrl != newUrl)
+                {
+                    if (oldUrl is not null)
+                        File.Delete(oldUrl);
+
+                    Action<string?> set = type switch
+                    {
+                        "poster" => v => videoEditor.Video.PosterUrl = v,
+                        "background" => v => videoEditor.Video.BackgroundUrl = v,
+                        _ => throw new NotImplementedException()
+                    };
+
+                    if (newUrl is not null)
+                    {
+                        try
+                        {
+                            var stem = Utils.GetValidFileName(videoEditor.Video.Title);
+                            var dstFile = $"Images/{stem}.{type}.{Guid.NewGuid()}{Path.GetExtension(newUrl)}";
+                            File.Copy(newUrl, dstFile, overwrite: false);
+                            set(dstFile);
+                        }
+                        catch { }
+                    }
+                }
+            }
         }
     }
 
@@ -67,6 +103,7 @@ public class VideoExplorerViewModel : ContentViewModel
 
         SearchResults = await Task.Run(() => db.Videos
             .Where(video => video.Title.ToLower().Contains(SearchText.ToLower()))
+            .OrderBy(video => video.Title.ToLower())
             .Select(video => SearchResultViewModel.Create(video))
             .ToArray());
         SelectedResult = SearchResults.FirstOrDefault();

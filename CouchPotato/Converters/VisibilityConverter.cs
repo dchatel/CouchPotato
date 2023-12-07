@@ -9,8 +9,8 @@ namespace CouchPotato.Converters;
 [MarkupExtensionReturnType(typeof(VisibilityConverter))]
 public class VisibilityConverter : MarkupExtension, IValueConverter
 {
-    private readonly Visibility FalseVisibility = Visibility.Collapsed;
-    private readonly Visibility TrueVisibility = Visibility.Visible;
+    private readonly Visibility _falseVisibility = Visibility.Collapsed;
+    private readonly Visibility _trueVisibility = Visibility.Visible;
 
     [ConstructorArgument(nameof(Reversed))]
     public bool Reversed { get; set; }
@@ -20,22 +20,22 @@ public class VisibilityConverter : MarkupExtension, IValueConverter
     {
         if (reversed)
         {
-            FalseVisibility = Visibility.Visible;
-            TrueVisibility = Visibility.Collapsed;
+            _falseVisibility = Visibility.Visible;
+            _trueVisibility = Visibility.Collapsed;
         }
     }
 
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is bool b) return b ? TrueVisibility : FalseVisibility;
+        if (value is bool b) return b ? _trueVisibility : _falseVisibility;
         if (value is string s)
         {
             if (parameter is string p)
-                return s == p ? TrueVisibility : FalseVisibility;
+                return s == p ? _trueVisibility : _falseVisibility;
             else
-                return !string.IsNullOrEmpty(s) ? TrueVisibility : FalseVisibility;
+                return !string.IsNullOrEmpty(s) ? _trueVisibility : _falseVisibility;
         }
-        return value is not null ? TrueVisibility : FalseVisibility;
+        return value is not null ? _trueVisibility : _falseVisibility;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

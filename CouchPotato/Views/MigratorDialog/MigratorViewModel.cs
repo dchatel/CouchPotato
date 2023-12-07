@@ -28,24 +28,24 @@ public class MigratorViewModel : ContentViewModel
     public int TaskMaximum { get; private set; }
     public int TaskProgression { get; private set; }
 
-    private readonly DataContext db;
-    private readonly DbModel.OtherDbModels.Videlib.DataContext videlib;
-    private readonly Dictionary<int, Genre> dgenres = new();
-    private readonly Dictionary<int, Person> dpersons = new();
-    private readonly Dictionary<int, Video> dvideos = new();
-    private readonly Dictionary<int, Season> dseasons = new();
+    private readonly DataContext _db;
+    private readonly DbModel.OtherDbModels.Videlib.DataContext _videlib;
+    private readonly Dictionary<int, Genre> _dgenres = new();
+    private readonly Dictionary<int, Person> _dpersons = new();
+    private readonly Dictionary<int, Video> _dvideos = new();
+    private readonly Dictionary<int, Season> _dseasons = new();
 
     public MigratorViewModel() : base(autoClose: false)
     {
-        db = new();
-        videlib = new();
+        _db = new();
+        _videlib = new();
     }
 
     //public override bool CanAutoClose => false;
 
     private bool AreMigrationsPending()
     {
-        return db.Database.GetPendingMigrations().Any();
+        return _db.Database.GetPendingMigrations().Any();
     }
 
     protected override async void OnLoaded()
@@ -54,7 +54,7 @@ public class MigratorViewModel : ContentViewModel
         var result = MessageBox.Show("Reset Data?", "Reset", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
         if (result == MessageBoxResult.Yes)
         {
-            db.Database.EnsureDeleted();
+            _db.Database.EnsureDeleted();
             if (Directory.Exists("Images"))
                 Directory.Delete("Images", recursive: true);
         }
@@ -74,7 +74,7 @@ public class MigratorViewModel : ContentViewModel
 
         try
         {
-            if (!db.Database.GetAppliedMigrations().Any())
+            if (!_db.Database.GetAppliedMigrations().Any())
             {
                 try
                 {
@@ -82,13 +82,13 @@ public class MigratorViewModel : ContentViewModel
                 }
                 catch
                 {
-                    db.Database.EnsureDeleted();
+                    _db.Database.EnsureDeleted();
                     throw;
                 }
             }
             TaskName = Loc.DatabaseUpdating;
             TaskIsIndeterminate = true;
-            await db.Database.MigrateAsync();
+            await _db.Database.MigrateAsync();
             Close(true);
         }
         catch (Exception e)
@@ -141,7 +141,6 @@ public class MigratorViewModel : ContentViewModel
 
             TaskName = Loc.UpdatedRestartPlease;
             await Task.Delay(5000);
-            //App.Current.Shutdown();
             App.Restart();
         }
     }
@@ -150,7 +149,7 @@ public class MigratorViewModel : ContentViewModel
     {
         TaskName = Loc.DatabaseInitialization;
         TaskIsIndeterminate = true;
-        if (db.GetInfrastructure().GetService<IMigrator>() is IMigrator migrator)
+        if (_db.GetInfrastructure().GetService<IMigrator>() is IMigrator migrator)
         {
             await migrator.MigrateAsync("CouchPotato_v0");
         }
@@ -168,25 +167,23 @@ public class MigratorViewModel : ContentViewModel
 
         TaskName = Loc.DatabaseSaving;
         TaskIsIndeterminate = true;
-        await db.SaveChangesAsync();
-
-        await MigrateImages();
+        await _db.SaveChangesAsync();
     }
 
     private async Task MigrateEpisodes()
     {
         TaskName = Loc.DatabaseImportEpisodes;
         TaskIsIndeterminate = false;
-        TaskMaximum = videlib.Episodes.Count();
+        TaskMaximum = _videlib.Episodes.Count();
         TaskProgression = 0;
 
         await Task.Run(() =>
         {
-            foreach (var episode in videlib.Episodes.ToArray())
+            foreach (var episode in _videlib.Episodes.ToArray())
             {
-                if (dseasons.TryGetValue((int)episode.SeasonId!, out Season? season))
+                if (_dseasons.TryGetValue((int)episode.SeasonId!, out Season? season))
                 {
-                    db.Episodes.Add(new Episode
+                    _db.Episodes.Add(new Episode
                     {
                         EpisodeNumber = (int)episode.EpisodeNumber!,
                         Name = episode.Name!.Normalize(),
@@ -208,14 +205,14 @@ public class MigratorViewModel : ContentViewModel
     {
         TaskName = Loc.DatabaseImportSeasons;
         TaskIsIndeterminate = false;
-        TaskMaximum = videlib.Seasons.Count();
+        TaskMaximum = _videlib.Seasons.Count();
         TaskProgression = 0;
 
         await Task.Run(() =>
         {
-            foreach (var s in videlib.Seasons.ToArray())
+            foreach (var s in _videlib.Seasons.ToArray())
             {
-                if (dvideos.TryGetValue((int)s.FilmId!, out Video? video)
+                if (_dvideos.TryGetValue((int)s.FilmId!, out Video? video)
                     && video is TVShow tvShow)
                 {
                     var season = new Season
@@ -226,7 +223,7 @@ public class MigratorViewModel : ContentViewModel
                         PosterUrl = s.PosterPath,
                         TVShow = tvShow,
                     };
-                    dseasons[(int)s.SeasonId!] = season;
+                    _dseasons[(int)s.SeasonId!] = season;
                     tvShow.Seasons.Add(season);
                 }
                 TaskProgression++;
@@ -238,22 +235,22 @@ public class MigratorViewModel : ContentViewModel
     {
         TaskName = Loc.DatabaseImportRoles;
         TaskIsIndeterminate = false;
-        TaskMaximum = videlib.Casts.Count();
+        TaskMaximum = _videlib.Casts.Count();
         TaskProgression = 0;
 
         await Task.Run(() =>
         {
-            foreach (var cast in videlib.Casts
+            foreach (var cast in _videlib.Casts
                 .Include(c => c.Person)
                 .ToArray())
             {
-                if (dvideos.TryGetValue((int)cast.FilmId!, out Video? video)
-                    && dpersons.TryGetValue((int)cast.Person!.TmdbId!, out Person? person))
+                if (_dvideos.TryGetValue((int)cast.FilmId!, out Video? video)
+                    && _dpersons.TryGetValue((int)cast.Person!.TmdbId!, out Person? person))
                 {
                     if (person.Roles.Any(r => r.Video == video))
                         continue;
 
-                    db.Roles.Add(new Role
+                    _db.Roles.Add(new Role
                     {
                         Video = video,
                         Person = person,
@@ -269,18 +266,32 @@ public class MigratorViewModel : ContentViewModel
     {
         TaskName = Loc.DatabaseImportVideos;
         TaskIsIndeterminate = false;
-        TaskMaximum = videlib.Films.Count();
+        TaskMaximum = _videlib.Films.Count();
         TaskProgression = 0;
+
+        var ofd = new CommonOpenFileDialog
+        {
+            Title = Loc.FileSystemSelectVidelibImageFolder,
+            IsFolderPicker = true,
+        };
+        string? imageFolder = null;
+        if (ofd.ShowDialog() == CommonFileDialogResult.Ok)
+        {
+            imageFolder = ofd.FileName;
+        }
+        Directory.CreateDirectory("Images");
 
         await Task.Run(() =>
         {
-            foreach (var film in videlib.Films
+            foreach (var film in _videlib.Films
                 .Include(f => f.Genres)
                 .ToArray())
             {
+                var title = film.Title?.Normalize() ?? Guid.NewGuid().ToString();
+
                 Video video = new()
                 {
-                    Title = film.Title?.Normalize() ?? "",
+                    Title = title,
                     Tagline = film.Tagline?.Normalize(),
                     Overview = film.Overview?.Normalize(),
                     ReleaseDate = film.ReleaseDate,
@@ -296,8 +307,16 @@ public class MigratorViewModel : ContentViewModel
                     DigitalFileFormat = film.Format?.Normalize(),
                     DigitalResolution = film.Resolution?.Normalize(),
 
-                    PosterUrl = film.PosterPath is not null ? $"Images/{film.PosterPath}" : null,
-                    BackgroundUrl = film.BackdropPath is not null ? $"Images/{film.BackdropPath}" : null,
+                    PosterUrl = imageFolder is null ? null : film.PosterPath switch
+                    {
+                        null => null,
+                        _ => $"Images/{Utils.GetValidFileName(title)}.poster.{Guid.NewGuid()}{Path.GetExtension(film.PosterPath)}"
+                    },
+                    BackgroundUrl = imageFolder is null ? null : film.BackdropPath switch
+                    {
+                        null => null,
+                        _ => $"Images/{Utils.GetValidFileName(title)}.background.{Guid.NewGuid()}{Path.GetExtension(film.BackdropPath)}"
+                    },
 
                     PersonalRating = film.Rating,
 
@@ -305,6 +324,26 @@ public class MigratorViewModel : ContentViewModel
                     TmdbRating = film.TmdbRating,
                     TmdbRatingCount = film.TmdbRatingCount,
                 };
+
+                if (imageFolder is not null)
+                {
+                    if (film.PosterPath is not null)
+                    {
+                        var file = Path.Combine(imageFolder, film.PosterPath);
+                        if (File.Exists(file))
+                        {
+                            File.Copy(file, video.PosterUrl!);
+                        }
+                    }
+                    if (film.BackdropPath is not null)
+                    {
+                        var file = Path.Combine(imageFolder, film.BackdropPath);
+                        if (File.Exists(file))
+                        {
+                            File.Copy(file, video.BackgroundUrl!);
+                        }
+                    }
+                }
 
                 switch (film.EType)
                 {
@@ -321,42 +360,13 @@ public class MigratorViewModel : ContentViewModel
                         break;
                 }
 
-                dvideos[(int)film.FilmId!] = video;
+                _dvideos[(int)film.FilmId!] = video;
                 foreach (var g in film.Genres)
                 {
-                    if (g.GenreId is not null && dgenres.TryGetValue((int)g.GenreId, out Genre? genre))
+                    if (g.GenreId is not null && _dgenres.TryGetValue((int)g.GenreId, out Genre? genre))
                         video.Genres.Add(genre);
                 }
-                db.Videos.Add(video);
-                TaskProgression++;
-            }
-        });
-    }
-
-    private async Task MigrateImages()
-    {
-        var ofd = new CommonOpenFileDialog
-        {
-            Title = Loc.FileSystemSelectVidelibImageFolder,
-            IsFolderPicker = true,
-        };
-        if (ofd.ShowDialog() != CommonFileDialogResult.Ok)
-            return;
-
-        var files = Directory.GetFiles(ofd.FileName);
-
-        TaskName = Loc.DatabaseImportImages;
-        TaskIsIndeterminate = false;
-        TaskMaximum = files.Length;
-        TaskProgression = 0;
-        await Task.Run(() =>
-        {
-            Directory.CreateDirectory("Images");
-            foreach (var file in files)
-            {
-                var newfile = $"Images/{Path.GetFileName(file)}";
-                File.Copy(file, newfile);
-                File.SetAttributes(newfile, FileAttributes.Normal);
+                _db.Videos.Add(video);
                 TaskProgression++;
             }
         });
@@ -366,14 +376,14 @@ public class MigratorViewModel : ContentViewModel
     {
         TaskName = Loc.DatabaseImportPersons;
         TaskIsIndeterminate = false;
-        TaskMaximum = videlib.Persons.Count();
+        TaskMaximum = _videlib.Persons.Count();
         TaskProgression = 0;
 
         await Task.Run(() =>
         {
-            foreach (var p in videlib.Persons.ToArray())
+            foreach (var p in _videlib.Persons.ToArray())
             {
-                if (dpersons.ContainsKey((int)p.TmdbId!))
+                if (_dpersons.ContainsKey((int)p.TmdbId!))
                     continue;
 
                 var person = new Person
@@ -382,8 +392,8 @@ public class MigratorViewModel : ContentViewModel
                     PortraitUrl = p.ProfilePath,
                     TmdbId = p.TmdbId,
                 };
-                dpersons[(int)p.TmdbId!] = person;
-                db.Persons.Add(person);
+                _dpersons[(int)p.TmdbId!] = person;
+                _db.Persons.Add(person);
                 TaskProgression++;
             }
         });
@@ -393,20 +403,20 @@ public class MigratorViewModel : ContentViewModel
     {
         TaskName = Loc.DatabaseImportGenres;
         TaskIsIndeterminate = false;
-        TaskMaximum = videlib.Genres.Count();
+        TaskMaximum = _videlib.Genres.Count();
         TaskProgression = 0;
 
         await Task.Run(() =>
         {
-            foreach (var g in videlib.Genres.ToArray())
+            foreach (var g in _videlib.Genres.ToArray())
             {
                 var genre = new Genre
                 {
                     Fixed = (bool)g.NoChange!,
                     Name = g.Name!.Normalize(),
                 };
-                dgenres[(int)g.GenreId!] = genre;
-                db.Genres.Add(genre);
+                _dgenres[(int)g.GenreId!] = genre;
+                _db.Genres.Add(genre);
                 TaskProgression++;
             }
         });

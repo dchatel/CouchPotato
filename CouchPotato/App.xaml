@@ -19,9 +19,9 @@
                 <ResourceDictionary Source="Styles/ScrollBars/RoundScrollBar.xaml" />
                 <ResourceDictionary Source="Styles/BusyAnimation.xaml" />
 
+                <ResourceDictionary Source="Views/CommonViews/CommonViews.xaml" />
                 <ResourceDictionary Source="Views/DummyTestDialog/DummyTest.xaml" />
                 <ResourceDictionary Source="Views/MigratorDialog/MigratorDialog.xaml" />
-                <ResourceDictionary Source="Views/VideoExplorer/SearchResultViewTemplates.xaml" />
                 <ResourceDictionary Source="Views/VideoExplorer/VideoExplorer.xaml" />
                 <ResourceDictionary Source="Views/VideoEditor/VideoEditor.xaml" />
                 <ResourceDictionary Source="Views/OkDialog/OkDialog.xaml" />

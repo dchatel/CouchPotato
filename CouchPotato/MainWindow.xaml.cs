@@ -1,20 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-using PostSharp.Aspects.Advices;
 
 namespace CouchPotato;
 
@@ -43,13 +29,23 @@ public class ContentDataTemplateSelector : DataTemplateSelector
         if (item is null) return null!;
 
         var name = (string)container.GetValue(FrameworkElement.NameProperty);
-        var template = name switch
+
+        static object? FindTemplate(Type type, string name)
         {
-            "toolbar" => App.Current.TryFindResource(item.GetType().Name.Replace("ViewModel", "Toolbar")),
-            "content" => App.Current.TryFindResource(item.GetType().Name.Replace("ViewModel", "View")),
-            "menu" => App.Current.TryFindResource(item.GetType().Name.Replace("ViewModel", "Menu")),
-            _ => null
-        };
+            var template = name switch
+            {
+                "toolbar" => App.Current.TryFindResource(type.Name.Replace("ViewModel", "Toolbar")),
+                "content" => App.Current.TryFindResource(type.Name.Replace("ViewModel", "View")),
+                "menu" => App.Current.TryFindResource(type.Name.Replace("ViewModel", "Menu")),
+                _ => null
+            };
+            if (type.BaseType is not null)
+                template ??= FindTemplate(type.BaseType, name);
+
+            return template;
+        }
+
+        var template = FindTemplate(item.GetType(), name);
 
         return (DataTemplate)(template ?? App.Current.TryFindResource("emptyDataTemplate"));
     }

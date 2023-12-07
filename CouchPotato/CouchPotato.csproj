@@ -11,6 +11,14 @@
 		<SignAssembly>False</SignAssembly>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <NoWarn>1701;1702;NETSDK11</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <NoWarn>1701;1702;NETSDK11</NoWarn>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<None Remove="logo.png" />
 	</ItemGroup>

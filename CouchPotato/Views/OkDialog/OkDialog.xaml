@@ -12,17 +12,10 @@
                 <md:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
                 <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2" />
             </md:TransitioningContent.OpeningEffects>
-            <Grid
+            <ContentPresenter
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                e:Grid.Rows="auto,auto">
-                <ContentPresenter Content="{Binding Content}" />
-                <Button
-                    Grid.Row="1"
-                    Command="{Binding OkCommand}"
-                    Content="Ok"
-                    Style="{StaticResource MaterialDesignFlatLightButton}" />
-            </Grid>
+                Content="{Binding Content}" />
         </md:TransitioningContent>
     </DataTemplate>
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -15,13 +14,10 @@ using CouchPotato.DbModel;
 using CouchPotato.Properties;
 using CouchPotato.Views.ActorFinderDialog;
 using CouchPotato.Views.InputDialog;
-using CouchPotato.Views.OkDialog;
 
 using GongSolutions.Wpf.DragDrop;
 
 using Microsoft.EntityFrameworkCore;
-
-using PostSharp.Patterns.Model;
 
 using IDropTarget = GongSolutions.Wpf.DragDrop.IDropTarget;
 
@@ -29,7 +25,18 @@ namespace CouchPotato.Views.VideoEditor;
 
 public class VideoEditorViewModel : ContentViewModel, IDropTarget
 {
-    private readonly DataContext db;
+    public static VideoEditorViewModel Create(DataContext db, Video video)
+    {
+        VideoEditorViewModel videoEditorViewModel = video switch
+        {
+            Movie => new VideoEditorViewModel(db, video.Id),
+            TVShow => new TVEditorViewModel(db, video.Id),
+            _ => throw new NotImplementedException()
+        };
+        return videoEditorViewModel;
+    }
+
+    protected readonly DataContext _db;
 
     public ICommand SaveCommand { get; }
     public ICommand CancelCommand { get; }
@@ -41,29 +48,43 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
     public Video Video { get; }
     public string? PosterUrl { get; set; }
     public string? BackgroundUrl { get; set; }
-    public IEnumerable<Selectable> Genres { get; private set; }
+    public IEnumerable<Selectable<Genre>> Genres { get; private set; }
     public ObservableCollection<RoleViewModel> Roles { get; }
 
-    public VideoEditorViewModel(int videoId) : base(autoClose: false)
+    public VideoEditorViewModel(DataContext db, int videoId) : base(autoClose: false)
     {
-        db = new DataContext();
+        _db = db;
 
-        SaveCommand = new AsyncRelayCommand(Save);
+        SaveCommand = new RelayCommand(() => Close(true));
         CancelCommand = new RelayCommand(() => Close(false));
         ChangePosterCommand = new RelayCommand(() => PosterUrl = GetFile() ?? PosterUrl);
         ChangeBackgroundCommand = new RelayCommand(() => BackgroundUrl = GetFile() ?? BackgroundUrl);
         AddRoleCommand = new AsyncRelayCommand(AddRole);
         DeleteRoleCommand = new RelayCommand<RoleViewModel>(DeleteRole);
 
-        Video = db.Videos
+        Video = _db.Videos
             .Include(v => v.Genres)
             .Include(v => v.Roles).ThenInclude(r => r.Person)
             .Single(v => v.Id == videoId);
+        if (Video is TVShow tv)
+        {
+            _db.Entry(tv).Collection(t => t.Seasons).Load();
+        }
         PosterUrl = Video.PosterUrl;
         BackgroundUrl = Video.BackgroundUrl;
-        Genres = db.Genres
+        Genres = _db.Genres
             .ToList()
-            .Select(g => new Selectable(g, Video.Genres.Any(vg => vg.Id == g.Id)))
+            .Select(g => new Selectable<Genre>(g, Video.Genres.Any(vg => vg.Id == g.Id), (g, s) =>
+            {
+                if (s)
+                {
+                    Video.Genres.Add(g);
+                }
+                else
+                {
+                    Video.Genres.Remove(g);
+                }
+            }))
             .ToList();
         Roles = new(from r in Video.Roles
                     select new RoleViewModel(r));
@@ -71,7 +92,7 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
 
     private async Task AddRole()
     {
-        var addRoleViewModel = new ActorFinderViewModel(Video.Roles.Select(r=>r.Person));
+        var addRoleViewModel = new ActorFinderViewModel(Video.Roles.Select(r => r.Person));
         if (await addRoleViewModel.Show() && addRoleViewModel.SelectedPerson is not null)
         {
             var role = new Role
@@ -80,7 +101,16 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
                 Order = Video.Roles.Max(r => r.Order) + 1,
             };
             Video.Roles.Add(role);
-            Roles.Add(new RoleViewModel(role));
+            var roleViewModel = new RoleViewModel(role);
+            var inputDialog = new InputDialogViewModel(Loc.InputCharacterRole)
+            {
+                InputText = role.Characters
+            };
+            if (await inputDialog.Show())
+            {
+                role.Characters = inputDialog.InputText;
+                Roles.Add(roleViewModel);
+            }
         }
     }
 
@@ -106,51 +136,6 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
         else
         {
             return null;
-        }
-    }
-
-    public async Task Save()
-    {
-        foreach (var genre in Genres)
-        {
-            if (genre.IsSelected == true && Video.Genres.Contains(genre.Value) == false)
-                Video.Genres.Add((Genre)genre.Value);
-            else if (genre.IsSelected == false && Video.Genres.Contains(genre.Value) == true)
-                Video.Genres.Remove((Genre)genre.Value);
-        }
-
-        ChangeImage("poster", PosterUrl, Video.PosterUrl);
-        ChangeImage("background", BackgroundUrl, Video.BackgroundUrl);
-
-        await db.SaveChangesAsync();
-        Close(true);
-
-        void ChangeImage(string type, string? newUrl, string? oldUrl)
-        {
-            if (oldUrl != newUrl)
-            {
-                if (oldUrl is not null)
-                    File.Delete(oldUrl);
-
-                Action<string?> set = type switch
-                {
-                    "poster" => v => Video.PosterUrl = v,
-                    "background" => v => Video.BackgroundUrl = v,
-                    _ => throw new NotImplementedException()
-                };
-
-                if (newUrl is not null)
-                {
-                    try
-                    {
-                        var stem = Path.GetInvalidFileNameChars().Aggregate(Video.Title, (current, c) => current.Replace(c, '_'));
-                        var dstFile = $"Images/{stem}.{type}.{Guid.NewGuid()}{Path.GetExtension(newUrl)}";
-                        File.Copy(newUrl, dstFile, overwrite: false);
-                        set(dstFile);
-                    }
-                    catch { }
-                }
-            }
         }
     }
 

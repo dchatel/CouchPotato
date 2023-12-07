@@ -13,15 +13,15 @@ namespace CouchPotato.Views.ActorFinderDialog;
 
 public class ActorFinderViewModel : ContentViewModel
 {
-    private IEnumerable<Person> _excludedPeople;
-    private string? searchText;
-    private Person? selectedPerson;
+    private readonly IEnumerable<Person> _excludedPeople;
+    private string? _searchText;
+    private Person? _selectedPerson;
 
     public string? SearchText
     {
-        get => searchText;
+        get => _searchText;
         set {
-            searchText = value;
+            _searchText = value;
             Task.Run(Search);
         }
     }
@@ -31,11 +31,11 @@ public class ActorFinderViewModel : ContentViewModel
     public IEnumerable<Person> SearchResults { get; set; }
     public Person? SelectedPerson
     {
-        get => selectedPerson;
+        get => _selectedPerson;
         set {
-            selectedPerson = value;
-            if (selectedPerson is not null)
-                Url = $"https://www.themoviedb.org/person/{selectedPerson.TmdbId}";
+            _selectedPerson = value;
+            if (_selectedPerson is not null)
+                Url = $"https://www.themoviedb.org/person/{_selectedPerson.TmdbId}";
         }
     }
     public string Url { get; set; }
@@ -51,13 +51,13 @@ public class ActorFinderViewModel : ContentViewModel
     private async Task Search()
     {
         Searching = true;
-        if (string.IsNullOrWhiteSpace(searchText))
+        if (string.IsNullOrWhiteSpace(_searchText))
         {
             SearchResults = Enumerable.Empty<Person>();
         }
         else
         {
-            var results = await Tmdb.SearchActors(searchText, _excludedPeople);
+            var results = await Tmdb.SearchActors(_searchText, _excludedPeople);
             SearchResults = results;
         }
         Searching = false;

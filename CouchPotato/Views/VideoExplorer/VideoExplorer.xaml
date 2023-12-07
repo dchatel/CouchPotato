@@ -26,6 +26,7 @@
                 md:HintAssist.Hint="{x:Static p:Loc.VideoExplorerSearchHint}"
                 md:TextFieldAssist.HasLeadingIcon="True"
                 md:TextFieldAssist.LeadingIcon="Search"
+                md:TextFieldAssist.HasClearButton="True"
                 Text="{Binding SearchText,
                                Mode=TwoWay,
                                Delay=800,
@@ -45,22 +46,8 @@
                 </b:EventTrigger>
             </b:Interaction.Triggers>
 
-            <Grid.Resources>
-                <CollectionViewSource
-                    x:Key="SearchResults"
-                    IsLiveSortingRequested="True"
-                    Source="{Binding SearchResults}">
-                    <CollectionViewSource.LiveSortingProperties>
-                        <clr:String>Video.Title</clr:String>
-                    </CollectionViewSource.LiveSortingProperties>
-                    <CollectionViewSource.SortDescriptions>
-                        <scm:SortDescription Direction="Ascending" PropertyName="Video.Title" />
-                    </CollectionViewSource.SortDescriptions>
-                </CollectionViewSource>
-            </Grid.Resources>
-
             <ListBox
-                ItemsSource="{Binding Source={StaticResource SearchResults}}"
+                ItemsSource="{Binding SearchResults}"
                 SelectedItem="{Binding SelectedResult}"
                 Style="{StaticResource MaterialDesignNavigationListBox}"
                 Visibility="{Binding IsSearching,
@@ -88,13 +75,13 @@
                 Content="{Binding SelectedResult}"
                 Visibility="{Binding IsSearching,
                                      Converter={c:VisibilityConverter Reversed=True}}">
-                <!--<ContentControl.Resources>
+                <ContentControl.Resources>
                     <ResourceDictionary>
                         <ResourceDictionary.MergedDictionaries>
                             <ResourceDictionary Source="SearchResultViewTemplates.xaml" />
                         </ResourceDictionary.MergedDictionaries>
                     </ResourceDictionary>
-                </ContentControl.Resources>-->
+                </ContentControl.Resources>
             </ContentControl>
 
             <ContentControl

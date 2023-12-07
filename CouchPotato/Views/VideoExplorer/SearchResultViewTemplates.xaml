@@ -7,6 +7,7 @@
     xmlns:e="clr-namespace:CouchPotato.Extensions"
     xmlns:l="clr-namespace:CouchPotato.Views.VideoExplorer"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:ok="clr-namespace:CouchPotato.Views.OkDialog"
     xmlns:p="clr-namespace:CouchPotato.Properties"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     xmlns:sys="clr-namespace:System;assembly=mscorlib">
@@ -126,7 +127,14 @@
                     Grid.ColumnSpan="7"
                     Margin="20,0,10,10"
                     Header="Genres">
-                    <ItemsControl ItemsSource="{Binding Video.Genres}">
+                    <HeaderedContentControl.Resources>
+                        <CollectionViewSource x:Key="Genres" Source="{Binding Video.Genres}">
+                            <CollectionViewSource.SortDescriptions>
+                                <scm:SortDescription Direction="Ascending" PropertyName="Name" />
+                            </CollectionViewSource.SortDescriptions>
+                        </CollectionViewSource>
+                    </HeaderedContentControl.Resources>
+                    <ItemsControl ItemsSource="{Binding Source={StaticResource Genres}}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel />
@@ -144,68 +152,6 @@
                 </HeaderedContentControl>
             </Grid>
         </Border>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type db:Role}">
-        <!--<md:TransitioningContent OpeningEffectsOffset="{md:IndexedItemOffsetMultiplier 0:0:0.05}">
-        <md:TransitioningContent.OpeningEffects>
-            <md:TransitionEffect Kind="ExpandIn" />
-            <md:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
-            <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2" />
-        </md:TransitioningContent.OpeningEffects>-->
-        <Border
-            Width="138"
-            Height="175"
-            Margin="5"
-            CornerRadius="20,0,0,0">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="20" ShadowDepth="0" />
-            </Border.Effect>
-            <Border.Style>
-                <Style TargetType="{x:Type Border}">
-                    <Setter Property="Background">
-                        <Setter.Value>
-                            <ImageBrush ImageSource="{Binding Person.PortraitUrl, Converter={c:ImageConverter}, IsAsync=True}" />
-                        </Setter.Value>
-                    </Setter>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource self}, Path=DataContext.Person.PortraitUrl}" Value="{x:Null}">
-                            <Setter Property="Background" Value="{StaticResource MaterialDesignCardBackground}" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Border.Style>
-            <Grid>
-                <Border VerticalAlignment="Bottom" Background="#b000">
-                    <StackPanel>
-                        <Viewbox StretchDirection="DownOnly">
-                            <TextBlock
-                                FontSize="16"
-                                Text="{Binding Person.Name}"
-                                TextAlignment="Center" />
-                        </Viewbox>
-                        <TextBlock
-                            x:Name="characters"
-                            FontSize="14"
-                            Text="{Binding Characters}"
-                            TextAlignment="Center"
-                            TextWrapping="Wrap">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Visibility" Value="Collapsed" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Border, AncestorLevel=2}, Path=IsMouseOver}" Value="True">
-                                            <Setter Property="Visibility" Value="Visible" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </StackPanel>
-                </Border>
-            </Grid>
-        </Border>
-        <!--</md:TransitioningContent>-->
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type db:Video}">
@@ -244,81 +190,7 @@
         </ScrollViewer>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type l:EpisodeViewModel}">
-        <md:TransitioningContent OpeningEffectsOffset="{md:IndexedItemOffsetMultiplier 0:0:0.05}">
-            <md:TransitioningContent.OpeningEffects>
-                <md:TransitionEffect Kind="ExpandIn" />
-            </md:TransitioningContent.OpeningEffects>
-            <Border
-                Margin="5"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Background="{StaticResource MaterialDesignCardBackground}"
-                CornerRadius="40,0,0,0">
-                <b:Interaction.Triggers>
-                    <b:EventTrigger EventName="MouseLeftButtonUp">
-                        <b:InvokeCommandAction Command="{Binding Zoom}" />
-                    </b:EventTrigger>
-                </b:Interaction.Triggers>
-                <Border.Effect>
-                    <DropShadowEffect BlurRadius="20" ShadowDepth="0" />
-                </Border.Effect>
-                <Grid e:Grid.Cols="35,800" e:Grid.Rows="300,400">
-                    <TextBlock
-                        Margin="5"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        FontSize="18"
-                        FontWeight="Bold"
-                        Text="{Binding Episode.EpisodeNumber,
-                                       StringFormat='{}Episode {0}'}"
-                        TextAlignment="Center">
-                        <TextBlock.LayoutTransform>
-                            <RotateTransform Angle="-90" />
-                        </TextBlock.LayoutTransform>
-                    </TextBlock>
-                    <Border
-                        Grid.Column="1"
-                        Margin="0,5,5,5"
-                        CornerRadius="5">
-                        <Border.Background>
-                            <ImageBrush ImageSource="{Binding Episode.ImageUrl, Converter={c:ImageConverter}}" Stretch="Uniform" />
-                        </Border.Background>
-                    </Border>
-                    <TextBlock
-                        x:Name="overview"
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
-                        Margin="15,5"
-                        FontSize="18"
-                        Text="{Binding Episode.Overview}"
-                        TextAlignment="Justify"
-                        TextTrimming="WordEllipsis"
-                        TextWrapping="Wrap" />
-                </Grid>
-                <Border.Style>
-                    <Style TargetType="Border">
-                        <Setter Property="Opacity" Value="0" />
-                        <Style.Triggers>
-                            <EventTrigger RoutedEvent="Loaded">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation
-                                            Storyboard.TargetProperty="Opacity"
-                                            To="1"
-                                            Duration="0:0:0.25" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Border.Style>
-            </Border>
-        </md:TransitioningContent>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type l:SeasonViewModel}">
+    <DataTemplate DataType="{x:Type db:Season}">
         <ScrollViewer
             HorizontalAlignment="Center"
             HorizontalScrollBarVisibility="Disabled"
@@ -327,7 +199,7 @@
                 <TextBlock
                     Margin="40,20"
                     FontSize="16"
-                    Text="{Binding Season.Overview}"
+                    Text="{Binding Overview}"
                     TextAlignment="Justify" />
 
                 <ItemsControl
@@ -336,62 +208,27 @@
                     ItemsSource="{Binding Episodes}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel />
+                            <WrapPanel HorizontalAlignment="Center" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type l:EpisodeViewModel}">
+                        <DataTemplate DataType="{x:Type db:Episode}">
                             <md:TransitioningContent OpeningEffectsOffset="{md:IndexedItemOffsetMultiplier 0:0:0.05}">
                                 <md:TransitioningContent.OpeningEffects>
                                     <md:TransitionEffect Kind="ExpandIn" />
                                     <md:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
                                     <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2" />
                                 </md:TransitioningContent.OpeningEffects>
-                                <Border
-                                    Margin="5"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="{StaticResource MaterialDesignCardBackground}"
-                                    CornerRadius="20,0,0,0">
+                                <ContentControl
+                                    Width="300"
+                                    Height="360"
+                                    Content="{Binding}">
                                     <b:Interaction.Triggers>
                                         <b:EventTrigger EventName="MouseLeftButtonUp">
-                                            <b:InvokeCommandAction Command="{Binding Zoom}" />
+                                            <b:InvokeCommandAction Command="{Binding Source={x:Static ok:OkDialogViewModel.ShowCommand}}" CommandParameter="{Binding}" />
                                         </b:EventTrigger>
                                     </b:Interaction.Triggers>
-                                    <Border.Effect>
-                                        <DropShadowEffect BlurRadius="20" ShadowDepth="0" />
-                                    </Border.Effect>
-                                    <Grid e:Grid.Cols="35,250" e:Grid.Rows="150,200">
-                                        <TextBlock
-                                            Margin="5"
-                                            HorizontalAlignment="Stretch"
-                                            VerticalAlignment="Stretch"
-                                            FontSize="18"
-                                            FontWeight="Bold"
-                                            Text="{Binding Episode.EpisodeNumber,
-                                                           StringFormat='{}Episode {0}'}"
-                                            TextAlignment="Center">
-                                            <TextBlock.LayoutTransform>
-                                                <RotateTransform Angle="-90" />
-                                            </TextBlock.LayoutTransform>
-                                        </TextBlock>
-                                        <Border Grid.Column="1" Margin="0,2,2,2">
-                                            <Border.Background>
-                                                <ImageBrush ImageSource="{Binding Episode.ImageUrl, Converter={c:ImageConverter}}" Stretch="UniformToFill" />
-                                            </Border.Background>
-                                        </Border>
-                                        <TextBlock
-                                            x:Name="overview"
-                                            Grid.Row="1"
-                                            Grid.Column="0"
-                                            Grid.ColumnSpan="2"
-                                            Margin="15,5"
-                                            Text="{Binding Episode.Overview}"
-                                            TextAlignment="Justify"
-                                            TextTrimming="WordEllipsis"
-                                            TextWrapping="Wrap" />
-                                    </Grid>
-                                </Border>
+                                </ContentControl>
                             </md:TransitioningContent>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -454,8 +291,8 @@
                         <DataTemplate DataType="{x:Type db:TVShow}">
                             <TextBlock Text="{x:Static p:Loc.TVShowInfo}" />
                         </DataTemplate>
-                        <DataTemplate DataType="{x:Type l:SeasonViewModel}">
-                            <TextBlock Text="{Binding Season.Name}" />
+                        <DataTemplate DataType="{x:Type db:Season}">
+                            <TextBlock Text="{Binding Name}" />
                         </DataTemplate>
                     </ListBox.Resources>
 
@@ -466,7 +303,7 @@
                     </ListBox.ItemsPanel>
                 </ListBox>
 
-                <ContentControl Grid.Row="2" Content="{Binding ElementName=list, Path=SelectedItem}" />
+                <ContentControl Grid.Row="2" Content="{Binding ElementName=list, Path=SelectedValue}" />
             </Grid>
         </Border>
     </DataTemplate>
