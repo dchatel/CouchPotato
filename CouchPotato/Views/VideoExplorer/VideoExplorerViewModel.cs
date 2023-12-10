@@ -17,15 +17,15 @@ namespace CouchPotato.Views.VideoExplorer;
 
 public class VideoExplorerViewModel : ContentViewModel
 {
-    private SearchResultViewModel? _selectedResult;
+    private VideoViewerViewModel? _selectedResult;
     private string _searchText;
 
     public ICommand EditCommand { get; }
     public ICommand SearchCommand { get; }
-    public IEnumerable<SearchResultViewModel>? SearchResults { get; set; }
+    public IEnumerable<VideoViewerViewModel>? SearchResults { get; set; }
     public bool IsSearching { get; set; }
 
-    public SearchResultViewModel? SelectedResult
+    public VideoViewerViewModel? SelectedResult
     {
         get => _selectedResult;
         set {
@@ -104,7 +104,7 @@ public class VideoExplorerViewModel : ContentViewModel
         SearchResults = await Task.Run(() => db.Videos
             .Where(video => video.Title.ToLower().Contains(SearchText.ToLower()))
             .OrderBy(video => video.Title.ToLower())
-            .Select(video => SearchResultViewModel.Create(video))
+            .Select(video => VideoViewerViewModel.Create(video))
             .ToArray());
         SelectedResult = SearchResults.FirstOrDefault();
         IsSearching = false;

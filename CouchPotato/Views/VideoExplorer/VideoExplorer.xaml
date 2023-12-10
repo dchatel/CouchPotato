@@ -3,12 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:c="clr-namespace:CouchPotato.Converters"
-    xmlns:clr="clr-namespace:System;assembly=mscorlib"
     xmlns:e="clr-namespace:CouchPotato.Extensions"
     xmlns:l="clr-namespace:CouchPotato.Views.VideoExplorer"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-    xmlns:p="clr-namespace:CouchPotato.Properties"
-    xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase">
+    xmlns:p="clr-namespace:CouchPotato.Properties">
 
     <DataTemplate x:Key="VideoExplorerToolbar" DataType="{x:Type l:VideoExplorerViewModel}">
         <Grid e:Grid.Cols="auto,*,auto">
@@ -24,9 +22,9 @@
                 VerticalAlignment="Center"
                 VerticalContentAlignment="Center"
                 md:HintAssist.Hint="{x:Static p:Loc.VideoExplorerSearchHint}"
+                md:TextFieldAssist.HasClearButton="True"
                 md:TextFieldAssist.HasLeadingIcon="True"
                 md:TextFieldAssist.LeadingIcon="Search"
-                md:TextFieldAssist.HasClearButton="True"
                 Text="{Binding SearchText,
                                Mode=TwoWay,
                                Delay=800,
@@ -54,7 +52,6 @@
                                      Converter={c:VisibilityConverter Reversed=True}}">
                 <ListBox.Resources>
                     <ResourceDictionary>
-                        <Style BasedOn="{StaticResource RoundScrollBar}" TargetType="ScrollBar" />
                         <ResourceDictionary.MergedDictionaries>
                             <ResourceDictionary Source="SearchResultListTemplates.xaml" />
                         </ResourceDictionary.MergedDictionaries>
@@ -78,7 +75,7 @@
                 <ContentControl.Resources>
                     <ResourceDictionary>
                         <ResourceDictionary.MergedDictionaries>
-                            <ResourceDictionary Source="SearchResultViewTemplates.xaml" />
+                            <ResourceDictionary Source="Viewers/Templates.xaml" />
                         </ResourceDictionary.MergedDictionaries>
                     </ResourceDictionary>
                 </ContentControl.Resources>

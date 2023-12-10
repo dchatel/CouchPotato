@@ -31,7 +31,7 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
         {
             Movie => new VideoEditorViewModel(db, video.Id),
             TVShow => new TVEditorViewModel(db, video.Id),
-            _ => throw new NotImplementedException()
+            _ => new VideoEditorViewModel(db, video.Id),
         };
         return videoEditorViewModel;
     }

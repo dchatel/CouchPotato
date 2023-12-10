@@ -12,11 +12,11 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <NoWarn>1701;1702;NETSDK11</NoWarn>
+	  <NoWarn>1701;1702;NETSDK1187</NoWarn>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <NoWarn>1701;1702;NETSDK11</NoWarn>
+	  <NoWarn>1701;1702;NETSDK1187</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -28,22 +28,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="gong-wpf-dragdrop" Version="3.2.1" />
 		<PackageReference Include="MaterialDesignExtensions" Version="3.3.0" />
-		<PackageReference Include="MaterialDesignThemes" Version="4.8.0" />
-		<PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
+		<PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
+		<PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2045.28" />
-		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-		<PackageReference Include="PostSharp.Patterns.Model" Version="2023.0.4" />
+		<PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2151.40" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
+		<PackageReference Include="PostSharp.Patterns.Model" Version="2023.0.8" />
 		<PackageReference Include="System.Data.OleDb" Version="7.0.0" />
-		<PackageReference Include="TMDbLib" Version="2.0.0" />
+		<PackageReference Include="TMDbLib" Version="2.1.0" />
 		<PackageReference Include="System.Collections" Version="4.3.0" />
 		<PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
 		<PackageReference Include="System.IO.FileSystem.Primitives" Version="4.3.0" />

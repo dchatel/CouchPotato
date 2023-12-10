@@ -14,9 +14,10 @@
     <DataTemplate x:Key="VideoEditorToolbar" DataType="{x:Type l:VideoEditorViewModel}">
         <StackPanel Orientation="Horizontal">
             <StackPanel.Resources>
-                <Style TargetType="FrameworkElement">
-                    <Setter Property="ToolTipService.InitialShowDelay" Value="0" />
-                    <Setter Property="Margin" Value="0,50,0,0" />
+                <Style TargetType="Separator">
+                    <Setter Property="Margin" Value="0,0,10,0" />
+                    <Setter Property="BorderBrush" Value="#ffc400" />
+                    <Setter Property="BorderThickness" Value="20" />
                 </Style>
             </StackPanel.Resources>
             <Button
@@ -33,10 +34,9 @@
                 Style="{StaticResource MaterialDesignFlatButton}"
                 ToolTip="{Binding Source={x:Static p:Loc.Cancel}}"
                 ToolTipService.InitialShowDelay="0" />
-            <Separator
-                Margin="0,0,10,0"
-                BorderBrush="#ffc400"
-                BorderThickness="20" />
+            <Separator />
+
+            <Separator />
             <Button
                 Margin="0,0,10,0"
                 Content="{md:PackIcon Kind=Delete}"
@@ -46,7 +46,7 @@
         </StackPanel>
     </DataTemplate>
 
-    <DataTemplate x:Key="MovieEditorView" DataType="{x:Type l:VideoEditorViewModel}">
+    <DataTemplate x:Key="VideoInfo" DataType="{x:Type l:VideoEditorViewModel}">
         <Grid e:Grid.Cols="300, *">
             <Grid.Resources>
                 <CollectionViewSource x:Key="Genres" Source="{Binding Genres}">
@@ -240,76 +240,60 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate x:Key="TVEditorView" DataType="{x:Type l:TVEditorViewModel}">
-        <md:TransitioningContent>
-            <md:TransitioningContent.OpeningEffects>
-                <md:TransitionEffect Kind="ExpandIn" />
-                <md:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
-                <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2" />
-            </md:TransitioningContent.OpeningEffects>
-            <Border
-                Margin="20"
-                Padding="20"
-                Background="{StaticResource MaterialDesignCardBackground}"
-                CornerRadius="20,0,0,0">
-                <Border.Effect>
-                    <DropShadowEffect
-                        BlurRadius="5"
-                        Opacity=".3"
-                        ShadowDepth="2" />
-                </Border.Effect>
+    <DataTemplate DataType="{x:Type l:VideoEditorViewModel}">
+        <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource VideoInfo}" />
+    </DataTemplate>
 
-                <TabControl TabStripPlacement="Left">
-                    <TabControl.Style>
-                        <Style TargetType="TabControl">
-                            <Setter Property="Background" Value="{StaticResource MaterialDesignCardBackground}" />
-                            <Setter Property="BorderThickness" Value="0" />
-                            <Setter Property="Foreground" Value="White" />
-                        </Style>
-                    </TabControl.Style>
-                    <TabControl.Template>
-                        <ControlTemplate TargetType="TabControl">
-                            <Grid e:Grid.Cols="auto,*">
-                                <ScrollViewer
-                                    Grid.Column="0"
-                                    MaxWidth="200"
-                                    HorizontalScrollBarVisibility="Disabled"
-                                    VerticalScrollBarVisibility="Auto">
-                                    <TabPanel
-                                        Name="HeaderPanel"
-                                        Panel.ZIndex="1"
-                                        IsItemsHost="True"
-                                        KeyboardNavigation.TabIndex="1" />
-                                </ScrollViewer>
-                                <ContentPresenter
-                                    Name="PART_SelectedContentHost"
-                                    Grid.Column="1"
-                                    Margin="{TemplateBinding Padding}"
-                                    ContentSource="SelectedContent"
-                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                            </Grid>
-                        </ControlTemplate>
-                    </TabControl.Template>
-                    <TabControl.Resources>
-                        <CollectionViewSource x:Key="Seasons" Source="{Binding TVShow.Seasons}" />
-                    </TabControl.Resources>
-                    <TabControl.ItemsSource>
-                        <CompositeCollection>
-                            <TabItem Header="{x:Static p:Loc.TVShowInfo}">
-                                <ContentControl Content="{Binding}" ContentTemplate="{StaticResource MovieEditorView}" />
-                            </TabItem>
-                            <CollectionContainer Collection="{Binding Source={StaticResource Seasons}}" />
-                            <TabItem Header="{md:PackIcon Kind=Add}" />
-                        </CompositeCollection>
-                    </TabControl.ItemsSource>
-                    <TabControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type db:Season}">
-                            <TextBlock Text="{Binding Name}" />
-                        </DataTemplate>
-                    </TabControl.ItemTemplate>
-                </TabControl>
-            </Border>
-        </md:TransitioningContent>
+    <DataTemplate DataType="{x:Type l:TVEditorViewModel}">
+        <TabControl TabStripPlacement="Left">
+            <!--<TabControl.Style>
+                <Style TargetType="TabControl">
+                    <Setter Property="Background" Value="{StaticResource MaterialDesignCardBackground}" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Foreground" Value="White" />
+                </Style>
+            </TabControl.Style>-->
+            <TabControl.Template>
+                <ControlTemplate TargetType="TabControl">
+                    <Grid e:Grid.Cols="auto,*">
+                        <ScrollViewer
+                            Grid.Column="0"
+                            MaxWidth="200"
+                            HorizontalScrollBarVisibility="Disabled"
+                            VerticalScrollBarVisibility="Auto">
+                            <TabPanel
+                                Name="HeaderPanel"
+                                Panel.ZIndex="1"
+                                IsItemsHost="True"
+                                KeyboardNavigation.TabIndex="1" />
+                        </ScrollViewer>
+                        <ContentPresenter
+                            Name="PART_SelectedContentHost"
+                            Grid.Column="1"
+                            Margin="{TemplateBinding Padding}"
+                            ContentSource="SelectedContent"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Grid>
+                </ControlTemplate>
+            </TabControl.Template>
+            <TabControl.Resources>
+                <CollectionViewSource x:Key="Seasons" Source="{Binding TVShow.Seasons}" />
+            </TabControl.Resources>
+            <TabControl.ItemsSource>
+                <CompositeCollection>
+                    <TabItem Header="{x:Static p:Loc.TVShowInfo}">
+                        <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource VideoInfo}" />
+                    </TabItem>
+                    <CollectionContainer Collection="{Binding Source={StaticResource Seasons}}" />
+                    <TabItem Header="{md:PackIcon Kind=Add}" />
+                </CompositeCollection>
+            </TabControl.ItemsSource>
+            <TabControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type db:Season}">
+                    <TextBlock Text="{Binding Name}" TextTrimming="WordEllipsis" />
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+        </TabControl>
     </DataTemplate>
 
     <DataTemplate x:Key="VideoEditorView" DataType="{x:Type l:VideoEditorViewModel}">
@@ -331,18 +315,7 @@
                         ShadowDepth="2" />
                 </Border.Effect>
 
-                <ContentPresenter Content="{Binding}">
-                    <ContentPresenter.Style>
-                        <Style TargetType="ContentPresenter">
-                            <Setter Property="ContentTemplate" Value="{StaticResource MovieEditorView}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource self}, Path=DataContext.Video, Converter={c:TypeMatchConverter {x:Type db:TVShow}}}" Value="True">
-                                    <Setter Property="ContentTemplate" Value="{StaticResource TVEditorView}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ContentPresenter.Style>
-                </ContentPresenter>
+                <ContentPresenter Content="{Binding}" />
 
             </Border>
         </md:TransitioningContent>

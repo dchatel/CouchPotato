@@ -1,0 +1,54 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:db="clr-namespace:CouchPotato.DbModel"
+    xmlns:l="clr-namespace:CouchPotato.Views.VideoExplorer"
+    xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase">
+
+    <ResourceDictionary.MergedDictionaries>
+
+        <!--<ResourceDictionary Source="VideoViewerHeader.xaml" />-->
+        <ResourceDictionary Source="MovieViewer.xaml" />
+        <ResourceDictionary Source="TVShowViewer.xaml" />
+
+    </ResourceDictionary.MergedDictionaries>
+
+    <DataTemplate DataType="{x:Type db:Video}">
+        <ScrollViewer
+            Grid.Row="1"
+            Margin="20"
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Auto">
+            <ScrollViewer.Resources>
+                <CollectionViewSource x:Key="roles" Source="{Binding Roles}">
+                    <CollectionViewSource.SortDescriptions>
+                        <scm:SortDescription Direction="Ascending" PropertyName="Order" />
+                    </CollectionViewSource.SortDescriptions>
+                </CollectionViewSource>
+            </ScrollViewer.Resources>
+            <StackPanel>
+                <TextBlock
+                    FontSize="24"
+                    Text="{Binding Tagline}"
+                    TextAlignment="Center" />
+                <TextBlock
+                    Margin="20"
+                    FontSize="18"
+                    Text="{Binding Overview}"
+                    TextAlignment="Justify"
+                    TextWrapping="Wrap" />
+
+                <ItemsControl HorizontalAlignment="Center" ItemsSource="{Binding Source={StaticResource roles}}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type l:VideoViewerViewModel}" />
+
+</ResourceDictionary>

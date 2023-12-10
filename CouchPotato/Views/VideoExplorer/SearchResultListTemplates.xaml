@@ -112,7 +112,7 @@
         </Style.Triggers>
     </Style>
 
-    <DataTemplate DataType="{x:Type l:SearchResultViewModel}">
+    <DataTemplate DataType="{x:Type l:VideoViewerViewModel}">
         <StackPanel MaxWidth="200" Orientation="Horizontal">
             <md:PackIcon
                 Foreground="Gray"
@@ -122,7 +122,7 @@
         </StackPanel>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type l:MovieSearchResultViewModel}">
+    <DataTemplate DataType="{x:Type l:MovieViewerViewModel}">
         <Border Style="{StaticResource MovieOrTVShowSearchResultBorderStyle}">
             <Grid e:Grid.Cols="auto,*">
                 <md:PackIcon
@@ -134,7 +134,7 @@
         </Border>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type l:TVShowSearchResultViewModel}">
+    <DataTemplate DataType="{x:Type l:TVShowViewerViewModel}">
         <Border Style="{StaticResource MovieOrTVShowSearchResultBorderStyle}">
             <Grid e:Grid.Cols="auto,*">
                 <md:PackIcon

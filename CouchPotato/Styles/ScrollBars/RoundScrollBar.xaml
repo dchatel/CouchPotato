@@ -129,7 +129,7 @@
         </Grid>
     </ControlTemplate>
 
-    <Style x:Key="RoundScrollBar" TargetType="{x:Type ScrollBar}">
+    <Style TargetType="{x:Type ScrollBar}">
         <Setter Property="Control.Template" Value="{StaticResource VerticalScrollBar}" />
         <Setter Property="FrameworkElement.MinWidth" Value="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" />
         <Setter Property="FrameworkElement.Width" Value="30" />
