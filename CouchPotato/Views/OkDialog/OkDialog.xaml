@@ -15,7 +15,11 @@
             <ContentPresenter
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Content="{Binding Content}" />
+                Content="{Binding Content}">
+                <ContentPresenter.Effect>
+                    <DropShadowEffect BlurRadius="20" ShadowDepth="0" />
+                </ContentPresenter.Effect>
+            </ContentPresenter>
         </md:TransitioningContent>
     </DataTemplate>
 

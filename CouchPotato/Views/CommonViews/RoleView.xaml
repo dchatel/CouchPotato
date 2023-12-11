@@ -5,20 +5,11 @@
     xmlns:db="clr-namespace:CouchPotato.DbModel">
 
     <DataTemplate DataType="{x:Type db:Role}">
-        <!--<md:TransitioningContent OpeningEffectsOffset="{md:IndexedItemOffsetMultiplier 0:0:0.05}">
-    <md:TransitioningContent.OpeningEffects>
-        <md:TransitionEffect Kind="ExpandIn" />
-        <md:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
-        <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2" />
-    </md:TransitioningContent.OpeningEffects>-->
         <Border
             Width="138"
             Height="175"
             Margin="5"
             CornerRadius="20,0,0,0">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="20" ShadowDepth="0" />
-            </Border.Effect>
             <Border.Style>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="Background">
@@ -63,7 +54,6 @@
                 </Border>
             </Grid>
         </Border>
-        <!--</md:TransitioningContent>-->
     </DataTemplate>
 
 </ResourceDictionary>

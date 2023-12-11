@@ -9,17 +9,17 @@ public class VideoViewerViewModel
 {
     public static VideoViewerViewModel Create(Video video)
     {
-        VideoViewerViewModel result = video switch
+        VideoViewerViewModel result = video.Type switch
         {
-            Movie => new MovieViewerViewModel(video),
-            TVShow => new TVShowViewerViewModel(video),
+            VideoType.Movie => new MovieViewerViewModel(video),
+            VideoType.TVShow => new TVShowViewerViewModel(video),
             _ => new VideoViewerViewModel(video)
         };
         return result;
     }
 
     public Video Video { get; set; }
-
+    
     protected VideoViewerViewModel(Video video)
     {
         Video = video;
@@ -58,7 +58,6 @@ public class TVShowViewerViewModel : VideoViewerViewModel
 {
     public TVShowViewerViewModel(Video video) : base(video) { }
 
-    public TVShow TVShow => (TVShow)Video;
     public IEnumerable<object> Pages { get; set; } = null!;
     public object CurrentPage { get; set; } = null!;
 
@@ -70,7 +69,7 @@ public class TVShowViewerViewModel : VideoViewerViewModel
         db.Entry(Video).Collection(v => v.Roles).Load();
         foreach (var role in Video.Roles)
             db.Entry(role).Reference(r => r.Person).Load();
-        if (Video is TVShow tv)
+        if (Video is Video tv)
         {
             db.Entry(tv).Collection(v => v.Seasons).Load();
             foreach (var season in tv.Seasons)

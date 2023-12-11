@@ -3,22 +3,31 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:c="clr-namespace:CouchPotato.Converters"
+    xmlns:clr="clr-namespace:System;assembly=mscorlib"
     xmlns:e="clr-namespace:CouchPotato.Extensions"
     xmlns:l="clr-namespace:CouchPotato.Views.VideoExplorer"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-    xmlns:p="clr-namespace:CouchPotato.Properties">
+    xmlns:p="clr-namespace:CouchPotato.Properties"
+    xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase">
 
     <DataTemplate x:Key="VideoExplorerToolbar" DataType="{x:Type l:VideoExplorerViewModel}">
-        <Grid e:Grid.Cols="auto,*,auto">
+        <Grid e:Grid.Cols="auto,auto,*,auto">
             <Button
                 Grid.Column="0"
+                Command="{Binding AddCommand}"
+                Content="{md:PackIcon Kind=Add}"
+                Style="{StaticResource MaterialDesignFlatButton}"
+                ToolTip="{Binding Source={x:Static p:Loc.Add}}"
+                ToolTipService.InitialShowDelay="0" />
+            <Button
+                Grid.Column="1"
                 Command="{Binding EditCommand}"
                 Content="{md:PackIcon Kind=Edit}"
                 Style="{StaticResource MaterialDesignFlatButton}"
                 ToolTip="{Binding Source={x:Static p:Loc.Edit}}"
                 ToolTipService.InitialShowDelay="0" />
             <TextBox
-                Grid.Column="1"
+                Grid.Column="2"
                 VerticalAlignment="Center"
                 VerticalContentAlignment="Center"
                 md:HintAssist.Hint="{x:Static p:Loc.VideoExplorerSearchHint}"
@@ -30,7 +39,7 @@
                                Delay=800,
                                UpdateSourceTrigger=PropertyChanged}" />
             <ToggleButton
-                Grid.Column="2"
+                Grid.Column="3"
                 Content="{md:PackIcon Kind=MovieSearchOutline}"
                 Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" />
         </Grid>
@@ -44,8 +53,22 @@
                 </b:EventTrigger>
             </b:Interaction.Triggers>
 
+            <Grid.Resources>
+                <CollectionViewSource
+                    x:Key="searchResults"
+                    IsLiveSortingRequested="True"
+                    Source="{Binding SearchResults}">
+                    <CollectionViewSource.SortDescriptions>
+                        <scm:SortDescription Direction="Ascending" PropertyName="VideoViewer.Video.Title" />
+                    </CollectionViewSource.SortDescriptions>
+                    <CollectionViewSource.LiveSortingProperties>
+                        <clr:String>VideoViewer.Video.Title</clr:String>
+                    </CollectionViewSource.LiveSortingProperties>
+                </CollectionViewSource>
+            </Grid.Resources>
+
             <ListBox
-                ItemsSource="{Binding SearchResults}"
+                ItemsSource="{Binding Source={StaticResource searchResults}}"
                 SelectedItem="{Binding SelectedResult}"
                 Style="{StaticResource MaterialDesignNavigationListBox}"
                 Visibility="{Binding IsSearching,
@@ -65,11 +88,16 @@
                             VirtualizingPanel.VirtualizationMode="Recycling" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type l:VideoSearchResultViewModel}">
+                        <ContentPresenter Content="{Binding VideoViewer}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
             </ListBox>
 
             <ContentControl
                 Grid.Column="1"
-                Content="{Binding SelectedResult}"
+                Content="{Binding SelectedResult.VideoViewer}"
                 Visibility="{Binding IsSearching,
                                      Converter={c:VisibilityConverter Reversed=True}}">
                 <ContentControl.Resources>

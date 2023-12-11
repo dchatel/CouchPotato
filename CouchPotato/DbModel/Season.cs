@@ -13,5 +13,5 @@ public class Season
     public int? TmdbId { get; set; }
 
     public ICollection<Episode> Episodes { get; set; } = new HashSet<Episode>();
-    public TVShow TVShow { get; set; } = null!;
+    public Video TVShow { get; set; } = null!;
 }

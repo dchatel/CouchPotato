@@ -39,6 +39,9 @@
                     TextWrapping="Wrap" />
 
                 <ItemsControl HorizontalAlignment="Center" ItemsSource="{Binding Source={StaticResource roles}}">
+                    <ItemsControl.Effect>
+                        <DropShadowEffect BlurRadius="20" ShadowDepth="0"/>
+                    </ItemsControl.Effect>
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel />

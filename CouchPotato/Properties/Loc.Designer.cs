@@ -61,6 +61,15 @@ namespace CouchPotato.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Create.
+        /// </summary>
+        public static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Cancel.
         /// </summary>
         public static string Cancel {
@@ -277,6 +286,15 @@ namespace CouchPotato.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Is it a Movie.
+        /// </summary>
+        public static string IsItMovie {
+            get {
+                return ResourceManager.GetString("IsItMovie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Location.
         /// </summary>
         public static string Location {
@@ -300,6 +318,15 @@ namespace CouchPotato.Properties {
         public static string OriginalTitle {
             get {
                 return ResourceManager.GetString("OriginalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à or a TV Show.
+        /// </summary>
+        public static string OrTV {
+            get {
+                return ResourceManager.GetString("OrTV", resourceCulture);
             }
         }
         

@@ -46,6 +46,7 @@ namespace CouchPotato.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    Type = table.Column<int>(type: "INTEGER", nullable: false),
                     Title = table.Column<string>(type: "TEXT", nullable: false),
                     Tagline = table.Column<string>(type: "TEXT", nullable: true),
                     Overview = table.Column<string>(type: "TEXT", nullable: true),
@@ -65,7 +66,6 @@ namespace CouchPotato.Migrations
                     TmdbId = table.Column<int>(type: "INTEGER", nullable: true),
                     TmdbRating = table.Column<double>(type: "REAL", nullable: true),
                     TmdbRatingCount = table.Column<int>(type: "INTEGER", nullable: true),
-                    Discriminator = table.Column<string>(type: "TEXT", nullable: false),
                     Runtime = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>

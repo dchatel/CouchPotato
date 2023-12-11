@@ -13,13 +13,6 @@
 
     <DataTemplate x:Key="VideoEditorToolbar" DataType="{x:Type l:VideoEditorViewModel}">
         <StackPanel Orientation="Horizontal">
-            <StackPanel.Resources>
-                <Style TargetType="Separator">
-                    <Setter Property="Margin" Value="0,0,10,0" />
-                    <Setter Property="BorderBrush" Value="#ffc400" />
-                    <Setter Property="BorderThickness" Value="20" />
-                </Style>
-            </StackPanel.Resources>
             <Button
                 Margin="0,0,10,0"
                 Command="{Binding SaveCommand}"
@@ -30,16 +23,19 @@
             <Button
                 Margin="0,0,10,0"
                 Command="{Binding CancelCommand}"
-                Content="{md:PackIcon Kind=CloseBox}"
+                Content="{md:PackIcon Kind=Cancel}"
                 Style="{StaticResource MaterialDesignFlatButton}"
                 ToolTip="{Binding Source={x:Static p:Loc.Cancel}}"
                 ToolTipService.InitialShowDelay="0" />
-            <Separator />
-
-            <Separator />
+            <Separator
+                Margin="0,0,10,0"
+                BorderBrush="#ffc400"
+                BorderThickness="20" />
             <Button
                 Margin="0,0,10,0"
-                Content="{md:PackIcon Kind=Delete}"
+                Command="{Binding DeleteCommand}"
+                Content="{md:PackIcon Kind=Remove}"
+                IsEnabled="{Binding EditionMode}"
                 Style="{StaticResource MaterialDesignFlatAccentBgButton}"
                 ToolTip="{Binding Source={x:Static p:Loc.Delete}}"
                 ToolTipService.InitialShowDelay="0" />
@@ -168,6 +164,9 @@
                         dd:DragDrop.DropHandler="{Binding}"
                         dd:DragDrop.IsDragSource="True"
                         dd:DragDrop.IsDropTarget="True">
+                        <ItemsControl.Effect>
+                            <DropShadowEffect BlurRadius="20" ShadowDepth="0" />
+                        </ItemsControl.Effect>
                         <ItemsControl.Resources>
                             <CollectionViewSource
                                 x:Key="Roles"
@@ -240,11 +239,50 @@
         </Grid>
     </DataTemplate>
 
+    <DataTemplate x:Key="VideoTypeSelector" DataType="{x:Type l:VideoEditorViewModel}">
+        <StackPanel VerticalAlignment="Center">
+            <TextBlock
+                Margin="0,0,0,10"
+                HorizontalAlignment="Center"
+                md:HintAssist.Hint="{x:Static p:Loc.Title}"
+                FontSize="24"
+                Text="{Binding Video.Title}"
+                TextAlignment="Center" />
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <TextBlock
+                    Margin="5,20"
+                    VerticalAlignment="Center"
+                    Text="{x:Static p:Loc.IsItMovie}" />
+                <Button
+                    Grid.Row="1"
+                    Command="{Binding MakeMovieCommand}"
+                    Content="{md:PackIcon Kind=Movie,
+                                          Size=24}"
+                    Style="{StaticResource MaterialDesignFlatAccentButton}" />
+                <TextBlock
+                    Margin="5,20"
+                    VerticalAlignment="Center"
+                    Text="{x:Static p:Loc.OrTV}" />
+                <Button
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Command="{Binding MakeTVShowCommand}"
+                    Content="{md:PackIcon Kind=TvBox,
+                                          Size=24}"
+                    Style="{StaticResource MaterialDesignFlatAccentButton}" />
+                <TextBlock
+                    Margin="5,20"
+                    VerticalAlignment="Center"
+                    Text="?" />
+            </StackPanel>
+        </StackPanel>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type l:VideoEditorViewModel}">
         <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource VideoInfo}" />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type l:TVEditorViewModel}">
+    <DataTemplate x:Key="TVEditor" DataType="{x:Type l:VideoEditorViewModel}">
         <TabControl TabStripPlacement="Left">
             <!--<TabControl.Style>
                 <Style TargetType="TabControl">
@@ -277,7 +315,7 @@
                 </ControlTemplate>
             </TabControl.Template>
             <TabControl.Resources>
-                <CollectionViewSource x:Key="Seasons" Source="{Binding TVShow.Seasons}" />
+                <CollectionViewSource x:Key="Seasons" Source="{Binding Video.Seasons}" />
             </TabControl.Resources>
             <TabControl.ItemsSource>
                 <CompositeCollection>
@@ -315,7 +353,23 @@
                         ShadowDepth="2" />
                 </Border.Effect>
 
-                <ContentPresenter Content="{Binding}" />
+                <ContentPresenter Content="{Binding}">
+                    <ContentPresenter.Style>
+                        <Style TargetType="ContentPresenter">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Video.Type}" Value="Unknown">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource VideoTypeSelector}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Video.Type}" Value="Movie">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource VideoInfo}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Video.Type}" Value="TVShow">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource TVEditor}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentPresenter.Style>
+                </ContentPresenter>
 
             </Border>
         </md:TransitioningContent>

@@ -7,15 +7,61 @@
 
     <DataTemplate DataType="{x:Type db:Episode}">
         <Border
-            Margin="5"
+            MinHeight="400"
+            MaxWidth="800"
+            MaxHeight="600"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Background="{StaticResource MaterialDesignCardBackground}"
             CornerRadius="40,0,0,0">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="20" ShadowDepth="0" />
-            </Border.Effect>
-            <Grid e:Grid.Cols="35,*" e:Grid.Rows="150,*">
+            <Grid>
+                <FlowDocumentScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <FlowDocument>
+                        <Paragraph>
+                            <Floater
+                                Width="300"
+                                Margin="5,0"
+                                HorizontalAlignment="Left">
+                                <BlockUIContainer>
+                                    <Image Source="{Binding ImageUrl, Converter={c:ImageConverter}}">
+                                        <Image.Effect>
+                                            <DropShadowEffect BlurRadius="5" ShadowDepth="0" />
+                                        </Image.Effect>
+                                    </Image>
+                                </BlockUIContainer>
+                            </Floater>
+                            <Run FontFamily="{DynamicResource MaterialDesignFont}" Text="{Binding Overview}" />
+                        </Paragraph>
+                    </FlowDocument>
+                </FlowDocumentScrollViewer>
+                <TextBlock
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top" TextWrapping="Wrap"
+                    MaxWidth="350"
+                    TextAlignment="Center">
+                    <TextBlock.Effect>
+                        <DropShadowEffect BlurRadius="5" ShadowDepth="5" />
+                    </TextBlock.Effect>
+                    <Run
+                        FontSize="32"
+                        FontWeight="ExtraBold"
+                        Foreground="Red"
+                        Text="{Binding EpisodeNumber,
+                                       StringFormat='Episode {0}'}" />
+                    <LineBreak />
+                    <Run
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Text="{Binding Name}" />
+                    <TextBlock.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="-15" />
+                            <TranslateTransform X="-50" Y="50" />
+                        </TransformGroup>
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+            </Grid>
+            <!--<Grid e:Grid.Cols="35,*" e:Grid.Rows="150,*">
                 <TextBlock
                     Margin="5"
                     HorizontalAlignment="Stretch"
@@ -37,20 +83,23 @@
                         <ImageBrush ImageSource="{Binding ImageUrl, Converter={c:ImageConverter}}" Stretch="Uniform" />
                     </Border.Background>
                 </Border>
-                <TextBlock
-                    x:Name="overview"
+                <ScrollViewer
                     Grid.Row="1"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     MinWidth="250"
                     MinHeight="200"
                     MaxWidth="800"
-                    Margin="15,5"
-                    Text="{Binding Overview}"
-                    TextAlignment="Justify"
-                    TextTrimming="WordEllipsis"
-                    TextWrapping="Wrap" />
-            </Grid>
+                    HorizontalScrollBarVisibility="Disabled"
+                    VerticalScrollBarVisibility="Auto">
+                    <TextBlock
+                        x:Name="overview"
+                        Margin="15,5"
+                        Text="{Binding Overview}"
+                        TextAlignment="Justify"
+                        TextWrapping="Wrap" />
+                </ScrollViewer>
+            </Grid>-->
         </Border>
     </DataTemplate>
 

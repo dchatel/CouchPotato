@@ -1,13 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace CouchPotato.DbModel;
 
+public enum VideoType
+{
+    Unknown,
+    Movie,
+    TVShow,
+}
+
 public class Video
 {
     public int Id { get; set; }
+    public VideoType Type { get; set; }
 
     public string Title { get; set; } = null!;
     public string? Tagline { get; set; }
@@ -34,6 +44,22 @@ public class Video
     public double? TmdbRating { get; set; }
     public int? TmdbRatingCount { get; set; }
 
+    public int? Runtime { get; set; }
+
     public ICollection<Genre> Genres { get; set; } = new HashSet<Genre>();
     public ICollection<Role> Roles { get; set; } = new HashSet<Role>();
+    public ICollection<Season> Seasons { get; set; } = new HashSet<Season>();
+
+    public Video CopyFromDb(DataContext db)
+    {
+        var video = db.Videos
+                    .Include(v => v.Genres)
+                    .Include(v => v.Roles).ThenInclude(r => r.Person)
+                    .Single(v => v.Id == Id);
+        if (video.Type == VideoType.TVShow)
+        {
+            db.Entry(video).Collection(t => t.Seasons).Load();
+        }
+        return video;
+    }
 }

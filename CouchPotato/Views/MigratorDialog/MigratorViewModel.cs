@@ -213,7 +213,7 @@ public class MigratorViewModel : ContentViewModel
             foreach (var s in _videlib.Seasons.ToArray())
             {
                 if (_dvideos.TryGetValue((int)s.FilmId!, out Video? video)
-                    && video is TVShow tvShow)
+                    && video.Type == VideoType.TVShow)
                 {
                     var season = new Season
                     {
@@ -221,10 +221,10 @@ public class MigratorViewModel : ContentViewModel
                         Name = s.Name!.Normalize(),
                         Overview = s.Overview?.Normalize(),
                         PosterUrl = s.PosterPath,
-                        TVShow = tvShow,
+                        TVShow = video,
                     };
                     _dseasons[(int)s.SeasonId!] = season;
-                    tvShow.Seasons.Add(season);
+                    video.Seasons.Add(season);
                 }
                 TaskProgression++;
             }
@@ -291,6 +291,12 @@ public class MigratorViewModel : ContentViewModel
 
                 Video video = new()
                 {
+                    Type = film.EType switch
+                    {
+                        "movie" => VideoType.Movie,
+                        "tv" => VideoType.TVShow,
+                        _ => VideoType.Unknown,
+                    },
                     Title = title,
                     Tagline = film.Tagline?.Normalize(),
                     Overview = film.Overview?.Normalize(),
@@ -306,6 +312,8 @@ public class MigratorViewModel : ContentViewModel
                     DigitalStorageCode = film.Disk?.Normalize(),
                     DigitalFileFormat = film.Format?.Normalize(),
                     DigitalResolution = film.Resolution?.Normalize(),
+
+                    Runtime = film.Runtime,
 
                     PosterUrl = imageFolder is null ? null : film.PosterPath switch
                     {
@@ -343,21 +351,6 @@ public class MigratorViewModel : ContentViewModel
                             File.Copy(file, video.BackgroundUrl!);
                         }
                     }
-                }
-
-                switch (film.EType)
-                {
-                    case "movie":
-                        video = new Movie(video)
-                        {
-                            Runtime = film.Runtime,
-                        };
-                        break;
-                    case "tv":
-                        video = new TVShow(video);
-                        break;
-                    default:
-                        break;
                 }
 
                 _dvideos[(int)film.FilmId!] = video;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -17,62 +18,54 @@ using CouchPotato.Views.InputDialog;
 
 using GongSolutions.Wpf.DragDrop;
 
-using Microsoft.EntityFrameworkCore;
-
 using IDropTarget = GongSolutions.Wpf.DragDrop.IDropTarget;
 
 namespace CouchPotato.Views.VideoEditor;
 
 public class VideoEditorViewModel : ContentViewModel, IDropTarget
 {
-    public static VideoEditorViewModel Create(DataContext db, Video video)
-    {
-        VideoEditorViewModel videoEditorViewModel = video switch
-        {
-            Movie => new VideoEditorViewModel(db, video.Id),
-            TVShow => new TVEditorViewModel(db, video.Id),
-            _ => new VideoEditorViewModel(db, video.Id),
-        };
-        return videoEditorViewModel;
-    }
-
-    protected readonly DataContext _db;
-
     public ICommand SaveCommand { get; }
     public ICommand CancelCommand { get; }
+    public ICommand DeleteCommand { get; }
     public ICommand ChangePosterCommand { get; }
     public ICommand ChangeBackgroundCommand { get; }
     public ICommand AddRoleCommand { get; }
     public ICommand DeleteRoleCommand { get; }
+    public ICommand MakeMovieCommand { get; }
+    public ICommand MakeTVShowCommand { get; }
 
     public Video Video { get; }
+    public bool EditionMode { get; }
+    public bool VideoWasRemoved { get; private set; }
     public string? PosterUrl { get; set; }
     public string? BackgroundUrl { get; set; }
     public IEnumerable<Selectable<Genre>> Genres { get; private set; }
     public ObservableCollection<RoleViewModel> Roles { get; }
+    public ObservableCollection<SeasonViewModel> Seasons { get; }
 
-    public VideoEditorViewModel(DataContext db, int videoId) : base(autoClose: false)
+    public VideoEditorViewModel(DataContext db, Video video, bool editionMode) : base(autoClose: false)
     {
-        _db = db;
-
+        Video = video;
+        EditionMode = editionMode;
         SaveCommand = new RelayCommand(() => Close(true));
         CancelCommand = new RelayCommand(() => Close(false));
+        DeleteCommand = new RelayCommand(Delete);
         ChangePosterCommand = new RelayCommand(() => PosterUrl = GetFile() ?? PosterUrl);
         ChangeBackgroundCommand = new RelayCommand(() => BackgroundUrl = GetFile() ?? BackgroundUrl);
         AddRoleCommand = new AsyncRelayCommand(AddRole);
         DeleteRoleCommand = new RelayCommand<RoleViewModel>(DeleteRole);
-
-        Video = _db.Videos
-            .Include(v => v.Genres)
-            .Include(v => v.Roles).ThenInclude(r => r.Person)
-            .Single(v => v.Id == videoId);
-        if (Video is TVShow tv)
+        MakeMovieCommand = new RelayCommand(() =>
         {
-            _db.Entry(tv).Collection(t => t.Seasons).Load();
-        }
+            Video.Type = VideoType.Movie;
+        });
+        MakeTVShowCommand = new RelayCommand(() =>
+        {
+            Video.Type = VideoType.TVShow;
+        });
+
         PosterUrl = Video.PosterUrl;
         BackgroundUrl = Video.BackgroundUrl;
-        Genres = _db.Genres
+        Genres = db.Genres
             .ToList()
             .Select(g => new Selectable<Genre>(g, Video.Genres.Any(vg => vg.Id == g.Id), (g, s) =>
             {
@@ -88,6 +81,47 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
             .ToList();
         Roles = new(from r in Video.Roles
                     select new RoleViewModel(r));
+        Seasons = new(Video.Seasons.Select(s => new SeasonViewModel(s)));
+    }
+
+    private void Delete()
+    {
+        VideoWasRemoved = true;
+        Close(true);
+    }
+
+    public virtual void SaveChangesToImages()
+    {
+        ChangeImage("poster", PosterUrl, Video.PosterUrl);
+        ChangeImage("background", BackgroundUrl, Video.BackgroundUrl);
+
+        void ChangeImage(string type, string? newUrl, string? oldUrl)
+        {
+            if (oldUrl != newUrl)
+            {
+                if (oldUrl is not null)
+                    File.Delete(oldUrl);
+
+                Action<string?> set = type switch
+                {
+                    "poster" => v => Video.PosterUrl = v,
+                    "background" => v => Video.BackgroundUrl = v,
+                    _ => throw new NotImplementedException()
+                };
+
+                if (newUrl is not null)
+                {
+                    try
+                    {
+                        var stem = Utils.GetValidFileName(Video.Title);
+                        var dstFile = $"Images/{stem}.{type}.{Guid.NewGuid()}{Path.GetExtension(newUrl)}";
+                        File.Copy(newUrl, dstFile, overwrite: false);
+                        set(dstFile);
+                    }
+                    catch { }
+                }
+            }
+        }
     }
 
     private async Task AddRole()
@@ -214,4 +248,14 @@ public class RoleViewModel : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
     void OnPropertyChanged([CallerMemberName] string propertyName = null!)
         => PropertyChanged?.Invoke(this, new(propertyName));
+}
+
+public class SeasonViewModel
+{
+    public Season Season { get; }
+
+    public SeasonViewModel(Season season)
+    {
+        Season = season;
+    }
 }

@@ -13,8 +13,6 @@ public class DataContext : DbContext
     public DbSet<Role> Roles { get; set; } = null!;
     public DbSet<Season> Seasons { get; set; } = null!;
     public DbSet<Video> Videos { get; set; } = null!;
-    public DbSet<Movie> Movies { get; set; } = null!;
-    public DbSet<TVShow> TVShows { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,9 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:c="clr-namespace:CouchPotato.Converters"
-    xmlns:db="clr-namespace:CouchPotato.DbModel"
     xmlns:e="clr-namespace:CouchPotato.Extensions"
     xmlns:l="clr-namespace:CouchPotato.Views.VideoExplorer"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
@@ -35,7 +33,7 @@
                 </DataTrigger.ExitActions>
                 <Setter Property="Background">
                     <Setter.Value>
-                        <ImageBrush ImageSource="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=DataContext.Video.PosterUrl, Converter={c:ImageConverter}}" />
+                        <ImageBrush ImageSource="{Binding Video.PosterUrl, Converter={c:ImageConverter}}" />
                     </Setter.Value>
                 </Setter>
             </DataTrigger>

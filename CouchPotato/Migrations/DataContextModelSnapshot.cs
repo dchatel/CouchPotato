@@ -185,10 +185,6 @@ namespace CouchPotato.Migrations
                     b.Property<string>("DigitalStorageCode")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Origin")
                         .HasColumnType("TEXT");
 
@@ -213,6 +209,9 @@ namespace CouchPotato.Migrations
                     b.Property<DateTime?>("ReleaseDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("Runtime")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Status")
                         .HasColumnType("TEXT");
 
@@ -232,16 +231,15 @@ namespace CouchPotato.Migrations
                     b.Property<int?>("TmdbRatingCount")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Version")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.ToTable("Video");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Video");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("GenreVideo", b =>
@@ -257,23 +255,6 @@ namespace CouchPotato.Migrations
                     b.HasIndex("VideosId");
 
                     b.ToTable("GenreVideo");
-                });
-
-            modelBuilder.Entity("CouchPotato.DbModel.Movie", b =>
-                {
-                    b.HasBaseType("CouchPotato.DbModel.Video");
-
-                    b.Property<int?>("Runtime")
-                        .HasColumnType("INTEGER");
-
-                    b.HasDiscriminator().HasValue("Movie");
-                });
-
-            modelBuilder.Entity("CouchPotato.DbModel.TVShow", b =>
-                {
-                    b.HasBaseType("CouchPotato.DbModel.Video");
-
-                    b.HasDiscriminator().HasValue("TVShow");
                 });
 
             modelBuilder.Entity("CouchPotato.DbModel.Episode", b =>
@@ -308,7 +289,7 @@ namespace CouchPotato.Migrations
 
             modelBuilder.Entity("CouchPotato.DbModel.Season", b =>
                 {
-                    b.HasOne("CouchPotato.DbModel.TVShow", "TVShow")
+                    b.HasOne("CouchPotato.DbModel.Video", "TVShow")
                         .WithMany("Seasons")
                         .HasForeignKey("TVShowId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -345,10 +326,7 @@ namespace CouchPotato.Migrations
             modelBuilder.Entity("CouchPotato.DbModel.Video", b =>
                 {
                     b.Navigation("Roles");
-                });
 
-            modelBuilder.Entity("CouchPotato.DbModel.TVShow", b =>
-                {
                     b.Navigation("Seasons");
                 });
 #pragma warning restore 612, 618
