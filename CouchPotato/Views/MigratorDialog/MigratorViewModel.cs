@@ -258,6 +258,7 @@ public class MigratorViewModel : ContentViewModel
                         Order = cast.Order ?? 0,
                     });
                 }
+                TaskProgression++;
             }
         });
     }
@@ -318,12 +319,12 @@ public class MigratorViewModel : ContentViewModel
                     PosterUrl = imageFolder is null ? null : film.PosterPath switch
                     {
                         null => null,
-                        _ => $"Images/{Utils.GetValidFileName(title)}.poster.{Guid.NewGuid()}{Path.GetExtension(film.PosterPath)}"
+                        _ => $"Images/{Utils.GetValidFileName(title)}.poster.{Guid.NewGuid()}.jpg"
                     },
                     BackgroundUrl = imageFolder is null ? null : film.BackdropPath switch
                     {
                         null => null,
-                        _ => $"Images/{Utils.GetValidFileName(title)}.background.{Guid.NewGuid()}{Path.GetExtension(film.BackdropPath)}"
+                        _ => $"Images/{Utils.GetValidFileName(title)}.background.{Guid.NewGuid()}.jpg"
                     },
 
                     PersonalRating = film.Rating,
@@ -340,7 +341,8 @@ public class MigratorViewModel : ContentViewModel
                         var file = Path.Combine(imageFolder, film.PosterPath);
                         if (File.Exists(file))
                         {
-                            File.Copy(file, video.PosterUrl!);
+                            Utils.ResizeImage(file, video.PosterUrl!, width: 200);
+                            //File.Copy(file, video.PosterUrl!);
                         }
                     }
                     if (film.BackdropPath is not null)
@@ -348,7 +350,8 @@ public class MigratorViewModel : ContentViewModel
                         var file = Path.Combine(imageFolder, film.BackdropPath);
                         if (File.Exists(file))
                         {
-                            File.Copy(file, video.BackgroundUrl!);
+                            Utils.ResizeImage(file, video.BackgroundUrl!);
+                            //File.Copy(file, video.BackgroundUrl!);
                         }
                     }
                 }

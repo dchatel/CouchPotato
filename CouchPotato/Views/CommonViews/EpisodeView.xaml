@@ -35,10 +35,11 @@
                     </FlowDocument>
                 </FlowDocumentScrollViewer>
                 <TextBlock
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top" TextWrapping="Wrap"
                     MaxWidth="350"
-                    TextAlignment="Center">
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap">
                     <TextBlock.Effect>
                         <DropShadowEffect BlurRadius="5" ShadowDepth="5" />
                     </TextBlock.Effect>

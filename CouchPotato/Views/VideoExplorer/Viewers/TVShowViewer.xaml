@@ -44,7 +44,13 @@
                         <ImageBrush ImageSource="{Binding ImageUrl, Converter={c:ImageConverter}}" Stretch="Uniform" />
                     </Border.Background>
                 </Border>
-                <TextBlock Text="{Binding Name}" Grid.ColumnSpan="2" Grid.Row="1" TextAlignment="Center" FontWeight="Bold" TextWrapping="Wrap"/>
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    FontWeight="Bold"
+                    Text="{Binding Name}"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap" />
                 <TextBlock
                     x:Name="overview"
                     Grid.Row="2"

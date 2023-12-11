@@ -3,11 +3,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:db="clr-namespace:CouchPotato.DbModel"
     xmlns:l="clr-namespace:CouchPotato.Views.VideoExplorer"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:p="clr-namespace:CouchPotato.Properties"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase">
 
     <ResourceDictionary.MergedDictionaries>
 
-        <!--<ResourceDictionary Source="VideoViewerHeader.xaml" />-->
         <ResourceDictionary Source="MovieViewer.xaml" />
         <ResourceDictionary Source="TVShowViewer.xaml" />
 
@@ -40,7 +41,7 @@
 
                 <ItemsControl HorizontalAlignment="Center" ItemsSource="{Binding Source={StaticResource roles}}">
                     <ItemsControl.Effect>
-                        <DropShadowEffect BlurRadius="20" ShadowDepth="0"/>
+                        <DropShadowEffect BlurRadius="20" ShadowDepth="0" />
                     </ItemsControl.Effect>
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -52,6 +53,22 @@
         </ScrollViewer>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type l:VideoViewerViewModel}" />
+    <DataTemplate DataType="{x:Type l:VideoViewerViewModel}">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock
+                FontSize="32"
+                FontWeight="Bold"
+                Text="{Binding Video.Title}" />
+            <Button
+                Width="64"
+                Height="64"
+                Command="{Binding RelativeSource={RelativeSource AncestorType=Grid},
+                                  Path=DataContext.EditCommand}"
+                Content="{md:PackIcon Kind=Edit,Size=32}"
+                Style="{StaticResource MaterialDesignOutlinedSecondaryButton}"
+                ToolTip="{Binding Source={x:Static p:Loc.Edit}}"
+                ToolTipService.InitialShowDelay="0" />
+        </StackPanel>
+    </DataTemplate>
 
 </ResourceDictionary>
