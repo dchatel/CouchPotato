@@ -115,6 +115,7 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
                     {
                         var stem = Utils.GetValidFileName(Video.Title);
                         var dstFile = $"Images/{stem}.{type}.{Guid.NewGuid()}{Path.GetExtension(newUrl)}";
+                        Utils.ResizeImage(newUrl, dstFile, width: type == "poster" ? 200 : null);
                         File.Copy(newUrl, dstFile, overwrite: false);
                         set(dstFile);
                     }
