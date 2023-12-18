@@ -62,7 +62,17 @@
                     </TextBlock.RenderTransform>
                 </TextBlock>
             </Grid>
-            <!--<Grid e:Grid.Cols="35,*" e:Grid.Rows="150,*">
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate x:Key="EpisodeViewCompact" DataType="{x:Type db:Episode}">
+        <Border
+            Margin="5"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Background="{StaticResource MaterialDesignCardBackground}"
+            CornerRadius="40,0,0,0">
+            <Grid e:Grid.Cols="35,*" e:Grid.Rows="150,auto,*">
                 <TextBlock
                     Margin="5"
                     HorizontalAlignment="Stretch"
@@ -84,24 +94,27 @@
                         <ImageBrush ImageSource="{Binding ImageUrl, Converter={c:ImageConverter}}" Stretch="Uniform" />
                     </Border.Background>
                 </Border>
-                <ScrollViewer
+                <TextBlock
                     Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    FontWeight="Bold"
+                    Text="{Binding Name}"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap" />
+                <TextBlock
+                    x:Name="overview"
+                    Grid.Row="2"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     MinWidth="250"
                     MinHeight="200"
                     MaxWidth="800"
-                    HorizontalScrollBarVisibility="Disabled"
-                    VerticalScrollBarVisibility="Auto">
-                    <TextBlock
-                        x:Name="overview"
-                        Margin="15,5"
-                        Text="{Binding Overview}"
-                        TextAlignment="Justify"
-                        TextWrapping="Wrap" />
-                </ScrollViewer>
-            </Grid>-->
+                    Margin="15,5"
+                    Text="{Binding Overview}"
+                    TextAlignment="Justify"
+                    TextTrimming="WordEllipsis"
+                    TextWrapping="Wrap" />
+            </Grid>
         </Border>
     </DataTemplate>
-
 </ResourceDictionary>

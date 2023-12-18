@@ -7,6 +7,8 @@ namespace CouchPotato.Views.VideoExplorer;
 
 public class VideoViewerViewModel
 {
+    private Video _video;
+
     public static VideoViewerViewModel Create(Video video)
     {
         VideoViewerViewModel result = video.Type switch
@@ -18,11 +20,18 @@ public class VideoViewerViewModel
         return result;
     }
 
-    public Video Video { get; set; }
-    
+    public Video Video
+    {
+        get => _video;
+        set {
+            _video = value;
+            LoadData();
+        }
+    }
+
     protected VideoViewerViewModel(Video video)
     {
-        Video = video;
+        _video = video;
     }
 
     public int PersonalRating

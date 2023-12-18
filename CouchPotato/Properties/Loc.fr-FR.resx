@@ -201,6 +201,12 @@
   <data name="Location" xml:space="preserve">
     <value>Emplacement</value>
   </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Numéro</value>
+  </data>
   <data name="Origin" xml:space="preserve">
     <value>Origine</value>
   </data>
@@ -227,6 +233,9 @@
   </data>
   <data name="Save" xml:space="preserve">
     <value>Sauvegarder</value>
+  </data>
+  <data name="Season" xml:space="preserve">
+    <value>Saison</value>
   </data>
   <data name="SelectNewImage" xml:space="preserve">
     <value>Sélectionnez une nouvelle image</value>

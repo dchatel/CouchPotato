@@ -1,7 +1,9 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:c="clr-namespace:CouchPotato.Converters"
+    xmlns:clr="clr-namespace:System;assembly=mscorlib"
     xmlns:db="clr-namespace:CouchPotato.DbModel"
     xmlns:dd="urn:gong-wpf-dragdrop"
     xmlns:e="clr-namespace:CouchPotato.Extensions"
@@ -10,6 +12,10 @@
     xmlns:p="clr-namespace:CouchPotato.Properties"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     xmlns:v="clr-namespace:CouchPotato.Views">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="SeasonEditor.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
     <DataTemplate x:Key="VideoEditorToolbar" DataType="{x:Type l:VideoEditorViewModel}">
         <StackPanel Orientation="Horizontal">
@@ -43,200 +49,207 @@
     </DataTemplate>
 
     <DataTemplate x:Key="VideoInfo" DataType="{x:Type l:VideoEditorViewModel}">
-        <Grid e:Grid.Cols="300, *">
-            <Grid.Resources>
-                <CollectionViewSource x:Key="Genres" Source="{Binding Genres}">
-                    <CollectionViewSource.SortDescriptions>
-                        <scm:SortDescription Direction="Ascending" PropertyName="Value.Name" />
-                    </CollectionViewSource.SortDescriptions>
-                </CollectionViewSource>
-            </Grid.Resources>
-            <StackPanel>
-                <Button
-                    Height="400"
-                    Margin="0,0,0,20"
-                    BorderThickness="0"
-                    Command="{Binding ChangePosterCommand}"
-                    ToolTip="{x:Static p:Loc.ChangePoster}"
-                    ToolTipService.InitialShowDelay="0">
-                    <Button.Background>
-                        <ImageBrush ImageSource="{Binding PosterUrl, Converter={c:ImageConverter}}" Stretch="UniformToFill" />
-                    </Button.Background>
-                </Button>
-                <Button
-                    Height="400"
-                    Margin="0,0,0,20"
-                    BorderThickness="0"
-                    Command="{Binding ChangeBackgroundCommand}"
-                    ToolTip="{x:Static p:Loc.ChangeBackground}"
-                    ToolTipService.InitialShowDelay="0">
-                    <Button.Background>
-                        <ImageBrush ImageSource="{Binding BackgroundUrl, Converter={c:ImageConverter}}" Stretch="Uniform" />
-                    </Button.Background>
-                </Button>
-            </StackPanel>
-
-            <ScrollViewer
-                Grid.Column="1"
-                Margin="20,0,0,0"
-                HorizontalScrollBarVisibility="Disabled">
+        <md:TransitioningContent>
+            <md:TransitioningContent.OpeningEffects>
+                <md:TransitionEffect Kind="ExpandIn" />
+                <md:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
+                <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2" />
+            </md:TransitioningContent.OpeningEffects>
+            <Grid e:Grid.Cols="300, *">
+                <Grid.Resources>
+                    <CollectionViewSource x:Key="Genres" Source="{Binding Genres}">
+                        <CollectionViewSource.SortDescriptions>
+                            <scm:SortDescription Direction="Ascending" PropertyName="Value.Name" />
+                        </CollectionViewSource.SortDescriptions>
+                    </CollectionViewSource>
+                </Grid.Resources>
                 <StackPanel>
-                    <StackPanel.Resources>
-                        <Style BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}" TargetType="{x:Type TextBox}">
-                            <Setter Property="FontSize" Value="16" />
-                            <Setter Property="Margin" Value="5" />
-                        </Style>
-                    </StackPanel.Resources>
-                    <TextBox
-                        Margin="5,0,5,5"
-                        md:HintAssist.Hint="{x:Static p:Loc.Title}"
-                        FontSize="24"
-                        Text="{Binding Video.Title}" />
-                    <TextBox md:HintAssist.Hint="{x:Static p:Loc.OriginalTitle}" Text="{Binding Video.OriginalTitle}" />
-                    <Grid e:Grid.Cols="*,*,*,*,auto,2*,auto,3*">
-                        <TextBox
-                            Grid.Column="0"
-                            md:HintAssist.Hint="{x:Static p:Loc.Version}"
-                            Text="{Binding Video.Version}" />
-                        <TextBox
-                            Grid.Column="1"
-                            md:HintAssist.Hint="{x:Static p:Loc.Origin}"
-                            Text="{Binding Video.Origin}" />
-                        <DatePicker
-                            Grid.Column="2"
-                            md:HintAssist.Hint="{x:Static p:Loc.ReleaseDate}"
-                            FontSize="16"
-                            SelectedDate="{Binding Video.ReleaseDate}"
-                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
-                        <TextBox
-                            Grid.Column="3"
-                            md:HintAssist.Hint="{x:Static p:Loc.Status}"
-                            Text="{Binding Video.Status}" />
-                        <Separator
-                            Grid.Column="4"
-                            BorderThickness="1"
-                            Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-                        <UniformGrid Grid.Column="5" Rows="1">
-                            <TextBox
-                                md:HintAssist.Hint="{x:Static p:Loc.PhysicalStorage}"
-                                Foreground="Yellow"
-                                Text="{Binding Video.PhysicalStorage}" />
-                            <TextBox
-                                md:HintAssist.Hint="{x:Static p:Loc.PhysicalStorageCode}"
-                                Foreground="Yellow"
-                                Text="{Binding Video.PhysicalStorageCode}" />
-                        </UniformGrid>
-                        <Separator
-                            Grid.Column="6"
-                            BorderThickness="1"
-                            Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-                        <UniformGrid Grid.Column="7" Rows="1">
-                            <TextBox
-                                md:HintAssist.Hint="{x:Static p:Loc.DigitalStorageCode}"
-                                Foreground="Yellow"
-                                Text="{Binding Video.DigitalStorageCode}" />
-                            <TextBox
-                                md:HintAssist.Hint="{x:Static p:Loc.DigitalResolution}"
-                                Foreground="Yellow"
-                                Text="{Binding Video.DigitalResolution}" />
-                            <TextBox
-                                md:HintAssist.Hint="{x:Static p:Loc.DigitalFileFormat}"
-                                Foreground="Yellow"
-                                Text="{Binding Video.DigitalFileFormat}" />
-                        </UniformGrid>
-                    </Grid>
-                    <ListBox ItemsSource="{Binding Source={StaticResource Genres}}" Style="{StaticResource MaterialDesignFilterChipPrimaryListBox}">
-                        <ListBox.ItemContainerStyle>
-                            <Style BasedOn="{StaticResource MaterialDesignFilterChipPrimaryListBoxItem}" TargetType="{x:Type ListBoxItem}">
-                                <Setter Property="Content" Value="{Binding Value.Name}" />
-                                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                    </ListBox>
-                    <TextBox md:HintAssist.Hint="{x:Static p:Loc.Tagline}" Text="{Binding Video.Tagline}" />
-                    <TextBox
-                        md:HintAssist.Hint="{x:Static p:Loc.Overview}"
-                        AcceptsReturn="True"
-                        Text="{Binding Video.Overview}"
-                        TextWrapping="Wrap" />
-
-                    <ItemsControl
-                        dd:DragDrop.DropHandler="{Binding}"
-                        dd:DragDrop.IsDragSource="True"
-                        dd:DragDrop.IsDropTarget="True">
-                        <ItemsControl.Effect>
-                            <DropShadowEffect BlurRadius="20" ShadowDepth="0" />
-                        </ItemsControl.Effect>
-                        <ItemsControl.Resources>
-                            <CollectionViewSource
-                                x:Key="Roles"
-                                IsLiveSortingRequested="True"
-                                Source="{Binding Roles}">
-                                <CollectionViewSource.SortDescriptions>
-                                    <scm:SortDescription Direction="Ascending" PropertyName="Order" />
-                                </CollectionViewSource.SortDescriptions>
-                            </CollectionViewSource>
-                        </ItemsControl.Resources>
-                        <ItemsControl.ItemsSource>
-                            <CompositeCollection>
-                                <CollectionContainer Collection="{Binding Source={StaticResource Roles}}" />
-                                <Button
-                                    Width="138"
-                                    Height="175"
-                                    Margin="5"
-                                    md:ButtonAssist.CornerRadius="20,0,0,0"
-                                    Command="{Binding AddRoleCommand}"
-                                    Content="{md:PackIcon Kind=PersonAdd,
-                                                          Size=24}"
-                                    Style="{StaticResource MaterialDesignFlatButton}" />
-                            </CompositeCollection>
-                        </ItemsControl.ItemsSource>
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel HorizontalAlignment="Center" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type l:RoleViewModel}">
-                                <Grid Background="Transparent">
-                                    <ContentPresenter Content="{Binding Role}" />
-                                    <StackPanel>
-                                        <StackPanel.Style>
-                                            <Style TargetType="StackPanel">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=IsMouseOver}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </StackPanel.Style>
-
-                                        <Button
-                                            Margin="0,0,0,5"
-                                            HorizontalAlignment="Right"
-                                            VerticalAlignment="Top"
-                                            Command="{Binding EditCommand}"
-                                            Content="{md:PackIcon Kind=PersonEdit,
-                                                                  Size=24}"
-                                            Style="{StaticResource MaterialDesignFloatingActionMiniButton}" />
-                                        <Button
-                                            HorizontalAlignment="Right"
-                                            VerticalAlignment="Top"
-                                            Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl},
-                                                              Path=DataContext.DeleteRoleCommand}"
-                                            CommandParameter="{Binding}"
-                                            Content="{md:PackIcon Kind=PersonRemove,
-                                                                  Size=24}"
-                                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" />
-                                    </StackPanel>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                    <Button
+                        Height="400"
+                        Margin="0,0,0,20"
+                        BorderThickness="0"
+                        Command="{Binding ChangePosterCommand}"
+                        ToolTip="{x:Static p:Loc.ChangePoster}"
+                        ToolTipService.InitialShowDelay="0">
+                        <Button.Background>
+                            <ImageBrush ImageSource="{Binding Video.PosterUrl, Converter={c:ImageConverter}}" Stretch="UniformToFill" />
+                        </Button.Background>
+                    </Button>
+                    <Button
+                        Height="400"
+                        Margin="0,0,0,20"
+                        BorderThickness="0"
+                        Command="{Binding ChangeBackgroundCommand}"
+                        ToolTip="{x:Static p:Loc.ChangeBackground}"
+                        ToolTipService.InitialShowDelay="0">
+                        <Button.Background>
+                            <ImageBrush ImageSource="{Binding Video.BackgroundUrl, Converter={c:ImageConverter}}" Stretch="Uniform" />
+                        </Button.Background>
+                    </Button>
                 </StackPanel>
-            </ScrollViewer>
-        </Grid>
+
+                <ScrollViewer
+                    Grid.Column="1"
+                    Margin="20,0,0,0"
+                    HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <StackPanel.Resources>
+                            <Style BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}" TargetType="{x:Type TextBox}">
+                                <Setter Property="FontSize" Value="16" />
+                                <Setter Property="Margin" Value="5" />
+                            </Style>
+                        </StackPanel.Resources>
+                        <TextBox
+                            Margin="5,0,5,5"
+                            md:HintAssist.Hint="{x:Static p:Loc.Title}"
+                            FontSize="24"
+                            Text="{Binding Video.Title}" />
+                        <TextBox md:HintAssist.Hint="{x:Static p:Loc.OriginalTitle}" Text="{Binding Video.OriginalTitle}" />
+                        <Grid e:Grid.Cols="*,*,*,*,auto,2*,auto,3*">
+                            <TextBox
+                                Grid.Column="0"
+                                md:HintAssist.Hint="{x:Static p:Loc.Version}"
+                                Text="{Binding Video.Version}" />
+                            <TextBox
+                                Grid.Column="1"
+                                md:HintAssist.Hint="{x:Static p:Loc.Origin}"
+                                Text="{Binding Video.Origin}" />
+                            <DatePicker
+                                Grid.Column="2"
+                                md:HintAssist.Hint="{x:Static p:Loc.ReleaseDate}"
+                                FontSize="16"
+                                SelectedDate="{Binding Video.ReleaseDate}"
+                                Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                            <TextBox
+                                Grid.Column="3"
+                                md:HintAssist.Hint="{x:Static p:Loc.Status}"
+                                Text="{Binding Video.Status}" />
+                            <Separator
+                                Grid.Column="4"
+                                BorderThickness="1"
+                                Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                            <UniformGrid Grid.Column="5" Rows="1">
+                                <TextBox
+                                    md:HintAssist.Hint="{x:Static p:Loc.PhysicalStorage}"
+                                    Foreground="Yellow"
+                                    Text="{Binding Video.PhysicalStorage}" />
+                                <TextBox
+                                    md:HintAssist.Hint="{x:Static p:Loc.PhysicalStorageCode}"
+                                    Foreground="Yellow"
+                                    Text="{Binding Video.PhysicalStorageCode}" />
+                            </UniformGrid>
+                            <Separator
+                                Grid.Column="6"
+                                BorderThickness="1"
+                                Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                            <UniformGrid Grid.Column="7" Rows="1">
+                                <TextBox
+                                    md:HintAssist.Hint="{x:Static p:Loc.DigitalStorageCode}"
+                                    Foreground="Yellow"
+                                    Text="{Binding Video.DigitalStorageCode}" />
+                                <TextBox
+                                    md:HintAssist.Hint="{x:Static p:Loc.DigitalResolution}"
+                                    Foreground="Yellow"
+                                    Text="{Binding Video.DigitalResolution}" />
+                                <TextBox
+                                    md:HintAssist.Hint="{x:Static p:Loc.DigitalFileFormat}"
+                                    Foreground="Yellow"
+                                    Text="{Binding Video.DigitalFileFormat}" />
+                            </UniformGrid>
+                        </Grid>
+                        <ListBox ItemsSource="{Binding Source={StaticResource Genres}}" Style="{StaticResource MaterialDesignFilterChipPrimaryListBox}">
+                            <ListBox.ItemContainerStyle>
+                                <Style BasedOn="{StaticResource MaterialDesignFilterChipPrimaryListBoxItem}" TargetType="{x:Type ListBoxItem}">
+                                    <Setter Property="Content" Value="{Binding Value.Name}" />
+                                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
+                        <TextBox md:HintAssist.Hint="{x:Static p:Loc.Tagline}" Text="{Binding Video.Tagline}" />
+                        <TextBox
+                            md:HintAssist.Hint="{x:Static p:Loc.Overview}"
+                            AcceptsReturn="True"
+                            Text="{Binding Video.Overview}"
+                            TextWrapping="Wrap" />
+
+                        <ItemsControl
+                            dd:DragDrop.DropHandler="{Binding}"
+                            dd:DragDrop.IsDragSource="True"
+                            dd:DragDrop.IsDropTarget="True">
+                            <ItemsControl.Effect>
+                                <DropShadowEffect BlurRadius="20" ShadowDepth="0" />
+                            </ItemsControl.Effect>
+                            <ItemsControl.Resources>
+                                <CollectionViewSource
+                                    x:Key="Roles"
+                                    IsLiveSortingRequested="True"
+                                    Source="{Binding Roles}">
+                                    <CollectionViewSource.SortDescriptions>
+                                        <scm:SortDescription Direction="Ascending" PropertyName="Order" />
+                                    </CollectionViewSource.SortDescriptions>
+                                </CollectionViewSource>
+                            </ItemsControl.Resources>
+                            <ItemsControl.ItemsSource>
+                                <CompositeCollection>
+                                    <CollectionContainer Collection="{Binding Source={StaticResource Roles}}" />
+                                    <Button
+                                        Width="138"
+                                        Height="175"
+                                        Margin="5"
+                                        md:ButtonAssist.CornerRadius="20,0,0,0"
+                                        Command="{Binding AddRoleCommand}"
+                                        Content="{md:PackIcon Kind=PersonAdd,
+                                                              Size=24}"
+                                        Style="{StaticResource MaterialDesignFlatButton}" />
+                                </CompositeCollection>
+                            </ItemsControl.ItemsSource>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel HorizontalAlignment="Center" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type l:RoleViewModel}">
+                                    <Grid Background="Transparent">
+                                        <ContentPresenter Content="{Binding Role}" />
+                                        <StackPanel>
+                                            <StackPanel.Style>
+                                                <Style TargetType="StackPanel">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=IsMouseOver}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </StackPanel.Style>
+
+                                            <Button
+                                                Margin="0,0,0,5"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Top"
+                                                Command="{Binding EditCommand}"
+                                                Content="{md:PackIcon Kind=PersonEdit,
+                                                                      Size=24}"
+                                                Style="{StaticResource MaterialDesignFloatingActionMiniButton}" />
+                                            <Button
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Top"
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl},
+                                                                  Path=DataContext.DeleteRoleCommand}"
+                                                CommandParameter="{Binding}"
+                                                Content="{md:PackIcon Kind=PersonRemove,
+                                                                      Size=24}"
+                                                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </md:TransitioningContent>
     </DataTemplate>
 
     <DataTemplate x:Key="VideoTypeSelector" DataType="{x:Type l:VideoEditorViewModel}">
@@ -283,14 +296,90 @@
     </DataTemplate>
 
     <DataTemplate x:Key="TVEditor" DataType="{x:Type l:VideoEditorViewModel}">
-        <TabControl TabStripPlacement="Left">
-            <!--<TabControl.Style>
-                <Style TargetType="TabControl">
-                    <Setter Property="Background" Value="{StaticResource MaterialDesignCardBackground}" />
-                    <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="Foreground" Value="White" />
-                </Style>
-            </TabControl.Style>-->
+        <Grid e:Grid.Cols="auto,*">
+            <Grid.Resources>
+                <CollectionViewSource
+                    x:Key="Seasons"
+                    IsLiveSortingRequested="True"
+                    Source="{Binding Seasons}">
+                    <CollectionViewSource.SortDescriptions>
+                        <scm:SortDescription Direction="Ascending" PropertyName="Season.SeasonNumber" />
+                    </CollectionViewSource.SortDescriptions>
+                    <CollectionViewSource.LiveSortingProperties>
+                        <clr:String>Season.SeasonNumber</clr:String>
+                    </CollectionViewSource.LiveSortingProperties>
+                </CollectionViewSource>
+            </Grid.Resources>
+
+            <StackPanel Margin="20,0" Orientation="Vertical">
+                <Button Content="{x:Static p:Loc.TVShowInfo}">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Click">
+                            <b:ChangePropertyAction
+                                PropertyName="SelectedValue"
+                                TargetName="seasonlist"
+                                Value="{x:Null}" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </Button>
+                <ListBox x:Name="seasonlist" Margin="0,20,0,0">
+                    <ListBox.ItemsSource>
+                        <CompositeCollection>
+                            <CollectionContainer Collection="{Binding Source={StaticResource Seasons}}" />
+                        </CompositeCollection>
+                    </ListBox.ItemsSource>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemContainerStyle>
+                        <Style BasedOn="{StaticResource MaterialDesignNavigationPrimaryListBoxItem}" TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type l:SeasonViewModel}">
+                            <Grid e:Grid.Cols="*, auto">
+                                <TextBlock
+                                    Margin="0,0,10,0"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Season.Name}" />
+                                <Button
+                                    Grid.Column="1"
+                                    Width="32"
+                                    Height="32"
+                                    Padding="0"
+                                    HorizontalAlignment="Right"
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox},
+                                                      Path=DataContext.DeleteSeasonCommand}"
+                                    CommandParameter="{Binding}"
+                                    Content="{md:PackIcon Kind=Remove}"
+                                    Style="{StaticResource MaterialDesignFlatAccentButton}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Button
+                    Command="{Binding AddSeasonCommand}"
+                    Content="{md:PackIcon Kind=Add}"
+                    Style="{StaticResource MaterialDesignFlatButton}" />
+            </StackPanel>
+
+            <ContentControl Grid.Column="1">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Setter Property="Content" Value="{Binding ElementName=seasonlist, Path=SelectedValue}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=seasonlist, Path=SelectedValue}" Value="{x:Null}">
+                                <Setter Property="Content" Value="{Binding}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+        </Grid>
+        <!--<TabControl TabStripPlacement="Left">
             <TabControl.Template>
                 <ControlTemplate TargetType="TabControl">
                     <Grid e:Grid.Cols="auto,*">
@@ -315,7 +404,17 @@
                 </ControlTemplate>
             </TabControl.Template>
             <TabControl.Resources>
-                <CollectionViewSource x:Key="Seasons" Source="{Binding Video.Seasons}" />
+                <CollectionViewSource
+                    x:Key="Seasons"
+                    IsLiveSortingRequested="True"
+                    Source="{Binding Seasons}">
+                    <CollectionViewSource.SortDescriptions>
+                        <scm:SortDescription Direction="Ascending" PropertyName="Season.SeasonNumber" />
+                    </CollectionViewSource.SortDescriptions>
+                    <CollectionViewSource.LiveSortingProperties>
+                        <clr:String>Season.SeasonNumber</clr:String>
+                    </CollectionViewSource.LiveSortingProperties>
+                </CollectionViewSource>
             </TabControl.Resources>
             <TabControl.ItemsSource>
                 <CompositeCollection>
@@ -327,11 +426,11 @@
                 </CompositeCollection>
             </TabControl.ItemsSource>
             <TabControl.ItemTemplate>
-                <DataTemplate DataType="{x:Type db:Season}">
-                    <TextBlock Text="{Binding Name}" TextTrimming="WordEllipsis" />
+                <DataTemplate DataType="{x:Type l:SeasonViewModel}">
+                    <TextBlock Text="{Binding Season.Name}" TextTrimming="WordEllipsis" />
                 </DataTemplate>
             </TabControl.ItemTemplate>
-        </TabControl>
+        </TabControl>-->
     </DataTemplate>
 
     <DataTemplate x:Key="VideoEditorView" DataType="{x:Type l:VideoEditorViewModel}">

@@ -342,7 +342,6 @@ public class MigratorViewModel : ContentViewModel
                         if (File.Exists(file))
                         {
                             Utils.ResizeImage(file, video.PosterUrl!, width: 200);
-                            //File.Copy(file, video.PosterUrl!);
                         }
                     }
                     if (film.BackdropPath is not null)
@@ -351,7 +350,6 @@ public class MigratorViewModel : ContentViewModel
                         if (File.Exists(file))
                         {
                             Utils.ResizeImage(file, video.BackgroundUrl!);
-                            //File.Copy(file, video.BackgroundUrl!);
                         }
                     }
                 }

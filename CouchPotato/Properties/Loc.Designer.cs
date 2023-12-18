@@ -304,6 +304,24 @@ namespace CouchPotato.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Name.
+        /// </summary>
+        public static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Number.
+        /// </summary>
+        public static string Number {
+            get {
+                return ResourceManager.GetString("Number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Origin.
         /// </summary>
         public static string Origin {
@@ -381,6 +399,15 @@ namespace CouchPotato.Properties {
         public static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Season.
+        /// </summary>
+        public static string Season {
+            get {
+                return ResourceManager.GetString("Season", resourceCulture);
             }
         }
         

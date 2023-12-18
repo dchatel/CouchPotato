@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -18,7 +20,12 @@ using CouchPotato.Views.InputDialog;
 
 using GongSolutions.Wpf.DragDrop;
 
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+
 using IDropTarget = GongSolutions.Wpf.DragDrop.IDropTarget;
+using ResizeMode = SixLabors.ImageSharp.Processing.ResizeMode;
+using Size = SixLabors.ImageSharp.Size;
 
 namespace CouchPotato.Views.VideoEditor;
 
@@ -31,14 +38,14 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
     public ICommand ChangeBackgroundCommand { get; }
     public ICommand AddRoleCommand { get; }
     public ICommand DeleteRoleCommand { get; }
+    public ICommand AddSeasonCommand { get; }
+    public ICommand DeleteSeasonCommand { get; }
     public ICommand MakeMovieCommand { get; }
     public ICommand MakeTVShowCommand { get; }
 
     public Video Video { get; }
     public bool EditionMode { get; }
     public bool VideoWasRemoved { get; private set; }
-    public string? PosterUrl { get; set; }
-    public string? BackgroundUrl { get; set; }
     public IEnumerable<Selectable<Genre>> Genres { get; private set; }
     public ObservableCollection<RoleViewModel> Roles { get; }
     public ObservableCollection<SeasonViewModel> Seasons { get; }
@@ -50,10 +57,12 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
         SaveCommand = new RelayCommand(() => Close(true));
         CancelCommand = new RelayCommand(() => Close(false));
         DeleteCommand = new RelayCommand(Delete);
-        ChangePosterCommand = new RelayCommand(() => PosterUrl = GetFile() ?? PosterUrl);
-        ChangeBackgroundCommand = new RelayCommand(() => BackgroundUrl = GetFile() ?? BackgroundUrl);
+        ChangePosterCommand = new RelayCommand(() => Video.PosterUrl = ImageChange.AddImageChange(Video.PosterUrl, Video.Title, "poster", width: 200));
+        ChangeBackgroundCommand = new RelayCommand(() => Video.BackgroundUrl = ImageChange.AddImageChange(Video.BackgroundUrl, Video.Title, "background"));
         AddRoleCommand = new AsyncRelayCommand(AddRole);
         DeleteRoleCommand = new RelayCommand<RoleViewModel>(DeleteRole);
+        AddSeasonCommand = new RelayCommand(AddSeason);
+        DeleteSeasonCommand = new RelayCommand<SeasonViewModel>(RemoveSeason);
         MakeMovieCommand = new RelayCommand(() =>
         {
             Video.Type = VideoType.Movie;
@@ -63,8 +72,6 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
             Video.Type = VideoType.TVShow;
         });
 
-        PosterUrl = Video.PosterUrl;
-        BackgroundUrl = Video.BackgroundUrl;
         Genres = db.Genres
             .ToList()
             .Select(g => new Selectable<Genre>(g, Video.Genres.Any(vg => vg.Id == g.Id), (g, s) =>
@@ -81,7 +88,7 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
             .ToList();
         Roles = new(from r in Video.Roles
                     select new RoleViewModel(r));
-        Seasons = new(Video.Seasons.Select(s => new SeasonViewModel(s)));
+        Seasons = new(Video.Seasons.Select(s => new SeasonViewModel(this, s)));
     }
 
     private void Delete()
@@ -90,38 +97,25 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
         Close(true);
     }
 
-    public virtual void SaveChangesToImages()
+    private void AddSeason()
     {
-        ChangeImage("poster", PosterUrl, Video.PosterUrl);
-        ChangeImage("background", BackgroundUrl, Video.BackgroundUrl);
-
-        void ChangeImage(string type, string? newUrl, string? oldUrl)
+        var seasonNumber = Seasons.Select(s => s.Season.SeasonNumber).Max() + 1;
+        var seasonName = $"{Loc.Season} {seasonNumber}";
+        var season = new Season
         {
-            if (oldUrl != newUrl)
-            {
-                if (oldUrl is not null)
-                    File.Delete(oldUrl);
+            SeasonNumber = seasonNumber,
+            Name = seasonName,
+        };
+        Seasons.Add(new SeasonViewModel(this, season));
+        Video.Seasons.Add(season);
+    }
 
-                Action<string?> set = type switch
-                {
-                    "poster" => v => Video.PosterUrl = v,
-                    "background" => v => Video.BackgroundUrl = v,
-                    _ => throw new NotImplementedException()
-                };
-
-                if (newUrl is not null)
-                {
-                    try
-                    {
-                        var stem = Utils.GetValidFileName(Video.Title);
-                        var dstFile = $"Images/{stem}.{type}.{Guid.NewGuid()}{Path.GetExtension(newUrl)}";
-                        Utils.ResizeImage(newUrl, dstFile, width: type == "poster" ? 200 : null);
-                        File.Copy(newUrl, dstFile, overwrite: false);
-                        set(dstFile);
-                    }
-                    catch { }
-                }
-            }
+    private void RemoveSeason(SeasonViewModel? season)
+    {
+        if (season is not null)
+        {
+            Video.Seasons.Remove(season.Season);
+            Seasons.Remove(season);
         }
     }
 
@@ -155,22 +149,6 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
         {
             Video.Roles.Remove(roleViewModel.Role);
             Roles.Remove(roleViewModel);
-        }
-    }
-
-    private static string? GetFile()
-    {
-        var ofd = new System.Windows.Forms.OpenFileDialog
-        {
-            Title = Loc.SelectNewImage,
-        };
-        if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-        {
-            return ofd.FileName;
-        }
-        else
-        {
-            return null;
         }
     }
 
@@ -253,10 +231,100 @@ public class RoleViewModel : INotifyPropertyChanged
 
 public class SeasonViewModel
 {
-    public Season Season { get; }
+    private readonly VideoEditorViewModel _videoEditorViewModel;
 
-    public SeasonViewModel(Season season)
+    public Season Season { get; }
+    public ObservableCollection<Episode> Episodes { get; }
+    public ICommand AddEpisodeCommand { get; }
+    public ICommand EditEpisodeCommand { get; }
+    public ICommand DeleteEpisodeCommand { get; }
+
+    public SeasonViewModel(VideoEditorViewModel videoEditorViewModel, Season season)
     {
+        AddEpisodeCommand = new AsyncRelayCommand(AddEpisode);
+        EditEpisodeCommand = new AsyncRelayCommand<Episode>(EditEpisode);
+        DeleteEpisodeCommand = new RelayCommand<Episode>(RemoveEpisode);
+        _videoEditorViewModel = videoEditorViewModel;
         Season = season;
+        Episodes = new(Season.Episodes);
+        Episodes.CollectionChanged += Episodes_CollectionChanged;
+    }
+
+    private void Episodes_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add:
+                if (e.NewItems is not null)
+                {
+                    foreach (var item in e.NewItems)
+                    {
+                        if (item is Episode episode)
+                        {
+                            Season.Episodes.Add(episode);
+                        }
+                    }
+                }
+                break;
+            case NotifyCollectionChangedAction.Remove:
+                if (e.OldItems is not null)
+                {
+                    foreach (var item in e.OldItems)
+                    {
+                        if (item is Episode episode)
+                        {
+                            Season.Episodes.Remove(episode);
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    private async Task AddEpisode()
+    {
+        var episode = new Episode();
+        if (await new EpisodeEditorViewModel(_videoEditorViewModel, episode).Show())
+        {
+            Episodes.Add(episode);
+        }
+    }
+
+
+    private async Task EditEpisode(Episode? episode)
+    {
+        if (episode is not null)
+        {
+            await new EpisodeEditorViewModel(_videoEditorViewModel, episode).Show();
+        }
+    }
+
+    private void RemoveEpisode(Episode? episode)
+    {
+        if (episode is not null)
+        {
+            Episodes.Remove(episode);
+        }
     }
 }
+
+public class EpisodeEditorViewModel : ContentViewModel
+{
+    private readonly VideoEditorViewModel _videoEditorViewModel;
+
+    public Episode Episode { get; set; }
+    public ICommand ChangeEpisodeImageCommand { get; }
+
+    public EpisodeEditorViewModel(VideoEditorViewModel videoEditorViewModel, Episode episode) : base(true)
+    {
+        _videoEditorViewModel = videoEditorViewModel;
+        Episode = episode;
+
+        ChangeEpisodeImageCommand = new RelayCommand(() => Episode.ImageUrl= ImageChange.AddImageChange(
+            Episode.ImageUrl,
+            $"{_videoEditorViewModel.Video.Title}",
+            $"S{Episode.Season.SeasonNumber}E{Episode.EpisodeNumber}"
+            ));
+    }
+}
+

@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 
 using CommunityToolkit.Mvvm.Input;
 
 using CouchPotato.DbModel;
 using CouchPotato.Views.VideoEditor;
-
-using Microsoft.EntityFrameworkCore;
 
 namespace CouchPotato.Views.VideoExplorer;
 
@@ -64,9 +58,14 @@ public class VideoExplorerViewModel : ContentViewModel
         if (await editor.Show())
         {
             await db.SaveChangesAsync();
-            editor.SaveChangesToImages();
+            ImageChange.Apply();
+            //editor.SaveChangesToImages();
             SelectedResult = new VideoSearchResultViewModel(VideoViewerViewModel.Create(video));
             SearchResults?.Add(SelectedResult);
+        }
+        else
+        {
+            ImageChange.Cancel();
         }
     }
 
@@ -89,22 +88,27 @@ public class VideoExplorerViewModel : ContentViewModel
             else
             {
                 await db.SaveChangesAsync();
-                editor.SaveChangesToImages();
+                ImageChange.Apply();
+                //editor.SaveChangesToImages();
                 SelectedResult.VideoViewer.Video = video;
             }
+        }
+        else
+        {
+            ImageChange.Cancel();
         }
     }
 
     private async Task SearchAsync()
     {
         IsSearching = true;
-        using var db = new DataContext();
 
+        using var db = new DataContext();
         SearchResults = new ObservableCollection<VideoSearchResultViewModel>(await Task.Run(() => db.Videos
             .Where(video => video.Title.ToLower().Contains(SearchText.ToLower()))
-            //.OrderBy(video => video.Title.ToLower())
             .Select(video => new VideoSearchResultViewModel(VideoViewerViewModel.Create(video)))
             .ToArray()));
+
         SelectedResult = SearchResults.FirstOrDefault();
         IsSearching = false;
     }

@@ -55,11 +55,8 @@ public class Video
         var video = db.Videos
                     .Include(v => v.Genres)
                     .Include(v => v.Roles).ThenInclude(r => r.Person)
+                    .Include(v => v.Seasons).ThenInclude(s => s.Episodes)
                     .Single(v => v.Id == Id);
-        if (video.Type == VideoType.TVShow)
-        {
-            db.Entry(video).Collection(t => t.Seasons).Load();
-        }
         return video;
     }
 }
