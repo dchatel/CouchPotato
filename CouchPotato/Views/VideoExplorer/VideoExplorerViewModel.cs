@@ -105,7 +105,7 @@ public class VideoExplorerViewModel : ContentViewModel
 
         using var db = new DataContext();
         SearchResults = new ObservableCollection<VideoSearchResultViewModel>(await Task.Run(() => db.Videos
-            .Where(video => video.Title.ToLower().Contains(SearchText.ToLower()))
+            .Where(video => video.Title.ToLower().Contains((SearchText ?? "").ToLower()))
             .Select(video => new VideoSearchResultViewModel(VideoViewerViewModel.Create(video)))
             .ToArray()));
 

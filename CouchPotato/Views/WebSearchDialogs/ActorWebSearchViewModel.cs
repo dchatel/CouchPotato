@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 
 using CouchPotato.DbModel;
 using CouchPotato.DbModel.OtherDbModels.Tmdb;
 
-using Microsoft.Web.WebView2.Wpf;
+namespace CouchPotato.Views.WebSearchDialogs;
 
-namespace CouchPotato.Views.ActorFinderDialog;
-
-public class ActorFinderViewModel : ContentViewModel
+public class ActorWebSearchViewModel : ContentViewModel
 {
     private readonly IEnumerable<Person> _excludedPeople;
     private string? _searchText;
@@ -41,7 +37,7 @@ public class ActorFinderViewModel : ContentViewModel
     public string Url { get; set; }
     public bool Searching { get; set; }
 
-    public ActorFinderViewModel(IEnumerable<Person> excludedPeople) : base(autoClose: true)
+    public ActorWebSearchViewModel(IEnumerable<Person> excludedPeople) : base(autoClose: true)
     {
         _excludedPeople = excludedPeople;
         SearchResults = Enumerable.Empty<Person>();
@@ -61,17 +57,5 @@ public class ActorFinderViewModel : ContentViewModel
             SearchResults = results;
         }
         Searching = false;
-    }
-}
-
-// Fix the issue with WebView throwing an exception when unloaded
-public partial class ResourceDictionary : System.Windows.ResourceDictionary
-{
-    private void WebView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-    {
-        if (sender is WebView2 webView && webView.DataContext is null)
-        {
-            webView.Source = new Uri("about:blank");
-        }
     }
 }

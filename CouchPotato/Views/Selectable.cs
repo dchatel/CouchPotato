@@ -4,28 +4,43 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CouchPotato.Views
+using Microsoft.Web.WebView2.Wpf;
+
+namespace CouchPotato.Views;
+
+public class Selectable<T>
 {
-    public class Selectable<T>
+    private bool _isSelected;
+    private readonly Action<T, bool>? _selectionChanged;
+
+    public T Value { get; }
+    public bool IsSelected
     {
-        private bool _isSelected;
-        private readonly Action<T, bool>? _selectionChanged;
+        get => _isSelected;
+        set {
+            _isSelected = value;
+            _selectionChanged?.Invoke(Value, value);
+        }
+    }
 
-        public T Value { get; }
-        public bool IsSelected
+    public Selectable(T value, bool isSelected = false, Action<T, bool>? selectionChanged = null)
+    {
+        Value = value;
+        IsSelected = isSelected;
+        _selectionChanged = selectionChanged;
+    }
+}
+
+public class WebView : WebView2
+{
+    public WebView() : base()
+    {
+        this.DataContextChanged += (sender, e) =>
         {
-            get => _isSelected;
-            set {
-                _isSelected = value;
-                _selectionChanged?.Invoke(Value, value);
+            if (sender is WebView2 webView && webView.DataContext is null)
+            {
+                webView.Source = new Uri("about:blank");
             }
-        }
-
-        public Selectable(T value, bool isSelected = false, Action<T, bool>? selectionChanged = null)
-        {
-            Value = value;
-            IsSelected = isSelected;
-            _selectionChanged = selectionChanged;
-        }
+        };
     }
 }

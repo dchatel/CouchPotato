@@ -1,0 +1,126 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:CouchPotato.Converters"
+    xmlns:db="clr-namespace:CouchPotato.DbModel"
+    xmlns:e="clr-namespace:CouchPotato.Extensions"
+    xmlns:l="clr-namespace:CouchPotato.Views.WebSearchDialogs"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:p="clr-namespace:CouchPotato.Properties"
+    xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+    xmlns:tmdb="clr-namespace:CouchPotato.DbModel.OtherDbModels.Tmdb"
+    xmlns:v="clr-namespace:CouchPotato.Views">
+
+    <DataTemplate x:Key="VideoWebSearchToolbar" DataType="{x:Type l:VideoWebSearchViewModel}">
+        <StackPanel Orientation="Horizontal">
+            <StackPanel.Resources>
+                <Style TargetType="FrameworkElement">
+                    <Setter Property="ToolTipService.InitialShowDelay" Value="0" />
+                    <Setter Property="Margin" Value="0,50,0,0" />
+                </Style>
+            </StackPanel.Resources>
+            <Button
+                Margin="0,0,10,0"
+                Command="{Binding OkCommand}"
+                Content="{md:PackIcon Kind=ContentSave}"
+                Style="{StaticResource MaterialDesignFlatButton}"
+                ToolTip="{x:Static p:Loc.Save}"
+                ToolTipService.InitialShowDelay="0" />
+            <Button
+                Margin="0,0,10,0"
+                Command="{Binding CloseCommand}"
+                Content="{md:PackIcon Kind=CloseBox}"
+                Style="{StaticResource MaterialDesignFlatButton}"
+                ToolTip="{x:Static p:Loc.Cancel}"
+                ToolTipService.InitialShowDelay="0" />
+            <Separator />
+            <Grid Width="500" e:Grid.Cols="*,auto">
+                <TextBox
+                    Grid.Column="0"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Bottom"
+                    e:TextBox.IsInitiallyFocused="True"
+                    md:HintAssist.Hint="{x:Static p:Loc.Title}"
+                    md:HintAssist.IsFloating="True"
+                    md:TextFieldAssist.HasClearButton="True"
+                    md:TextFieldAssist.HasLeadingIcon="True"
+                    md:TextFieldAssist.LeadingIcon="Search"
+                    Text="{Binding Title,
+                                   UpdateSourceTrigger=PropertyChanged,
+                                   Delay=800}" />
+                <TextBox
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Bottom"
+                    md:HintAssist.Hint="{x:Static p:Loc.ReleaseDate}"
+                    md:HintAssist.IsFloating="True"
+                    md:TextFieldAssist.HasClearButton="True"
+                    Text="{Binding Year,
+                                   UpdateSourceTrigger=PropertyChanged,
+                                   Delay=800}" />
+            </Grid>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate x:Key="VideoWebSearchView" DataType="{x:Type l:VideoWebSearchViewModel}">
+        <md:TransitioningContent>
+            <md:TransitioningContent.OpeningEffects>
+                <md:TransitionEffect Kind="ExpandIn" />
+                <md:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
+                <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2" />
+            </md:TransitioningContent.OpeningEffects>
+            <Border
+                Margin="0,0"
+                Padding="20"
+                Background="{StaticResource MaterialDesignCardBackground}"
+                CornerRadius="20,0,0,0">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="5" ShadowDepth="2" />
+                </Border.Effect>
+                <Grid e:Grid.Cols="*,2*">
+
+                    <DataGrid
+                        Padding="10,0"
+                        AutoGenerateColumns="False"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding SearchResults}"
+                        SelectedValue="{Binding SelectedVideo}"
+                        SelectionMode="Single"
+                        SelectionUnit="FullRow">
+                        <DataGrid.CellStyle>
+                            <Style BasedOn="{StaticResource MaterialDesignDataGridCell}" TargetType="{x:Type DataGridCell}">
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="IsTabStop" Value="False" />
+                            </Style>
+                        </DataGrid.CellStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Title}"
+                                Header="{x:Static p:Loc.Title}" />
+                            <DataGridTextColumn Binding="{Binding Year}" Header="{x:Static p:Loc.ReleaseDate}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Right" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <v:WebView Grid.Column="1" Source="{Binding Url}" />
+
+                    <Control
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource BusyAnimationStyle}"
+                        Visibility="{Binding Searching,
+                                             Converter={c:VisibilityConverter}}" />
+                </Grid>
+            </Border>
+        </md:TransitioningContent>
+    </DataTemplate>
+
+</ResourceDictionary>

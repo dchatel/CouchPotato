@@ -13,28 +13,29 @@ using System.Windows.Markup;
 
 using CouchPotato.Properties;
 
-namespace CouchPotato
+using Microsoft.Web.WebView2.Wpf;
+
+namespace CouchPotato;
+
+/// <summary>
+/// Interaction logic for App.xaml
+/// </summary>
+public partial class App : Application
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    protected override void OnStartup(StartupEventArgs e)
     {
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            FrameworkElement.LanguageProperty.OverrideMetadata(
-                typeof(FrameworkElement),
-                new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
+        FrameworkElement.LanguageProperty.OverrideMetadata(
+            typeof(FrameworkElement),
+            new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
 
-            var win = new MainWindow();
-            win.ShowDialog();
-            Config.Save();
-        }
+        var win = new MainWindow();
+        win.ShowDialog();
+        Config.Save();
+    }
 
-        public static void Restart()
-        {
-            Process.Start(Assembly.GetEntryAssembly()!.Location);
-            Current.Shutdown();
-        }
+    public static void Restart()
+    {
+        Process.Start(Assembly.GetEntryAssembly()!.Location);
+        Current.Shutdown();
     }
 }

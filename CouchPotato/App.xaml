@@ -26,10 +26,16 @@
                 <ResourceDictionary Source="Views/VideoEditor/VideoEditor.xaml" />
                 <ResourceDictionary Source="Views/OkDialog/OkDialog.xaml" />
                 <ResourceDictionary Source="Views/InputDialog/InputDialog.xaml" />
-                <ResourceDictionary Source="Views/ActorFinderDialog/ActorFinderDialog.xaml" />
+                <ResourceDictionary Source="Views/WebSearchDialogs/ActorWebSearchDialog.xaml" />
+                <ResourceDictionary Source="Views/WebSearchDialogs/VideoWebSearchDialog.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 
+            <Style TargetType="{x:Type Separator}">
+                <Setter Property="Margin" Value="0,0,10,0" />
+                <Setter Property="BorderBrush" Value="#ffc400" />
+                <Setter Property="BorderThickness" Value="20" />
+            </Style>
             <DataTemplate x:Key="emptyDataTemplate" />
         </ResourceDictionary>
     </Application.Resources>

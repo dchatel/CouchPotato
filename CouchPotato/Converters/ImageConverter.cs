@@ -25,7 +25,7 @@ public class ImageConverter : MarkupExtension, IValueConverter
 
     private static BitmapImage? TmdbLoader(string str)
     {
-        return HttpLoader($"https://www.themoviedb.org/t/p/w138_and_h175_face{str}");
+        return HttpLoader($"https://www.themoviedb.org/t/p/w154{str}");
     }
 
     private static BitmapImage? HttpLoader(string url)

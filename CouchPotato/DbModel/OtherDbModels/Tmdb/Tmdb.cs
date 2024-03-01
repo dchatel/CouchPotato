@@ -30,4 +30,32 @@ public class Tmdb
         people = people.Where(p => excludedPeople.All(e => p.TmdbId != e.TmdbId));
         return people.ToArray();
     }
+
+    public static async Task<IEnumerable<VideoSearchResult>> SearchVideo(string mediaType, string title, int year)
+    {
+        using var tmdb = new TMDbClient(Config.Default.TMDbAPIKey);
+
+        var results = mediaType switch
+        {
+            "movie" => (await tmdb.SearchMovieAsync(title, Config.Default.Language, year: year)).Results.Select(m => new VideoSearchResult
+            {
+                TmdbId = m.Id,
+                MediaType = "movie",
+                Title = m.Title,
+                PosterPath = m.PosterPath,
+                Year = m.ReleaseDate?.Year,
+            }),
+            "tv" => (await tmdb.SearchTvShowAsync(title, Config.Default.Language, firstAirDateYear: year)).Results.Select(s => new VideoSearchResult
+            {
+                TmdbId = s.Id,
+                MediaType = "tv",
+                Title = s.Name,
+                PosterPath = s.PosterPath,
+                Year = s.FirstAirDate?.Year,
+            }),
+            _ => throw new NotImplementedException()
+        };
+
+        return results;
+    }
 }

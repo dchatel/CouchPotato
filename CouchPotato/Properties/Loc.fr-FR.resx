@@ -243,6 +243,9 @@
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
+  <data name="Sync" xml:space="preserve">
+    <value>Synchroniser</value>
+  </data>
   <data name="Tagline" xml:space="preserve">
     <value>Accroche</value>
   </data>

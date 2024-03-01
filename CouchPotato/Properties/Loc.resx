@@ -240,6 +240,9 @@
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
+  <data name="Sync" xml:space="preserve">
+    <value>Synchronize</value>
+  </data>
   <data name="Tagline" xml:space="preserve">
     <value>Tagline</value>
   </data>

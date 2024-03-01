@@ -6,8 +6,8 @@
 
     <DataTemplate DataType="{x:Type db:Role}">
         <Border
-            Width="138"
-            Height="175"
+            Width="154"
+            Height="231"
             Margin="5"
             CornerRadius="20,0,0,0">
             <Border.Style>

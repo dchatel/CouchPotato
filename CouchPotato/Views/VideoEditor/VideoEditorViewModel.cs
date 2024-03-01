@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -15,17 +13,14 @@ using CommunityToolkit.Mvvm.Input;
 
 using CouchPotato.DbModel;
 using CouchPotato.Properties;
-using CouchPotato.Views.ActorFinderDialog;
 using CouchPotato.Views.InputDialog;
+using CouchPotato.Views.WebSearchDialogs;
 
 using GongSolutions.Wpf.DragDrop;
 
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
 
 using IDropTarget = GongSolutions.Wpf.DragDrop.IDropTarget;
-using ResizeMode = SixLabors.ImageSharp.Processing.ResizeMode;
-using Size = SixLabors.ImageSharp.Size;
 
 namespace CouchPotato.Views.VideoEditor;
 
@@ -33,6 +28,7 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
 {
     public ICommand SaveCommand { get; }
     public ICommand CancelCommand { get; }
+    public ICommand SyncCommand { get; }
     public ICommand DeleteCommand { get; }
     public ICommand ChangePosterCommand { get; }
     public ICommand ChangeBackgroundCommand { get; }
@@ -56,6 +52,7 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
         EditionMode = editionMode;
         SaveCommand = new RelayCommand(() => Close(true));
         CancelCommand = new RelayCommand(() => Close(false));
+        SyncCommand = new AsyncRelayCommand(Sync);
         DeleteCommand = new RelayCommand(Delete);
         ChangePosterCommand = new RelayCommand(() => Video.PosterUrl = ImageChange.AddImageChange(Video.PosterUrl, Video.Title, "poster", width: 200));
         ChangeBackgroundCommand = new RelayCommand(() => Video.BackgroundUrl = ImageChange.AddImageChange(Video.BackgroundUrl, Video.Title, "background"));
@@ -119,9 +116,18 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
         }
     }
 
+    private async Task Sync()
+    {
+        var videoWebSearchViewModel = new VideoWebSearchViewModel(Video.Type, Video.Title, Video.ReleaseDate?.Year);
+        if (await videoWebSearchViewModel.Show() && videoWebSearchViewModel.SelectedVideo is not null)
+        {
+
+        }
+    }
+
     private async Task AddRole()
     {
-        var addRoleViewModel = new ActorFinderViewModel(Video.Roles.Select(r => r.Person));
+        var addRoleViewModel = new ActorWebSearchViewModel(Video.Roles.Select(r => r.Person));
         if (await addRoleViewModel.Show() && addRoleViewModel.SelectedPerson is not null)
         {
             var role = new Role
@@ -320,7 +326,7 @@ public class EpisodeEditorViewModel : ContentViewModel
         _videoEditorViewModel = videoEditorViewModel;
         Episode = episode;
 
-        ChangeEpisodeImageCommand = new RelayCommand(() => Episode.ImageUrl= ImageChange.AddImageChange(
+        ChangeEpisodeImageCommand = new RelayCommand(() => Episode.ImageUrl = ImageChange.AddImageChange(
             Episode.ImageUrl,
             $"{_videoEditorViewModel.Video.Title}",
             $"S{Episode.Season.SeasonNumber}E{Episode.EpisodeNumber}"

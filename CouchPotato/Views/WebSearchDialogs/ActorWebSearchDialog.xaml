@@ -1,16 +1,15 @@
 ﻿<ResourceDictionary
-    x:Class="CouchPotato.Views.ActorFinderDialog.ResourceDictionary"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:c="clr-namespace:CouchPotato.Converters"
     xmlns:db="clr-namespace:CouchPotato.DbModel"
     xmlns:e="clr-namespace:CouchPotato.Extensions"
-    xmlns:l="clr-namespace:CouchPotato.Views.ActorFinderDialog"
+    xmlns:l="clr-namespace:CouchPotato.Views.WebSearchDialogs"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:p="clr-namespace:CouchPotato.Properties"
-    xmlns:web="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf">
+    xmlns:v="clr-namespace:CouchPotato.Views">
 
-    <DataTemplate x:Key="ActorFinderToolbar" DataType="{x:Type l:ActorFinderViewModel}">
+    <DataTemplate x:Key="ActorWebSearchToolbar" DataType="{x:Type l:ActorWebSearchViewModel}">
         <StackPanel Orientation="Horizontal">
             <StackPanel.Resources>
                 <Style TargetType="FrameworkElement">
@@ -32,10 +31,19 @@
                 Style="{StaticResource MaterialDesignFlatButton}"
                 ToolTip="{Binding Source={x:Static p:Loc.Cancel}}"
                 ToolTipService.InitialShowDelay="0" />
+            <Separator />
+            <TextBox
+                Grid.ColumnSpan="2"
+                e:TextBox.IsInitiallyFocused="True"
+                md:HintAssist.Hint="{Binding Source={x:Static p:Loc.InputActorName}}"
+                md:HintAssist.IsFloating="True"
+                Text="{Binding SearchText,
+                               UpdateSourceTrigger=PropertyChanged,
+                               Delay=800}" />
         </StackPanel>
     </DataTemplate>
 
-    <DataTemplate x:Key="ActorFinderView" DataType="{x:Type l:ActorFinderViewModel}">
+    <DataTemplate x:Key="ActorWebSearchView" DataType="{x:Type l:ActorWebSearchViewModel}">
         <md:TransitioningContent>
             <md:TransitioningContent.OpeningEffects>
                 <md:TransitionEffect Kind="ExpandIn" />
@@ -50,19 +58,9 @@
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="5" ShadowDepth="2" />
                 </Border.Effect>
-                <Grid e:Grid.Cols="*,*" e:Grid.Rows="auto,*,auto">
-
-                    <TextBox
-                        Grid.ColumnSpan="2"
-                        md:HintAssist.Hint="{Binding Source={x:Static p:Loc.InputActorName}}"
-                        md:HintAssist.IsFloating="True"
-                        FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource self}}"
-                        Text="{Binding SearchText,
-                                       UpdateSourceTrigger=PropertyChanged,
-                                       Delay=800}" />
+                <Grid e:Grid.Cols="*,2*">
 
                     <ListBox
-                        Grid.Row="1"
                         Grid.Column="0"
                         ItemsSource="{Binding SearchResults}"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -77,8 +75,8 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="{x:Type db:Person}">
                                 <Border
-                                    Width="138"
-                                    Height="175"
+                                    Width="154"
+                                    Height="231"
                                     CornerRadius="20,0,0,0">
                                     <Border.Effect>
                                         <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
@@ -97,14 +95,12 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <web:WebView2
-                        Grid.Row="1"
+                    <v:WebView
                         Grid.Column="1"
-                        DataContextChanged="WebView_DataContextChanged"
-                        Source="{Binding Url}" />
+                        Source="{Binding Url}" 
+                        Visibility="{Binding Searching, Converter={c:VisibilityConverter Reversed=True}}"/>
 
                     <Control
-                        Grid.Row="1"
                         Grid.ColumnSpan="2"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"

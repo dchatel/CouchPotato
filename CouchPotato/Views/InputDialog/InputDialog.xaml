@@ -25,6 +25,7 @@
 
                     <TextBox
                         Width="400"
+                        e:TextBox.IsInitiallyFocused="True"
                         md:HintAssist.Hint="{Binding HintMessage}"
                         md:HintAssist.IsFloating="True"
                         Text="{Binding InputText,
