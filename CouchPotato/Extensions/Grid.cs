@@ -28,7 +28,7 @@ public partial class Grid : DependencyObject
             grid.ColumnDefinitions.Clear();
             foreach (var def in definitions.Split(',').Select(x=>x.Trim()))
             {
-                var match = Regex.Match(def, @"(?<size>auto|\d*\*?)\s*(?:\((?<minsize>\d+)(?:-(?<maxsize>\d+))\))?");
+                var match = GridRowColSizeList().Match(def);
                 if (match.Success)
                 {
                     var col = new ColumnDefinition
@@ -54,7 +54,7 @@ public partial class Grid : DependencyObject
             grid.RowDefinitions.Clear();
             foreach (var def in definitions.Split(',').Select(x=>x.Trim()))
             {
-                var match = Regex.Match(def, @"(?<size>auto|\d*\*?)\s*(?:\((?<minsize>\d+)(?:-(?<maxsize>\d+))\))?");
+                var match = GridRowColSizeList().Match(def);
                 if (match.Success)
                 {
                     var col = new RowDefinition
@@ -71,4 +71,7 @@ public partial class Grid : DependencyObject
             }
         }
     }
+
+    [GeneratedRegex("(?<size>auto|\\d*\\*?)\\s*(?:\\((?<minsize>\\d+)(?:-(?<maxsize>\\d+))\\))?")]
+    private static partial Regex GridRowColSizeList();
 }

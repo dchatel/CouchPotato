@@ -126,7 +126,7 @@
                                             CommandParameter="{Binding}"
                                             Content="{md:PackIcon Kind=Remove,
                                                                   Size=24}"
-                                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" />
+                                            Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}" />
                                     </StackPanel>
                                 </Grid>
                             </md:TransitioningContent>

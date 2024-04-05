@@ -95,7 +95,7 @@
                     Grid.Row="1"
                     ItemsSource="{Binding Pages}"
                     SelectedValue="{Binding CurrentPage}"
-                    Style="{StaticResource MaterialDesignNavigationAccentListBox}">
+                    Style="{StaticResource MaterialDesignNavigationSecondaryListBox}">
                     <ListBox.Resources>
                         <CollectionViewSource x:Key="seasons" Source="{Binding Video.Seasons}">
                             <CollectionViewSource.SortDescriptions>

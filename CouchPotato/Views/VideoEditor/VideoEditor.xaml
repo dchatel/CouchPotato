@@ -44,7 +44,7 @@
                 Command="{Binding DeleteCommand}"
                 Content="{md:PackIcon Kind=Remove}"
                 IsEnabled="{Binding EditionMode}"
-                Style="{StaticResource MaterialDesignFlatAccentBgButton}"
+                Style="{StaticResource MaterialDesignFlatSecondaryButton}"
                 ToolTip="{Binding Source={x:Static p:Loc.Delete}}"
                 ToolTipService.InitialShowDelay="0" />
         </StackPanel>
@@ -242,7 +242,7 @@
                                                 CommandParameter="{Binding}"
                                                 Content="{md:PackIcon Kind=PersonRemove,
                                                                       Size=24}"
-                                                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" />
+                                                Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}" />
                                         </StackPanel>
                                     </Grid>
                                 </DataTemplate>
@@ -273,7 +273,7 @@
                     Command="{Binding MakeMovieCommand}"
                     Content="{md:PackIcon Kind=Movie,
                                           Size=24}"
-                    Style="{StaticResource MaterialDesignFlatAccentButton}" />
+                    Style="{StaticResource MaterialDesignFlatSecondaryButton}" />
                 <TextBlock
                     Margin="5,20"
                     VerticalAlignment="Center"
@@ -284,7 +284,7 @@
                     Command="{Binding MakeTVShowCommand}"
                     Content="{md:PackIcon Kind=TvBox,
                                           Size=24}"
-                    Style="{StaticResource MaterialDesignFlatAccentButton}" />
+                    Style="{StaticResource MaterialDesignFlatSecondaryButton}" />
                 <TextBlock
                     Margin="5,20"
                     VerticalAlignment="Center"
@@ -298,7 +298,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="TVEditor" DataType="{x:Type l:VideoEditorViewModel}">
-        <Grid e:Grid.Cols="auto,*">
+        <Grid e:Grid.Cols="350,*">
             <Grid.Resources>
                 <CollectionViewSource
                     x:Key="Seasons"
@@ -346,7 +346,7 @@
                                 <TextBlock
                                     Margin="0,0,10,0"
                                     VerticalAlignment="Center"
-                                    Text="{Binding Season.Name}" />
+                                    Text="{Binding Season.Name}" TextWrapping="Wrap" />
                                 <Button
                                     Grid.Column="1"
                                     Width="32"
@@ -357,7 +357,7 @@
                                                       Path=DataContext.DeleteSeasonCommand}"
                                     CommandParameter="{Binding}"
                                     Content="{md:PackIcon Kind=Remove}"
-                                    Style="{StaticResource MaterialDesignFlatAccentButton}" />
+                                    Style="{StaticResource MaterialDesignFlatSecondaryButton}" />
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

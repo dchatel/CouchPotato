@@ -30,26 +30,17 @@
                         <Viewbox StretchDirection="DownOnly">
                             <TextBlock
                                 FontSize="16"
+                                FontWeight="Bold"
                                 Text="{Binding Person.Name}"
                                 TextAlignment="Center" />
                         </Viewbox>
-                        <TextBlock
-                            x:Name="characters"
-                            FontSize="14"
-                            Text="{Binding Characters}"
-                            TextAlignment="Center"
-                            TextWrapping="Wrap">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Visibility" Value="Collapsed" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Border, AncestorLevel=2}, Path=IsMouseOver}" Value="True">
-                                            <Setter Property="Visibility" Value="Visible" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
+                        <Viewbox StretchDirection="DownOnly">
+                            <TextBlock
+                                x:Name="characters"
+                                FontSize="14"
+                                Text="{Binding Characters}"
+                                TextAlignment="Center" />
+                        </Viewbox>
                     </StackPanel>
                 </Border>
             </Grid>

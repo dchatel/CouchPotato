@@ -146,7 +146,7 @@
                     Content="{md:PackIcon Kind=WindowClose}"
                     Foreground="Red"
                     IsTabStop="False"
-                    Style="{DynamicResource MaterialDesignFlatAccentButton}"
+                    Style="{DynamicResource MaterialDesignFlatSecondaryButton}"
                     WindowChrome.IsHitTestVisibleInChrome="True" />
                 <!--#endregion-->
             </Grid>

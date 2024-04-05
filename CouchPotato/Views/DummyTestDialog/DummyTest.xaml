@@ -16,7 +16,7 @@
                     Margin="20"
                     Command="{Binding OkCommand}"
                     Content="{md:PackIcon Kind=Check}"
-                    Style="{StaticResource MaterialDesignFloatingActionAccentButton}" />
+                    Style="{StaticResource MaterialDesignFloatingActionSecondaryButton}" />
                 <Button
                     Margin="20"
                     Command="{Binding CloseCommand}"
