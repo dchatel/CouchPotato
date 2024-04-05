@@ -53,6 +53,7 @@ public class Tmdb
                 PosterPath = s.PosterPath,
                 Year = s.FirstAirDate?.Year,
             }),
+            "unknown" => (await SearchVideo("movie", title, year)).Union(await SearchVideo("tv", title, year)),
             _ => throw new NotImplementedException()
         };
 

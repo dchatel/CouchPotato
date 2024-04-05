@@ -78,7 +78,7 @@
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="5" ShadowDepth="2" />
                 </Border.Effect>
-                <Grid e:Grid.Cols="*,2*">
+                <Grid e:Grid.Cols="600,2*">
 
                     <DataGrid
                         Padding="10,0"
@@ -95,14 +95,34 @@
                             </Style>
                         </DataGrid.CellStyle>
                         <DataGrid.Columns>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type tmdb:VideoSearchResult}">
+                                        <md:PackIcon
+                                            Width="24"
+                                            Height="24"
+                                            Foreground="{Binding MediaType,
+                                                                 Converter={c:MediaTypeToColorConverter}}"
+                                            Kind="{Binding MediaType,
+                                                           Converter={c:MediaTypeToIconConverter}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTextColumn
                                 Width="*"
                                 Binding="{Binding Title}"
-                                Header="{x:Static p:Loc.Title}" />
+                                Header="{x:Static p:Loc.Title}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
                             <DataGridTextColumn Binding="{Binding Year}" Header="{x:Static p:Loc.ReleaseDate}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="HorizontalAlignment" Value="Right" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>

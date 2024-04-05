@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Microsoft.Web.WebView2.Wpf;
-
 namespace CouchPotato.Views;
 
 public class Selectable<T>
@@ -28,19 +26,5 @@ public class Selectable<T>
         Value = value;
         IsSelected = isSelected;
         _selectionChanged = selectionChanged;
-    }
-}
-
-public class WebView : WebView2
-{
-    public WebView() : base()
-    {
-        this.DataContextChanged += (sender, e) =>
-        {
-            if (sender is WebView2 webView && webView.DataContext is null)
-            {
-                webView.Source = new Uri("about:blank");
-            }
-        };
     }
 }
