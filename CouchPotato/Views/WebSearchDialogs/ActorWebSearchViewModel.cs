@@ -40,7 +40,7 @@ public class ActorWebSearchViewModel : ContentViewModel
     public ActorWebSearchViewModel(IEnumerable<Person> excludedPeople) : base(autoClose: true)
     {
         _excludedPeople = excludedPeople;
-        SearchResults = Enumerable.Empty<Person>();
+        SearchResults = [];
         Url = "";
     }
 
@@ -49,7 +49,7 @@ public class ActorWebSearchViewModel : ContentViewModel
         Searching = true;
         if (string.IsNullOrWhiteSpace(_searchText))
         {
-            SearchResults = Enumerable.Empty<Person>();
+            SearchResults = [];
         }
         else
         {

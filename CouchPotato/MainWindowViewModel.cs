@@ -21,11 +21,11 @@ public class MainWindowViewModel
         OnLoadedCommand = new AsyncRelayCommand(OnLoaded);
     }
 
-    public ObservableCollection<ContentViewModel> Pages { get; } = new();
+    public ObservableCollection<ContentViewModel> Pages { get; } = [];
     public ContentViewModel? CurrentPage { get; set; }
     public ICommand OnLoadedCommand { get; }
 
-    public async Task OnLoaded()
+    public static async Task OnLoaded()
     {
         var migrator = new MigratorViewModel();
         if (!await migrator.Show()) return;

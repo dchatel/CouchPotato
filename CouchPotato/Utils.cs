@@ -38,7 +38,7 @@ public static class Utils
 
 public class ImageChange
 {
-    private static readonly List<ImageChange> _imageChanges = new();
+    private static readonly List<ImageChange> _imageChanges = [];
 
     public Image? Image { get; }
     public string? OldImage { get; }

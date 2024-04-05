@@ -19,7 +19,7 @@ public class ImageConverter : MarkupExtension, IValueConverter
     {
         if (value is not string str) return null;
         if (str.StartsWith("http")) return HttpLoader(str);
-        else if (str.StartsWith("/")) return TmdbLoader(str);
+        else if (str.StartsWith('/')) return TmdbLoader(str);
         else return FileSystemLoader(str);
     }
 

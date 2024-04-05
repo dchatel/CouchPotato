@@ -30,10 +30,10 @@ public class MigratorViewModel : ContentViewModel
 
     private readonly DataContext _db;
     private readonly DbModel.OtherDbModels.Videlib.DataContext _videlib;
-    private readonly Dictionary<int, Genre> _dgenres = new();
-    private readonly Dictionary<int, Person> _dpersons = new();
-    private readonly Dictionary<int, Video> _dvideos = new();
-    private readonly Dictionary<int, Season> _dseasons = new();
+    private readonly Dictionary<int, Genre> _dgenres = [];
+    private readonly Dictionary<int, Person> _dpersons = [];
+    private readonly Dictionary<int, Video> _dvideos = [];
+    private readonly Dictionary<int, Season> _dseasons = [];
 
     public MigratorViewModel() : base(autoClose: false)
     {

@@ -19,8 +19,8 @@ public class VideoWebSearchViewModel : ContentViewModel
 
     public VideoWebSearchViewModel(VideoType videoType, string title, int? year) : base(autoClose: true)
     {
-        SearchResults = Enumerable.Empty<VideoSearchResult>();
-        SortedSearchResults = Enumerable.Empty<VideoSearchResult>();
+        SearchResults = [];
+        SortedSearchResults = [];
         Url = "";
         _videoType = videoType;
         _title = title;
@@ -70,7 +70,7 @@ public class VideoWebSearchViewModel : ContentViewModel
         Searching = true;
         if (string.IsNullOrWhiteSpace(_title))
         {
-            SearchResults = Enumerable.Empty<VideoSearchResult>();
+            SearchResults = [];
         }
         else
         {
