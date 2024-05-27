@@ -37,8 +37,10 @@
             <Button
                 Command="{Binding SyncCommand}"
                 Content="{md:PackIcon Kind=WebSync}"
-                ToolTip="{Binding Source={x:Static p:Loc.Sync}}" />
-            <Separator />
+                ToolTip="{Binding Source={x:Static p:Loc.Sync}}"
+                Visibility="{Binding Video.Type,
+                                     Converter={c:MediaTypeToVisibilityConverter}}" />
+            <Separator Visibility="{Binding Video.Type, Converter={c:MediaTypeToVisibilityConverter}}" />
             <Button
                 Margin="0,0,10,0"
                 Command="{Binding DeleteCommand}"
@@ -346,7 +348,8 @@
                                 <TextBlock
                                     Margin="0,0,10,0"
                                     VerticalAlignment="Center"
-                                    Text="{Binding Season.Name}" TextWrapping="Wrap" />
+                                    Text="{Binding Season.Name}"
+                                    TextWrapping="Wrap" />
                                 <Button
                                     Grid.Column="1"
                                     Width="32"

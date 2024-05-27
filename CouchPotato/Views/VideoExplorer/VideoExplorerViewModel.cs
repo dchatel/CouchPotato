@@ -59,7 +59,6 @@ public class VideoExplorerViewModel : ContentViewModel
         {
             await db.SaveChangesAsync();
             ImageChange.Apply();
-            //editor.SaveChangesToImages();
             SelectedResult = new VideoSearchResultViewModel(VideoViewerViewModel.Create(video));
             SearchResults?.Add(SelectedResult);
         }
@@ -89,7 +88,6 @@ public class VideoExplorerViewModel : ContentViewModel
             {
                 await db.SaveChangesAsync();
                 ImageChange.Apply();
-                //editor.SaveChangesToImages();
                 SelectedResult.VideoViewer.Video = video;
             }
         }

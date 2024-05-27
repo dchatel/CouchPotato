@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using PostSharp.Patterns.Model;
+
 namespace CouchPotato.Views;
 
+[NotifyPropertyChanged]
 public class Selectable<T>
 {
     private bool _isSelected;

@@ -1,0 +1,307 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:c="clr-namespace:CouchPotato.Converters"
+    xmlns:clr="clr-namespace:System;assembly=mscorlib"
+    xmlns:db="clr-namespace:CouchPotato.DbModel"
+    xmlns:dd="urn:gong-wpf-dragdrop"
+    xmlns:e="clr-namespace:CouchPotato.Extensions"
+    xmlns:l="clr-namespace:CouchPotato.Views.VideoEditor"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:p="clr-namespace:CouchPotato.Properties"
+    xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+    xmlns:v="clr-namespace:CouchPotato.Views">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="SeasonEditor.xaml" />
+        <ResourceDictionary Source="../VideoExplorer/Viewers/TVShowViewer.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <DataTemplate x:Key="VideoSyncToolbar" DataType="{x:Type l:VideoSyncViewModel}">
+        <StackPanel Orientation="Horizontal">
+            <StackPanel.Resources>
+                <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="{x:Type Button}">
+                    <Setter Property="Margin" Value="0,0,10,0" />
+                    <Setter Property="ToolTipService.InitialShowDelay" Value="0" />
+                </Style>
+            </StackPanel.Resources>
+            <Button
+                Command="{Binding OkCommand}"
+                Content="{md:PackIcon Kind=ContentSave}"
+                ToolTip="{Binding Source={x:Static p:Loc.Save}}" />
+            <Button
+                Command="{Binding CloseCommand}"
+                Content="{md:PackIcon Kind=Cancel}"
+                ToolTip="{Binding Source={x:Static p:Loc.Cancel}}" />
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate x:Key="VideoInfo" DataType="{x:Type l:VideoSyncViewModel}">
+        <md:TransitioningContent>
+            <md:TransitioningContent.OpeningEffects>
+                <md:TransitionEffect Kind="ExpandIn" />
+                <md:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
+                <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2" />
+            </md:TransitioningContent.OpeningEffects>
+            <Grid e:Grid.Cols="300, *">
+                <Grid.Resources>
+                    <CollectionViewSource x:Key="Genres" Source="{Binding Genres.Selected}">
+                        <CollectionViewSource.SortDescriptions>
+                            <scm:SortDescription Direction="Ascending" PropertyName="Value.Name" />
+                        </CollectionViewSource.SortDescriptions>
+                    </CollectionViewSource>
+                    <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="CheckBox">
+                        <Setter Property="Height" Value="auto" />
+                        <Setter Property="MinHeight" Value="32" />
+                    </Style>
+                </Grid.Resources>
+                <StackPanel>
+                    <CheckBox IsChecked="{Binding PosterUrl.Update}">
+                        <Image
+                            Height="400"
+                            Source="{Binding PosterUrl.Selected,
+                                             Converter={c:ImageConverter}}"
+                            Stretch="Uniform" />
+                    </CheckBox>
+                    <CheckBox IsChecked="{Binding BackgroundUrl.Update}">
+                        <Image
+                            Height="400"
+                            Source="{Binding BackgroundUrl.Selected,
+                                             Converter={c:ImageConverter}}"
+                            Stretch="Uniform" />
+                    </CheckBox>
+                </StackPanel>
+
+                <ScrollViewer
+                    Grid.Column="1"
+                    Margin="20,0,0,0"
+                    HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <StackPanel.Resources />
+
+                        <HeaderedContentControl Header="{x:Static p:Loc.Title}">
+                            <CheckBox
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Content="{Binding Title.Selected}"
+                                FontSize="24"
+                                IsChecked="{Binding Title.Update}" />
+                        </HeaderedContentControl>
+
+
+                        <HeaderedContentControl Header="{x:Static p:Loc.OriginalTitle}">
+                            <CheckBox
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Content="{Binding OriginalTitle.Selected}"
+                                IsChecked="{Binding OriginalTitle.Update}" />
+                        </HeaderedContentControl>
+
+                        <Grid e:Grid.Cols="*,*,*,*">
+                            <HeaderedContentControl Grid.Column="0" Header="{x:Static p:Loc.Version}">
+                                <CheckBox Content="{Binding Version.Selected}" IsChecked="{Binding Version.Update}" />
+                            </HeaderedContentControl>
+                            <HeaderedContentControl Grid.Column="1" Header="{x:Static p:Loc.Origin}">
+                                <CheckBox Content="{Binding Origin.Selected}" IsChecked="{Binding Origin.Update}" />
+                            </HeaderedContentControl>
+                            <HeaderedContentControl Grid.Column="2" Header="{x:Static p:Loc.ReleaseDate}">
+                                <CheckBox
+                                    Content="{Binding ReleaseDate.Selected}"
+                                    FontSize="16"
+                                    IsChecked="{Binding ReleaseDate.Update}" />
+                            </HeaderedContentControl>
+                            <HeaderedContentControl Grid.Column="3" Header="{x:Static p:Loc.Status}">
+                                <CheckBox Content="{Binding Status.Selected}" IsChecked="{Binding Status.Update}" />
+                            </HeaderedContentControl>
+                        </Grid>
+
+                        <HeaderedContentControl Header="Genres">
+                            <CheckBox IsChecked="{Binding Genres.Update}">
+                                <ItemsControl ItemsSource="{Binding Source={StaticResource Genres}}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type db:Genre}">
+                                            <TextBlock Margin="10,0" Text="{Binding Name}" />
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </CheckBox>
+                        </HeaderedContentControl>
+
+                        <HeaderedContentControl Header="{x:Static p:Loc.Tagline}">
+                            <CheckBox Content="{Binding Tagline.Selected}" IsChecked="{Binding Tagline.Update}" />
+                        </HeaderedContentControl>
+                        <HeaderedContentControl Header="{x:Static p:Loc.Overview}">
+                            <CheckBox IsChecked="{Binding Overview.Update}">
+                                <TextBlock Text="{Binding Overview.Selected}" TextWrapping="Wrap" />
+                            </CheckBox>
+                        </HeaderedContentControl>
+
+                        <HeaderedContentControl Header="Casting">
+                            <CheckBox IsChecked="{Binding Roles.Update}">
+                                <ItemsControl
+                                    dd:DragDrop.DropHandler="{Binding}"
+                                    dd:DragDrop.IsDragSource="True"
+                                    dd:DragDrop.IsDropTarget="True"
+                                    ItemsSource="{Binding Roles.Selected}">
+                                    <ItemsControl.Effect>
+                                        <DropShadowEffect BlurRadius="20" ShadowDepth="0" />
+                                    </ItemsControl.Effect>
+                                    <ItemsControl.Resources>
+                                        <CollectionViewSource
+                                            x:Key="Roles"
+                                            IsLiveSortingRequested="True"
+                                            Source="{Binding Roles}">
+                                            <CollectionViewSource.SortDescriptions>
+                                                <scm:SortDescription Direction="Ascending" PropertyName="Order" />
+                                            </CollectionViewSource.SortDescriptions>
+                                        </CollectionViewSource>
+                                    </ItemsControl.Resources>
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel HorizontalAlignment="Center" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </CheckBox>
+                        </HeaderedContentControl>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </md:TransitioningContent>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type l:VideoSyncViewModel}">
+        <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource VideoInfo}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="TVSync" DataType="{x:Type l:VideoSyncViewModel}">
+        <Grid e:Grid.Cols="350,*">
+            <Grid.Resources>
+                <CollectionViewSource
+                    x:Key="Seasons"
+                    IsLiveSortingRequested="True"
+                    Source="{Binding Seasons}">
+                    <CollectionViewSource.SortDescriptions>
+                        <scm:SortDescription Direction="Ascending" PropertyName="Season.SeasonNumber" />
+                    </CollectionViewSource.SortDescriptions>
+                    <CollectionViewSource.LiveSortingProperties>
+                        <clr:String>Season.SeasonNumber</clr:String>
+                    </CollectionViewSource.LiveSortingProperties>
+                </CollectionViewSource>
+            </Grid.Resources>
+
+            <StackPanel Margin="20,0" Orientation="Vertical">
+                <Button Content="{x:Static p:Loc.TVShowInfo}">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Click">
+                            <b:ChangePropertyAction
+                                PropertyName="SelectedValue"
+                                TargetName="seasonlist"
+                                Value="{x:Null}" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </Button>
+
+                <CheckBox
+                    Margin="0,20,0,0"
+                    HorizontalAlignment="Center"
+                    IsChecked="{Binding ReplaceSeasons}">
+                    <CheckBox.Style>
+                        <Style BasedOn="{StaticResource MaterialDesignFilterChipCheckBox}" TargetType="CheckBox">
+                            <Setter Property="Content" Value="{x:Static p:Loc.ReplaceSeasons}" />
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter Property="Content" Value="{x:Static p:Loc.CompleteSeasons}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </CheckBox.Style>
+                </CheckBox>
+
+                <ListBox x:Name="seasonlist" Margin="0,20,0,0">
+                    <ListBox.ItemsSource>
+                        <CompositeCollection>
+                            <CollectionContainer Collection="{Binding Source={StaticResource Seasons}}" />
+                        </CompositeCollection>
+                    </ListBox.ItemsSource>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemContainerStyle>
+                        <Style BasedOn="{StaticResource MaterialDesignNavigationPrimaryListBoxItem}" TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type db:Season}">
+                            <TextBlock
+                                Margin="0,0,10,0"
+                                VerticalAlignment="Center"
+                                Text="{Binding Name}"
+                                TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+
+            <ContentControl Grid.Column="1">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Setter Property="Content" Value="{Binding ElementName=seasonlist, Path=SelectedValue}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=seasonlist, Path=SelectedValue}" Value="{x:Null}">
+                                <Setter Property="Content" Value="{Binding}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="VideoSyncView" DataType="{x:Type l:VideoSyncViewModel}">
+        <md:TransitioningContent>
+            <md:TransitioningContent.OpeningEffects>
+                <md:TransitionEffect Kind="ExpandIn" />
+                <md:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
+                <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2" />
+            </md:TransitioningContent.OpeningEffects>
+            <Border
+                Margin="20"
+                Padding="20"
+                Background="{StaticResource MaterialDesignCardBackground}"
+                CornerRadius="20,0,0,0">
+                <Border.Effect>
+                    <DropShadowEffect
+                        BlurRadius="5"
+                        Opacity=".3"
+                        ShadowDepth="2" />
+                </Border.Effect>
+
+                <ContentPresenter Content="{Binding}">
+                    <ContentPresenter.Style>
+                        <Style TargetType="ContentPresenter">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Type}" Value="Movie">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource VideoInfo}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Type}" Value="TVShow">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource TVSync}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentPresenter.Style>
+                </ContentPresenter>
+
+            </Border>
+        </md:TransitioningContent>
+    </DataTemplate>
+</ResourceDictionary>

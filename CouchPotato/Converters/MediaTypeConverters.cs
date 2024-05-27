@@ -4,9 +4,12 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
 using System.Windows.Media;
+
+using CouchPotato.DbModel;
 
 using MaterialDesignThemes.Wpf;
 
@@ -49,6 +52,34 @@ public class MediaTypeToColorConverter : MarkupExtension, IValueConverter
             _ => Brushes.White,
         };
         return color;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override object ProvideValue(IServiceProvider serviceProvider)
+    {
+        return this;
+    }
+}
+
+[MarkupExtensionReturnType(typeof(MediaTypeToVisibilityConverter))]
+public class MediaTypeToVisibilityConverter : MarkupExtension, IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        Visibility visibility;
+        if(value is VideoType videoType && videoType == VideoType.Unknown)
+        {
+            visibility = Visibility.Collapsed;
+        }
+        else
+        {
+            visibility = Visibility.Visible;
+        }
+        return visibility;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

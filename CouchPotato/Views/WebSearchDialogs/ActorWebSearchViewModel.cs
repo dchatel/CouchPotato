@@ -9,6 +9,7 @@ namespace CouchPotato.Views.WebSearchDialogs;
 
 public class ActorWebSearchViewModel : ContentViewModel
 {
+    private DataContext _db;
     private readonly IEnumerable<Person> _excludedPeople;
     private string? _searchText;
     private Person? _selectedPerson;
@@ -37,8 +38,9 @@ public class ActorWebSearchViewModel : ContentViewModel
     public string Url { get; set; }
     public bool Searching { get; set; }
 
-    public ActorWebSearchViewModel(IEnumerable<Person> excludedPeople) : base(autoClose: true)
+    public ActorWebSearchViewModel(DataContext db, IEnumerable<Person> excludedPeople) : base(autoClose: true)
     {
+        _db = db;
         _excludedPeople = excludedPeople;
         SearchResults = [];
         Url = "";
@@ -53,7 +55,7 @@ public class ActorWebSearchViewModel : ContentViewModel
         }
         else
         {
-            var results = await Tmdb.SearchActors(_searchText, _excludedPeople);
+            var results = await Tmdb.SearchActors(_db, _searchText, _excludedPeople);
             SearchResults = results;
         }
         Searching = false;

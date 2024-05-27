@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 using Loc = CouchPotato.Properties.Loc;
@@ -270,15 +271,24 @@ public class MigratorViewModel : ContentViewModel
         TaskMaximum = _videlib.Films.Count();
         TaskProgression = 0;
 
-        var ofd = new CommonOpenFileDialog
+        //var ofd = new CommonOpenFileDialog
+        //{
+        //    Title = Loc.FileSystemSelectVidelibImageFolder,
+        //    IsFolderPicker = true,
+        //};
+        var ofd = new OpenFolderDialog
         {
             Title = Loc.FileSystemSelectVidelibImageFolder,
-            IsFolderPicker = true,
+            Multiselect = false,
         };
         string? imageFolder = null;
-        if (ofd.ShowDialog() == CommonFileDialogResult.Ok)
+        //if (ofd.ShowDialog() == CommonFileDialogResult.Ok)
+        //{
+        //    imageFolder = ofd.FileName;
+        //}
+        if (ofd.ShowDialog() ?? false)
         {
-            imageFolder = ofd.FileName;
+            imageFolder = ofd.FolderName;
         }
         Directory.CreateDirectory("Images");
 

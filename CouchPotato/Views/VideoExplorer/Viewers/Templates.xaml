@@ -48,6 +48,18 @@
                             <WrapPanel />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <md:TransitioningContent OpeningEffectsOffset="{md:IndexedItemOffsetMultiplier 0:0:0.05}">
+                                <md:TransitioningContent.OpeningEffects>
+                                    <md:TransitionEffect Kind="ExpandIn" />
+                                    <md:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
+                                    <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2" />
+                                </md:TransitioningContent.OpeningEffects>
+                                <ContentControl Content="{Binding}" />
+                            </md:TransitioningContent>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </StackPanel>
         </ScrollViewer>
@@ -64,7 +76,8 @@
                 Height="64"
                 Command="{Binding RelativeSource={RelativeSource AncestorType=Grid},
                                   Path=DataContext.EditCommand}"
-                Content="{md:PackIcon Kind=Edit,Size=32}"
+                Content="{md:PackIcon Kind=Edit,
+                                      Size=32}"
                 Style="{StaticResource MaterialDesignOutlinedSecondaryButton}"
                 ToolTip="{Binding Source={x:Static p:Loc.Edit}}"
                 ToolTipService.InitialShowDelay="0" />

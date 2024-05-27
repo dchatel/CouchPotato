@@ -106,6 +106,15 @@ namespace CouchPotato.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Complete Seasons.
+        /// </summary>
+        public static string CompleteSeasons {
+            get {
+                return ResourceManager.GetString("CompleteSeasons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Importing episodes.
         /// </summary>
         public static string DatabaseImportEpisodes {
@@ -390,6 +399,15 @@ namespace CouchPotato.Properties {
         public static string ReleaseDate {
             get {
                 return ResourceManager.GetString("ReleaseDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Replace Seasons.
+        /// </summary>
+        public static string ReplaceSeasons {
+            get {
+                return ResourceManager.GetString("ReplaceSeasons", resourceCulture);
             }
         }
         

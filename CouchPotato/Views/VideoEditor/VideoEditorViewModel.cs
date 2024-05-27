@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 
 using CouchPotato.DbModel;
+using CouchPotato.DbModel.OtherDbModels.Tmdb;
 using CouchPotato.Properties;
 using CouchPotato.Views.InputDialog;
 using CouchPotato.Views.WebSearchDialogs;
@@ -20,12 +22,16 @@ using GongSolutions.Wpf.DragDrop;
 
 using SixLabors.ImageSharp;
 
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+
 using IDropTarget = GongSolutions.Wpf.DragDrop.IDropTarget;
 
 namespace CouchPotato.Views.VideoEditor;
 
 public class VideoEditorViewModel : ContentViewModel, IDropTarget
 {
+    private DataContext _db;
+
     public ICommand SaveCommand { get; }
     public ICommand CancelCommand { get; }
     public ICommand SyncCommand { get; }
@@ -48,6 +54,8 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
 
     public VideoEditorViewModel(DataContext db, Video video, bool editionMode) : base(autoClose: false)
     {
+        _db = db;
+
         Video = video;
         EditionMode = editionMode;
         SaveCommand = new RelayCommand(() => Close(true));
@@ -96,7 +104,7 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
 
     private void AddSeason()
     {
-        var seasonNumber = Seasons.Select(s => s.Season.SeasonNumber).Max() + 1;
+        var seasonNumber = Seasons.Count == 0 ? 0 : Seasons.Select(s => s.Season.SeasonNumber).Max() + 1;
         var seasonName = $"{Loc.Season} {seasonNumber}";
         var season = new Season
         {
@@ -121,19 +129,87 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
         var videoWebSearchViewModel = new VideoWebSearchViewModel(Video.Type, Video.Title, Video.ReleaseDate?.Year);
         if (await videoWebSearchViewModel.Show() && videoWebSearchViewModel.SelectedVideo is not null)
         {
+            var selectedVideo = await Tmdb.GetVideo(_db, videoWebSearchViewModel.SelectedVideo.TmdbId, videoWebSearchViewModel.SelectedVideo.MediaType);
+            var videoSyncViewModel = new VideoSyncViewModel(Video, selectedVideo);
+            if (await videoSyncViewModel.Show())
+            {
+                Video.Title = videoSyncViewModel.Title.Selected;
+                Video.Tagline = videoSyncViewModel.Tagline.Selected;
+                Video.Overview = videoSyncViewModel.Overview.Selected;
+                Video.ReleaseDate = videoSyncViewModel.ReleaseDate.Selected;
+                Video.Status = videoSyncViewModel.Status.Selected;
+                Video.Origin = videoSyncViewModel.Origin.Selected;
+                Video.OriginalTitle = videoSyncViewModel.OriginalTitle.Selected;
+                Video.Version = videoSyncViewModel.Version.Selected;
+                Video.PosterUrl = videoSyncViewModel.PosterUrl.Selected;
+                Video.BackgroundUrl = videoSyncViewModel.BackgroundUrl.Selected;
+                Video.TmdbId = videoSyncViewModel.TmdbId.Selected;
+                Video.TmdbRating = videoSyncViewModel.TmdbRating.Selected;
+                Video.TmdbRatingCount = videoSyncViewModel.TmdbRatingCount.Selected;
+                Video.Runtime = videoSyncViewModel.Runtime.Selected;
 
+                foreach (var genre in Genres)
+                {
+                    genre.IsSelected = videoSyncViewModel.Genres.Selected.Any(g => g.Id == genre.Value.Id);
+                }
+
+                var roles = videoSyncViewModel.Roles.Selected.Select(role => Video.Roles.SingleOrDefault(r => r.Person.TmdbId == role.Person.TmdbId) ?? role);
+                Video.Roles.Clear();
+                Roles.Clear();
+                foreach (var role in roles)
+                {
+                    var roleViewModel = new RoleViewModel(role);
+                    Video.Roles.Add(role);
+                    Roles.Add(roleViewModel);
+                }
+
+                if (videoSyncViewModel.ReplaceSeasons)
+                {
+                    Video.Seasons.Clear();
+                    Seasons.Clear();
+                    foreach (var season in videoSyncViewModel.Seasons)
+                    {
+                        var seasonViewModel = new SeasonViewModel(this, season);
+                        Video.Seasons.Add(season);
+                        Seasons.Add(seasonViewModel);
+                    }
+                }
+                else
+                {
+                    foreach (var season in videoSyncViewModel.Seasons)
+                    {
+                        var existingSeason = Seasons.SingleOrDefault(s => s.Season.SeasonNumber == season.SeasonNumber);
+                        if (existingSeason is null)
+                        {
+                            var seasonViewModel = new SeasonViewModel(this, season);
+                            Video.Seasons.Add(season);
+                            Seasons.Add(seasonViewModel);
+                        }
+                        else
+                        {
+                            foreach (var episode in season.Episodes)
+                            {
+                                if (existingSeason.Episodes.All(e => e.EpisodeNumber != episode.EpisodeNumber))
+                                {
+                                    existingSeason.Episodes.Add(episode);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
     private async Task AddRole()
     {
-        var addRoleViewModel = new ActorWebSearchViewModel(Video.Roles.Select(r => r.Person));
+        var addRoleViewModel = new ActorWebSearchViewModel(_db, Video.Roles.Select(r => r.Person));
         if (await addRoleViewModel.Show() && addRoleViewModel.SelectedPerson is not null)
         {
             var role = new Role
             {
                 Person = addRoleViewModel.SelectedPerson,
-                Order = Video.Roles.Max(r => r.Order) + 1,
+                Order = Video.Roles.Count == 0 ? 0 : Video.Roles.Max(r => r.Order) + 1,
             };
             Video.Roles.Add(role);
             var roleViewModel = new RoleViewModel(role);
