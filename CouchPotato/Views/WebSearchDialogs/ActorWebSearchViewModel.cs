@@ -9,7 +9,7 @@ namespace CouchPotato.Views.WebSearchDialogs;
 
 public class ActorWebSearchViewModel : ContentViewModel
 {
-    private DataContext _db;
+    private readonly DataContext _db;
     private readonly IEnumerable<Person> _excludedPeople;
     private string? _searchText;
     private Person? _selectedPerson;

@@ -30,7 +30,7 @@ namespace CouchPotato.Views.VideoEditor;
 
 public class VideoEditorViewModel : ContentViewModel, IDropTarget
 {
-    private DataContext _db;
+    private readonly DataContext _db;
 
     public ICommand SaveCommand { get; }
     public ICommand CancelCommand { get; }
