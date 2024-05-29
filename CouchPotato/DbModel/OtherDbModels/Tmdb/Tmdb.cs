@@ -136,7 +136,7 @@ public class Tmdb
             TmdbRating = tmdbTVShow.VoteAverage,
             TmdbRatingCount = tmdbTVShow.VoteCount,
 
-            Runtime = (int)tmdbTVShow.EpisodeRunTime.Average(),
+            Runtime = tmdbTVShow.EpisodeRunTime.Count > 0 ? (int)tmdbTVShow.EpisodeRunTime.Average() : 0,
         };
 
         SyncGenres(db, tvShow, tmdbTVShow.Genres);
