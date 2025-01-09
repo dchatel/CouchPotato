@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using CommunityToolkit.Mvvm.ComponentModel;
+
 using CouchPotato.DbModel;
 
 namespace CouchPotato.Views.VideoExplorer;
 
-public class VideoViewerViewModel
+public partial class VideoViewerViewModel : ObservableObject
 {
     private Video _video;
 
@@ -24,8 +26,10 @@ public class VideoViewerViewModel
     {
         get => _video;
         set {
-            _video = value;
-            LoadData();
+            if (SetProperty(ref _video, value))
+            {
+                LoadData();
+            }
         }
     }
 
@@ -58,17 +62,19 @@ public class VideoViewerViewModel
     }
 }
 
-public class MovieViewerViewModel : VideoViewerViewModel
+public partial class MovieViewerViewModel : VideoViewerViewModel
 {
     public MovieViewerViewModel(Video video) : base(video) { }
 }
 
-public class TVShowViewerViewModel : VideoViewerViewModel
+public partial class TVShowViewerViewModel : VideoViewerViewModel
 {
+    [ObservableProperty]
+    private object _currentPage = null!;
+
     public TVShowViewerViewModel(Video video) : base(video) { }
 
     public IEnumerable<object> Pages { get; set; } = null!;
-    public object CurrentPage { get; set; } = null!;
 
     public override void LoadData()
     {

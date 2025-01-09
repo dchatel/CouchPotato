@@ -114,6 +114,8 @@
                 Style="{StaticResource BusyAnimationStyle}"
                 Visibility="{Binding IsSearching,
                                      Converter={c:VisibilityConverter}}" />
+
+
         </Grid>
     </DataTemplate>
 </ResourceDictionary>

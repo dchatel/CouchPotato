@@ -5,18 +5,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
-using PostSharp.Patterns.Model;
 
 namespace CouchPotato.Views;
 
-public abstract class ContentViewModel : INotifyPropertyChanged
+public abstract partial class ContentViewModel : ObservableObject
 {
     readonly CancellationTokenSource _cancellationTokenSource = new();
     bool _dialogResult = false;
 
-    [SafeForDependencyAnalysis]
     public bool IsCurrent => ((MainWindowViewModel)App.Current.MainWindow.DataContext).Pages.Last() == this;
     public ICommand OkCommand { get; }
     public ICommand CloseCommand { get; }
@@ -24,8 +22,10 @@ public abstract class ContentViewModel : INotifyPropertyChanged
 
     protected virtual void OnLoaded() { }
 
-    public bool CanAutoClose { get; }
-    public object? HamburgerMenu { get; protected init; }
+    [ObservableProperty]
+    bool _canAutoClose;
+    [ObservableProperty]
+    object? _hamburgerMenu;
 
     protected ContentViewModel(bool autoClose)
     {
@@ -65,8 +65,4 @@ public abstract class ContentViewModel : INotifyPropertyChanged
         _dialogResult = result;
         _cancellationTokenSource.Cancel();
     }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-    public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        => PropertyChanged?.Invoke(this, new(propertyName));
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using CouchPotato.DbModel;
@@ -11,23 +12,29 @@ using CouchPotato.Views.VideoEditor;
 
 namespace CouchPotato.Views.VideoExplorer;
 
-public class VideoExplorerViewModel : ContentViewModel
+public partial class VideoExplorerViewModel : ContentViewModel
 {
+    [ObservableProperty]
+    private bool _isSearching;
+    [ObservableProperty]
+    private ObservableCollection<VideoSearchResultViewModel>? _searchResults;
+
     private VideoSearchResultViewModel? _selectedResult;
     private string _searchText;
 
     public ICommand AddCommand { get; }
     public ICommand EditCommand { get; }
     public ICommand SearchCommand { get; }
-    public ObservableCollection<VideoSearchResultViewModel>? SearchResults { get; set; }
-    public bool IsSearching { get; set; }
 
     public VideoSearchResultViewModel? SelectedResult
     {
         get => _selectedResult;
         set {
-            _selectedResult = value;
-            _selectedResult?.VideoViewer.LoadData();
+            if (SetProperty(ref _selectedResult, value))
+            {
+                _selectedResult?.VideoViewer.LoadData();
+                OnPropertyChanged(nameof(SelectedResult));
+            }
         }
     }
 
@@ -106,8 +113,6 @@ public class VideoExplorerViewModel : ContentViewModel
             .Where(video => video.Title.ToLower().Contains((SearchText ?? "").ToLower()))
             .Select(video => new VideoSearchResultViewModel(VideoViewerViewModel.Create(video)))
             .ToArray()));
-
-        SelectedResult = SearchResults.FirstOrDefault();
         IsSearching = false;
     }
 }

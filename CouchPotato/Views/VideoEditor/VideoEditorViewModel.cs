@@ -274,7 +274,7 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
     }
 }
 
-public class RoleViewModel : INotifyPropertyChanged
+public partial class RoleViewModel : INotifyPropertyChanged
 {
     public ICommand EditCommand { get; }
 

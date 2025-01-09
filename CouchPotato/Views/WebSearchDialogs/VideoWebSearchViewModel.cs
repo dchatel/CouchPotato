@@ -10,7 +10,7 @@ using TMDbLib.Objects.General;
 
 namespace CouchPotato.Views.WebSearchDialogs;
 
-public class VideoWebSearchViewModel : ContentViewModel
+public partial class VideoWebSearchViewModel : ContentViewModel
 {
     private readonly VideoType _videoType;
     private string? _title;
