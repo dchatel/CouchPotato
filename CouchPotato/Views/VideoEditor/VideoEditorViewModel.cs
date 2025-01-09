@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using CouchPotato.DbModel;
@@ -229,7 +230,7 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
     {
         if (roleViewModel is not null)
         {
-            Video.Roles.Remove(roleViewModel.Role);
+            roleViewModel.Remove();
             Roles.Remove(roleViewModel);
         }
     }
@@ -274,16 +275,33 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
     }
 }
 
-public partial class RoleViewModel : INotifyPropertyChanged
+public partial class RoleViewModel : ObservableObject
 {
     public ICommand EditCommand { get; }
 
-    public Role Role { get; }
+    [ObservableProperty]
+    private Role _role;
+
+    public Person Person => Role.Person;
+
     public int Order
     {
         get => Role.Order;
         set {
+            if (Role.Order == value) return;
+
             Role.Order = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string? Characters
+    {
+        get => Role.Characters;
+        set {
+            if(Role.Characters == value) return;
+
+            Role.Characters = value;
             OnPropertyChanged();
         }
     }
@@ -294,21 +312,22 @@ public partial class RoleViewModel : INotifyPropertyChanged
         EditCommand = new AsyncRelayCommand(Edit);
     }
 
+    public void Remove()
+    {
+        Role.Video.Roles.Remove(Role);
+    }
+
     private async Task Edit()
     {
         var inputDialog = new InputDialogViewModel(Loc.InputCharacterRole)
         {
-            InputText = Role.Characters
+            InputText = Characters
         };
         if (await inputDialog.Show())
         {
-            Role.Characters = inputDialog.InputText;
+            Characters = inputDialog.InputText;
         }
     }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-    void OnPropertyChanged([CallerMemberName] string propertyName = null!)
-        => PropertyChanged?.Invoke(this, new(propertyName));
 }
 
 public class SeasonViewModel

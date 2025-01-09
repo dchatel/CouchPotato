@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cv="clr-namespace:CouchPotato.Views.CommonViews"
     xmlns:db="clr-namespace:CouchPotato.DbModel"
     xmlns:l="clr-namespace:CouchPotato.Views.VideoExplorer"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -56,7 +57,7 @@
                                     <md:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
                                     <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2" />
                                 </md:TransitioningContent.OpeningEffects>
-                                <ContentControl Content="{Binding}" />
+                                <ContentControl Content="{Binding}"  ContentTemplate="{StaticResource role}" />
                             </md:TransitioningContent>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

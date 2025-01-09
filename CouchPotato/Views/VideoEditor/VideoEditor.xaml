@@ -4,6 +4,7 @@
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:c="clr-namespace:CouchPotato.Converters"
     xmlns:clr="clr-namespace:System;assembly=mscorlib"
+    xmlns:cv="clr-namespace:CouchPotato.Views.CommonViews"
     xmlns:db="clr-namespace:CouchPotato.DbModel"
     xmlns:dd="urn:gong-wpf-dragdrop"
     xmlns:e="clr-namespace:CouchPotato.Extensions"
@@ -215,7 +216,7 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type l:RoleViewModel}">
                                     <Grid Background="Transparent">
-                                        <ContentPresenter Content="{Binding Role}" />
+                                        <ContentControl Content="{Binding}" ContentTemplate="{StaticResource role}" />
                                         <StackPanel>
                                             <StackPanel.Style>
                                                 <Style TargetType="StackPanel">
