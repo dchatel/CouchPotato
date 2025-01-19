@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
+using CommunityToolkit.Mvvm.ComponentModel;
+
 using CouchPotato.DbModel;
 using CouchPotato.DbModel.OtherDbModels.Tmdb;
 
@@ -51,8 +53,10 @@ public partial class VideoWebSearchViewModel : ContentViewModel
     public bool? TitleSortAscending { get; set; }
     public bool? YearSortAscending { get; set; }
 
-    public IEnumerable<VideoSearchResult> SearchResults { get; set; }
-    public IEnumerable<VideoSearchResult> SortedSearchResults { get; set; }
+    [ObservableProperty]
+    public IEnumerable<VideoSearchResult> _searchResults;
+    [ObservableProperty]
+    public IEnumerable<VideoSearchResult> _sortedSearchResults;
     public VideoSearchResult? SelectedVideo
     {
         get => _selectedVideo;
@@ -62,8 +66,11 @@ public partial class VideoWebSearchViewModel : ContentViewModel
                 Url = $"https://www.themoviedb.org/{_selectedVideo.MediaType}/{_selectedVideo.TmdbId}";
         }
     }
-    public string Url { get; set; }
-    public bool Searching { get; set; }
+
+    [ObservableProperty]
+    public string _url;
+    [ObservableProperty]
+    public bool _searching;
 
     private async Task Search()
     {

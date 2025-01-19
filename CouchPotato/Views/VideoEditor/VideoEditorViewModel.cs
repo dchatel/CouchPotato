@@ -53,6 +53,17 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
     public ObservableCollection<RoleViewModel> Roles { get; }
     public ObservableCollection<SeasonViewModel> Seasons { get; }
 
+    VideoType _type;
+
+    public VideoType Type
+    {
+        get => _type;
+        set {
+            if (SetProperty(ref _type, value))
+                Video.Type = value;
+        }
+    }
+
     public VideoEditorViewModel(DataContext db, Video video, bool editionMode) : base(autoClose: false)
     {
         _db = db;
@@ -71,11 +82,11 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
         DeleteSeasonCommand = new RelayCommand<SeasonViewModel>(RemoveSeason);
         MakeMovieCommand = new RelayCommand(() =>
         {
-            Video.Type = VideoType.Movie;
+            Type = VideoType.Movie;
         });
         MakeTVShowCommand = new RelayCommand(() =>
         {
-            Video.Type = VideoType.TVShow;
+            Type = VideoType.TVShow;
         });
 
         Genres = db.Genres
@@ -299,7 +310,7 @@ public partial class RoleViewModel : ObservableObject
     {
         get => Role.Characters;
         set {
-            if(Role.Characters == value) return;
+            if (Role.Characters == value) return;
 
             Role.Characters = value;
             OnPropertyChanged();

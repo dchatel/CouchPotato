@@ -22,7 +22,7 @@ public partial class PropertyUpdate<T> : ObservableObject
 
     public PropertyUpdate(T old, T @new, bool update = true)
     {
-            Update = update;
+        Update = update;
         Old = old;
         New = @new;
     }

@@ -39,9 +39,9 @@
                 Command="{Binding SyncCommand}"
                 Content="{md:PackIcon Kind=WebSync}"
                 ToolTip="{Binding Source={x:Static p:Loc.Sync}}"
-                Visibility="{Binding Video.Type,
+                Visibility="{Binding Type,
                                      Converter={c:MediaTypeToVisibilityConverter}}" />
-            <Separator Visibility="{Binding Video.Type, Converter={c:MediaTypeToVisibilityConverter}}" />
+            <Separator Visibility="{Binding Type, Converter={c:MediaTypeToVisibilityConverter}}" />
             <Button
                 Margin="0,0,10,0"
                 Command="{Binding DeleteCommand}"
@@ -102,7 +102,7 @@
                             </Style>
                         </StackPanel.Resources>
                         <TextBox
-                            Margin="5,0,5,5"
+                            Margin="5,5,5,5"
                             md:HintAssist.Hint="{x:Static p:Loc.Title}"
                             FontSize="24"
                             Text="{Binding Video.Title}" />
@@ -459,13 +459,13 @@
                     <ContentPresenter.Style>
                         <Style TargetType="ContentPresenter">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Video.Type}" Value="Unknown">
+                                <DataTrigger Binding="{Binding Type}" Value="Unknown">
                                     <Setter Property="ContentTemplate" Value="{StaticResource VideoTypeSelector}" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding Video.Type}" Value="Movie">
+                                <DataTrigger Binding="{Binding Type}" Value="Movie">
                                     <Setter Property="ContentTemplate" Value="{StaticResource VideoInfo}" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding Video.Type}" Value="TVShow">
+                                <DataTrigger Binding="{Binding Type}" Value="TVShow">
                                     <Setter Property="ContentTemplate" Value="{StaticResource TVEditor}" />
                                 </DataTrigger>
                             </Style.Triggers>

@@ -28,14 +28,11 @@ public partial class VideoExplorerViewModel : ContentViewModel
 
     public VideoSearchResultViewModel? SelectedResult
     {
-        get => _selectedResult;
-        set {
-            if (SetProperty(ref _selectedResult, value))
-            {
-                _selectedResult?.VideoViewer.LoadData();
-                OnPropertyChanged(nameof(SelectedResult));
-            }
+        get {
+            _ = _selectedResult?.VideoViewer.LoadData();
+            return _selectedResult;
         }
+        set => SetProperty(ref _selectedResult, value);
     }
 
     public string SearchText
