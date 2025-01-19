@@ -7,6 +7,7 @@ using CouchPotato.DbModel;
 
 namespace CouchPotato.Views.VideoExplorer;
 
+
 public partial class VideoViewerViewModel : ObservableObject
 {
     private Video _video;

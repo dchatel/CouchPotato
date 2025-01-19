@@ -72,25 +72,22 @@
                     <Button
                         Height="400"
                         Margin="0,0,0,20"
+                        Background="{Binding Video.PosterUrl,
+                                             Converter={c:ImageBrushConverter}}"
                         BorderThickness="0"
                         Command="{Binding ChangePosterCommand}"
                         ToolTip="{x:Static p:Loc.ChangePoster}"
-                        ToolTipService.InitialShowDelay="0">
-                        <Button.Background>
-                            <ImageBrush ImageSource="{Binding Video.PosterUrl, Converter={c:ImageConverter}}" Stretch="UniformToFill" />
-                        </Button.Background>
-                    </Button>
+                        ToolTipService.InitialShowDelay="0" />
                     <Button
                         Height="400"
                         Margin="0,0,0,20"
+                        Background="{Binding Video.BackgroundUrl,
+                                             Converter={c:ImageBrushConverter},
+                                             IsAsync=True}"
                         BorderThickness="0"
                         Command="{Binding ChangeBackgroundCommand}"
                         ToolTip="{x:Static p:Loc.ChangeBackground}"
-                        ToolTipService.InitialShowDelay="0">
-                        <Button.Background>
-                            <ImageBrush ImageSource="{Binding Video.BackgroundUrl, Converter={c:ImageConverter}}" Stretch="Uniform" />
-                        </Button.Background>
-                    </Button>
+                        ToolTipService.InitialShowDelay="0" />
                 </StackPanel>
 
                 <ScrollViewer

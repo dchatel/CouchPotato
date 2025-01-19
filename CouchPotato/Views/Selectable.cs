@@ -20,7 +20,6 @@ public partial class Selectable<T> : ObservableObject
         set {
             if (SetProperty(ref _isSelected, value))
             {
-                OnPropertyChanged(nameof(IsSelected));
                 _selectionChanged?.Invoke(Value, value);
             }
         }

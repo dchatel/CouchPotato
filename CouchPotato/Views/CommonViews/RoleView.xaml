@@ -10,21 +10,10 @@
             Width="154"
             Height="231"
             Margin="5"
+            Background="{Binding Person.PortraitUrl,
+                                 Converter={c:ImageBrushConverter {StaticResource MaterialDesignCardBackground}},
+                                 IsAsync=True}"
             CornerRadius="20,0,0,0">
-            <Border.Style>
-                <Style TargetType="{x:Type Border}">
-                    <Setter Property="Background">
-                        <Setter.Value>
-                            <ImageBrush ImageSource="{Binding Person.PortraitUrl, Converter={c:ImageConverter}, IsAsync=True}" />
-                        </Setter.Value>
-                    </Setter>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource self}, Path=DataContext.Person.PortraitUrl}" Value="{x:Null}">
-                            <Setter Property="Background" Value="{StaticResource MaterialDesignCardBackground}" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Border.Style>
             <Grid>
                 <Border VerticalAlignment="Bottom" Background="#b000">
                     <StackPanel>
@@ -39,7 +28,8 @@
                             <TextBlock
                                 x:Name="characters"
                                 FontSize="14"
-                                Text="{Binding Characters, Mode=TwoWay}"
+                                Text="{Binding Characters,
+                                               Mode=TwoWay}"
                                 TextAlignment="Center" />
                         </Viewbox>
                     </StackPanel>

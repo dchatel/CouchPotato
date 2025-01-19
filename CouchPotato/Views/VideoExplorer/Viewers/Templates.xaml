@@ -57,7 +57,7 @@
                                     <md:TransitionEffect Kind="SlideInFromBottom" Duration="0:0:0.5" />
                                     <md:TransitionEffect Kind="SlideInFromLeft" Duration="0:0:0.2" />
                                 </md:TransitioningContent.OpeningEffects>
-                                <ContentControl Content="{Binding}"  ContentTemplate="{StaticResource role}" />
+                                <ContentControl Content="{Binding}" ContentTemplate="{StaticResource role}" />
                             </md:TransitioningContent>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

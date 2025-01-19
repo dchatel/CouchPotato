@@ -117,9 +117,10 @@ public partial class VideoExplorerViewModel : ContentViewModel
     }
 }
 
-public class VideoSearchResultViewModel
+public partial class VideoSearchResultViewModel : ObservableObject
 {
-    public VideoViewerViewModel VideoViewer { get; set; }
+    [ObservableProperty]
+    private VideoViewerViewModel _videoViewer;
 
     public VideoSearchResultViewModel(VideoViewerViewModel videoViewerViewModel)
     {
