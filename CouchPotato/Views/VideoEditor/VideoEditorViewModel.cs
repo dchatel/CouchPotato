@@ -29,7 +29,7 @@ using IDropTarget = GongSolutions.Wpf.DragDrop.IDropTarget;
 
 namespace CouchPotato.Views.VideoEditor;
 
-public class VideoEditorViewModel : ContentViewModel, IDropTarget
+public partial class VideoEditorViewModel : ContentViewModel, IDropTarget
 {
     private readonly DataContext _db;
 
@@ -46,7 +46,9 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
     public ICommand MakeMovieCommand { get; }
     public ICommand MakeTVShowCommand { get; }
 
-    public Video Video { get; }
+    [ObservableProperty]
+    public Video _video;
+
     public bool EditionMode { get; }
     public bool VideoWasRemoved { get; private set; }
     public IEnumerable<Selectable<Genre>> Genres { get; private set; }
@@ -209,6 +211,7 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
                         }
                     }
                 }
+                OnPropertyChanged(nameof(Video));
             }
         }
     }

@@ -92,7 +92,10 @@ public partial class VideoExplorerViewModel : ContentViewModel
             {
                 await db.SaveChangesAsync();
                 ImageChange.Apply();
-                SelectedResult.VideoViewer.Video = video;
+                
+                var videoViewerViewModel = VideoViewerViewModel.Create(video);
+                await videoViewerViewModel.LoadData();
+                SelectedResult.VideoViewer = videoViewerViewModel;
             }
         }
         else
