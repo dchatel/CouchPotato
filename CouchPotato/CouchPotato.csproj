@@ -31,7 +31,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Resource Include="boring-coach-potato.gif" />
 		<Content Include="logo.ico" />
 	</ItemGroup>
 
