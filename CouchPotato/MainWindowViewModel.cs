@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using CouchPotato.Views;
@@ -14,15 +15,17 @@ using Microsoft.Extensions.DependencyModel;
 
 namespace CouchPotato;
 
-public class MainWindowViewModel
+public partial class MainWindowViewModel : ObservableObject
 {
+    [ObservableProperty]
+    private ContentViewModel? _currentPage;
+    
     public MainWindowViewModel()
     {
         OnLoadedCommand = new AsyncRelayCommand(OnLoaded);
     }
 
     public ObservableCollection<ContentViewModel> Pages { get; } = [];
-    public ContentViewModel? CurrentPage { get; set; }
     public ICommand OnLoadedCommand { get; }
 
     public static async Task OnLoaded()

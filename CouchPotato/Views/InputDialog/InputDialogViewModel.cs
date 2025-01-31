@@ -4,12 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using CommunityToolkit.Mvvm.ComponentModel;
+
 namespace CouchPotato.Views.InputDialog
 {
-    public class InputDialogViewModel : ContentViewModel
+    public partial class InputDialogViewModel : ContentViewModel
     {
+        [ObservableProperty]
+        private string? _inputText;
+
         public string HintMessage { get; }
-        public string? InputText { get; set; }
 
         public InputDialogViewModel(string hintMessage) : base(autoClose: true)
         {

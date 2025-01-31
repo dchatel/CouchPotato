@@ -39,9 +39,99 @@
                                Delay=800,
                                UpdateSourceTrigger=PropertyChanged}" />
             <ToggleButton
+                x:Name="AdvancedSearchButton"
                 Grid.Column="3"
+                Command="{Binding AdvancedSearchButtonClickedCommand}"
                 Content="{md:PackIcon Kind=MovieSearchOutline}"
+                IsChecked="{Binding IsAdvancedSearchDialogOpened}"
                 Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" />
+            <Popup
+                Width="1280"
+                AllowsTransparency="True"
+                HorizontalOffset="50"
+                IsOpen="{Binding ElementName=AdvancedSearchButton,
+                                 Path=IsChecked}"
+                Placement="Right"
+                PlacementTarget="{Binding ElementName=AdvancedSearchButton}"
+                PopupAnimation="Fade"
+                StaysOpen="False"
+                VerticalOffset="50">
+                <Border
+                    Margin="20"
+                    Padding="10"
+                    Background="{StaticResource MaterialDesignCardBackground}"
+                    CornerRadius="20,0,0,0"
+                    Visibility="{Binding ElementName=AdvancedSearchButton,
+                                         Path=IsChecked,
+                                         Converter={c:VisibilityConverter}}">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="20" ShadowDepth="2" />
+                    </Border.Effect>
+                    <StackPanel>
+                        <TextBox
+                            Margin="5"
+                            md:HintAssist.Hint="{x:Static p:Loc.Title}"
+                            md:HintAssist.IsFloating="True"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding Title,
+                                           Mode=TwoWay}" />
+                        <TextBox
+                            Margin="5"
+                            md:HintAssist.Hint="{x:Static p:Loc.Actors}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding Actors,
+                                           Mode=TwoWay}" />
+                        <TextBox
+                            Margin="5"
+                            md:HintAssist.Hint="{x:Static p:Loc.Roles}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding Roles,
+                                           Mode=TwoWay}" />
+
+                        <HeaderedContentControl Margin="20" Header="{x:Static p:Loc.Genres}">
+                            <HeaderedContentControl.Resources>
+                                <CollectionViewSource x:Key="Genres" Source="{Binding Genres}">
+                                    <CollectionViewSource.SortDescriptions>
+                                        <scm:SortDescription Direction="Ascending" PropertyName="Value.Name" />
+                                    </CollectionViewSource.SortDescriptions>
+                                </CollectionViewSource>
+                            </HeaderedContentControl.Resources>
+                            <ItemsControl ItemsSource="{Binding Source={StaticResource Genres}}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox
+                                            Content="{Binding Value.Name}"
+                                            IsChecked="{Binding IsSelected,
+                                                                Mode=TwoWay}"
+                                            IsThreeState="True"
+                                            Style="{StaticResource ThreeStateCheckbox}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </HeaderedContentControl>
+
+                        <Button
+                            Margin="5"
+                            Command="{Binding AdvancedSearchCommand}"
+                            Content="Rechercher">
+                            <b:Interaction.Triggers>
+                                <b:EventTrigger EventName="Click">
+                                    <b:ChangePropertyAction
+                                        PropertyName="IsChecked"
+                                        TargetName="AdvancedSearchButton"
+                                        Value="False" />
+                                </b:EventTrigger>
+                            </b:Interaction.Triggers>
+                        </Button>
+
+                    </StackPanel>
+                </Border>
+            </Popup>
         </Grid>
     </DataTemplate>
 
@@ -114,6 +204,8 @@
                 Style="{StaticResource BusyAnimationStyle}"
                 Visibility="{Binding IsSearching,
                                      Converter={c:VisibilityConverter}}" />
+
+
         </Grid>
     </DataTemplate>
 </ResourceDictionary>

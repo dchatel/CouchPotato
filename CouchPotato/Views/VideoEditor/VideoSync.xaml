@@ -148,6 +148,7 @@
                                     dd:DragDrop.DropHandler="{Binding}"
                                     dd:DragDrop.IsDragSource="True"
                                     dd:DragDrop.IsDropTarget="True"
+                                    ItemTemplate="{StaticResource role}"
                                     ItemsSource="{Binding Roles.Selected}">
                                     <ItemsControl.Effect>
                                         <DropShadowEffect BlurRadius="20" ShadowDepth="0" />

@@ -8,13 +8,16 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace CouchPotato.Views.OkDialog
 {
-    public class OkDialogViewModel : ContentViewModel
+    public partial class OkDialogViewModel : ContentViewModel
     {
-        public object Content { get; }
+        [ObservableProperty]
+        private object _content;
+
         public static ICommand ShowCommand { get; } = new AsyncRelayCommand<object>(Show);
 
         public OkDialogViewModel(object content) : base(autoClose: true)

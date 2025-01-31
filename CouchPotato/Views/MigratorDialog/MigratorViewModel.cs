@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 
+using CommunityToolkit.Mvvm.ComponentModel;
+
 using CouchPotato.DbModel;
 using CouchPotato.Properties;
 
@@ -22,12 +24,16 @@ using Loc = CouchPotato.Properties.Loc;
 
 namespace CouchPotato.Views.MigratorDialog;
 
-public class MigratorViewModel : ContentViewModel
+public partial class MigratorViewModel : ContentViewModel
 {
-    public string? TaskName { get; private set; }
-    public bool TaskIsIndeterminate { get; private set; }
-    public int TaskMaximum { get; private set; }
-    public int TaskProgression { get; private set; }
+    [ObservableProperty]
+    private string? _taskName;
+    [ObservableProperty]
+    private bool _taskIsIndeterminate;
+    [ObservableProperty]
+    private int _taskMaximum;
+    [ObservableProperty]
+    private int _taskProgression;
 
     private readonly DataContext _db;
     private readonly DbModel.OtherDbModels.Videlib.DataContext _videlib;

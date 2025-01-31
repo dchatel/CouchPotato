@@ -61,6 +61,15 @@ namespace CouchPotato.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Actors.
+        /// </summary>
+        public static string Actors {
+            get {
+                return ResourceManager.GetString("Actors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Create.
         /// </summary>
         public static string Add {
@@ -241,6 +250,15 @@ namespace CouchPotato.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à .
+        /// </summary>
+        public static string DigitalLocation {
+            get {
+                return ResourceManager.GetString("DigitalLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Resolution.
         /// </summary>
         public static string DigitalResolution {
@@ -273,6 +291,15 @@ namespace CouchPotato.Properties {
         public static string FileSystemSelectVidelibImageFolder {
             get {
                 return ResourceManager.GetString("FileSystemSelectVidelibImageFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Genres.
+        /// </summary>
+        public static string Genres {
+            get {
+                return ResourceManager.GetString("Genres", resourceCulture);
             }
         }
         
@@ -408,6 +435,15 @@ namespace CouchPotato.Properties {
         public static string ReplaceSeasons {
             get {
                 return ResourceManager.GetString("ReplaceSeasons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Roles.
+        /// </summary>
+        public static string Roles {
+            get {
+                return ResourceManager.GetString("Roles", resourceCulture);
             }
         }
         

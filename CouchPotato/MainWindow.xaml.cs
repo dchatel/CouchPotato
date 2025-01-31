@@ -32,13 +32,7 @@ public class ContentDataTemplateSelector : DataTemplateSelector
 
         static object? FindTemplate(Type type, string name)
         {
-            var template = name switch
-            {
-                "toolbar" => App.Current.TryFindResource(type.Name.Replace("ViewModel", "Toolbar")),
-                "content" => App.Current.TryFindResource(type.Name.Replace("ViewModel", "View")),
-                "menu" => App.Current.TryFindResource(type.Name.Replace("ViewModel", "Menu")),
-                _ => null
-            };
+            var template = App.Current.TryFindResource(type.Name.Replace("ViewModel", name));
             if (type.BaseType is not null)
                 template ??= FindTemplate(type.BaseType, name);
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CouchPotato.Views.DummyTestDialog;
 
-public class DummyTestViewModel : ContentViewModel
+public partial class DummyTestViewModel : ContentViewModel
 {
     public DummyTestViewModel() : base(autoClose: true)
     {

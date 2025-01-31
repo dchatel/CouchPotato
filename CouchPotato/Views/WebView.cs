@@ -4,7 +4,7 @@ using Microsoft.Web.WebView2.Wpf;
 
 namespace CouchPotato.Views;
 
-public class WebView : WebView2
+public partial class WebView : WebView2
 {
     public WebView() : base()
     {

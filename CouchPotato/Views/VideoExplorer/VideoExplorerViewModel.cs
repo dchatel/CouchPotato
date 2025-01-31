@@ -1,34 +1,52 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using CouchPotato.DbModel;
 using CouchPotato.Views.VideoEditor;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace CouchPotato.Views.VideoExplorer;
 
-public class VideoExplorerViewModel : ContentViewModel
+public partial class VideoExplorerViewModel : ContentViewModel
 {
+    [ObservableProperty]
+    private bool _isAdvancedSearchDialogOpened;
+    [ObservableProperty]
+    private bool _isSearching;
+    [ObservableProperty]
+    private ObservableCollection<VideoSearchResultViewModel>? _searchResults;
+    [ObservableProperty]
+    private string _title;
+    [ObservableProperty]
+    private string _actors;
+    [ObservableProperty]
+    private string _roles;
+
     private VideoSearchResultViewModel? _selectedResult;
     private string _searchText;
 
     public ICommand AddCommand { get; }
     public ICommand EditCommand { get; }
     public ICommand SearchCommand { get; }
-    public ObservableCollection<VideoSearchResultViewModel>? SearchResults { get; set; }
-    public bool IsSearching { get; set; }
+    public ICommand AdvancedSearchButtonClickedCommand { get; }
+    public ICommand AdvancedSearchCommand { get; }
 
     public VideoSearchResultViewModel? SelectedResult
     {
-        get => _selectedResult;
-        set {
-            _selectedResult = value;
-            _selectedResult?.VideoViewer.LoadData();
+        get {
+            _ = _selectedResult?.VideoViewer.LoadData();
+            return _selectedResult;
         }
+        set => SetProperty(ref _selectedResult, value);
     }
 
     public string SearchText
@@ -40,13 +58,33 @@ public class VideoExplorerViewModel : ContentViewModel
         }
     }
 
+    public IEnumerable<Togglable<Genre>> Genres { get; }
+
     public VideoExplorerViewModel() : base(autoClose: false)
     {
         SearchCommand = new AsyncRelayCommand(SearchAsync);
         AddCommand = new AsyncRelayCommand(Add);
         EditCommand = new AsyncRelayCommand(Edit);
+        AdvancedSearchButtonClickedCommand = new RelayCommand(AdvancedSearchButtonClicked);
+        AdvancedSearchCommand = new AsyncRelayCommand(AdvancedSearch);
         IsSearching = false;
         _searchText = "";
+        _title = "";
+        _actors = "";
+        _roles = "";
+        using var db = new DataContext();
+        Genres = db.Genres.ToArray().Select(genre => new Togglable<Genre>(genre, isSelected: false)).ToArray();
+    }
+
+    private void AdvancedSearchButtonClicked()
+    {
+        Title = "";
+        Actors = "";
+        Roles = "";
+        foreach (var item in Genres)
+        {
+            item.IsSelected = false;
+        }
     }
 
     private async Task Add()
@@ -88,7 +126,10 @@ public class VideoExplorerViewModel : ContentViewModel
             {
                 await db.SaveChangesAsync();
                 ImageChange.Apply();
-                SelectedResult.VideoViewer.Video = video;
+
+                var videoViewerViewModel = VideoViewerViewModel.Create(video);
+                await videoViewerViewModel.LoadData();
+                SelectedResult.VideoViewer = videoViewerViewModel;
             }
         }
         else
@@ -106,15 +147,39 @@ public class VideoExplorerViewModel : ContentViewModel
             .Where(video => video.Title.ToLower().Contains((SearchText ?? "").ToLower()))
             .Select(video => new VideoSearchResultViewModel(VideoViewerViewModel.Create(video)))
             .ToArray()));
+        IsSearching = false;
+    }
 
-        SelectedResult = SearchResults.FirstOrDefault();
+    private async Task AdvancedSearch()
+    {
+        IsSearching = true;
+
+        using var db = new DataContext();
+        var selectedGenres = Genres.Where(g => g.IsSelected == true).Select(g => g.Value.Id).ToArray();
+        var unselectedGenres = Genres.Where(g => g.IsSelected is null).Select(g => g.Value.Id).ToArray();
+
+        SearchResults = new ObservableCollection<VideoSearchResultViewModel>(await db.Videos
+            .Where(video => video.Title.ToLower().Contains((Title ?? "").ToLower())
+            && Actors.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).All(actor => video.Roles.Any(role => role.Person.Name.ToLower().Contains(actor.ToLower())))
+            && Roles.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).All(role => video.Roles.Any(r => !string.IsNullOrEmpty(r.Characters) && r.Characters.ToLower().Contains(role.ToLower())))
+            && selectedGenres.All(g => video.Genres.Any(vg => vg.Id == g))
+            && unselectedGenres.All(g => !video.Genres.Any(vg => vg.Id == g))
+            //&& video.Roles.Any(role => Actors.ToLower().Contains(role.Person.Name.ToLower()))
+            //&& video.Roles.Any(role => string.IsNullOrEmpty(role.Characters) && Roles.ToLower().Contains(role.Characters!.ToLower()))
+            //&& Genres.Where(g => g.IsSelected == true).ToArray().All(g => video.Genres.Contains(g.Value))
+            //&& Genres.Where(g => g.IsSelected == null).ToArray().All(g => !video.Genres.Contains(g.Value))
+            )
+            .Select(video => new VideoSearchResultViewModel(VideoViewerViewModel.Create(video)))
+            .ToArrayAsync());
+
         IsSearching = false;
     }
 }
 
-public class VideoSearchResultViewModel
+public partial class VideoSearchResultViewModel : ObservableObject
 {
-    public VideoViewerViewModel VideoViewer { get; set; }
+    [ObservableProperty]
+    private VideoViewerViewModel _videoViewer;
 
     public VideoSearchResultViewModel(VideoViewerViewModel videoViewerViewModel)
     {

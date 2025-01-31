@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using CouchPotato.DbModel;
@@ -28,7 +29,7 @@ using IDropTarget = GongSolutions.Wpf.DragDrop.IDropTarget;
 
 namespace CouchPotato.Views.VideoEditor;
 
-public class VideoEditorViewModel : ContentViewModel, IDropTarget
+public partial class VideoEditorViewModel : ContentViewModel, IDropTarget
 {
     private readonly DataContext _db;
 
@@ -45,12 +46,26 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
     public ICommand MakeMovieCommand { get; }
     public ICommand MakeTVShowCommand { get; }
 
-    public Video Video { get; }
+    [ObservableProperty]
+    public Video _video;
+
     public bool EditionMode { get; }
     public bool VideoWasRemoved { get; private set; }
     public IEnumerable<Selectable<Genre>> Genres { get; private set; }
     public ObservableCollection<RoleViewModel> Roles { get; }
     public ObservableCollection<SeasonViewModel> Seasons { get; }
+
+    public VideoType Type
+    {
+        get => Video.Type;
+        set {
+            if (Video.Type != value)
+            {
+                Video.Type = value;
+                OnPropertyChanged();
+            }
+        }
+    }
 
     public VideoEditorViewModel(DataContext db, Video video, bool editionMode) : base(autoClose: false)
     {
@@ -70,11 +85,11 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
         DeleteSeasonCommand = new RelayCommand<SeasonViewModel>(RemoveSeason);
         MakeMovieCommand = new RelayCommand(() =>
         {
-            Video.Type = VideoType.Movie;
+            Type = VideoType.Movie;
         });
         MakeTVShowCommand = new RelayCommand(() =>
         {
-            Video.Type = VideoType.TVShow;
+            Type = VideoType.TVShow;
         });
 
         Genres = db.Genres
@@ -197,6 +212,7 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
                         }
                     }
                 }
+                OnPropertyChanged(nameof(Video));
             }
         }
     }
@@ -229,7 +245,7 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
     {
         if (roleViewModel is not null)
         {
-            Video.Roles.Remove(roleViewModel.Role);
+            roleViewModel.Remove();
             Roles.Remove(roleViewModel);
         }
     }
@@ -274,16 +290,33 @@ public class VideoEditorViewModel : ContentViewModel, IDropTarget
     }
 }
 
-public class RoleViewModel : INotifyPropertyChanged
+public partial class RoleViewModel : ObservableObject
 {
     public ICommand EditCommand { get; }
 
-    public Role Role { get; }
+    [ObservableProperty]
+    private Role _role;
+
+    public Person Person => Role.Person;
+
     public int Order
     {
         get => Role.Order;
         set {
+            if (Role.Order == value) return;
+
             Role.Order = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string? Characters
+    {
+        get => Role.Characters;
+        set {
+            if (Role.Characters == value) return;
+
+            Role.Characters = value;
             OnPropertyChanged();
         }
     }
@@ -294,21 +327,22 @@ public class RoleViewModel : INotifyPropertyChanged
         EditCommand = new AsyncRelayCommand(Edit);
     }
 
+    public void Remove()
+    {
+        Role.Video.Roles.Remove(Role);
+    }
+
     private async Task Edit()
     {
         var inputDialog = new InputDialogViewModel(Loc.InputCharacterRole)
         {
-            InputText = Role.Characters
+            InputText = Characters
         };
         if (await inputDialog.Show())
         {
-            Role.Characters = inputDialog.InputText;
+            Characters = inputDialog.InputText;
         }
     }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-    void OnPropertyChanged([CallerMemberName] string propertyName = null!)
-        => PropertyChanged?.Invoke(this, new(propertyName));
 }
 
 public class SeasonViewModel

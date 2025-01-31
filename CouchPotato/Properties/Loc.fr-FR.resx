@@ -177,9 +177,6 @@
   <data name="DigitalFileFormat" xml:space="preserve">
     <value>Format de fichier</value>
   </data>
-  <data name="DigitalLocation" xml:space="preserve">
-    <value>Emplacement (digital)</value>
-  </data>
   <data name="DigitalResolution" xml:space="preserve">
     <value>Résolution</value>
   </data>
@@ -278,5 +275,17 @@
   </data>
   <data name="VideoExplorerSearchHint" xml:space="preserve">
     <value>Recherche</value>
+  </data>
+  <data name="DigitalLocation" xml:space="preserve">
+    <value>Emplacement (digital)</value>
+  </data>
+  <data name="Actors" xml:space="preserve">
+    <value>Acteurs</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="Genres" xml:space="preserve">
+    <value>Genres</value>
   </data>
 </root>

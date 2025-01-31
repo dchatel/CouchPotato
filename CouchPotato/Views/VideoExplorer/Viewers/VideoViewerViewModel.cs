@@ -1,11 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+
+using CommunityToolkit.Mvvm.ComponentModel;
 
 using CouchPotato.DbModel;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace CouchPotato.Views.VideoExplorer;
 
-public class VideoViewerViewModel
+
+public partial class VideoViewerViewModel : ObservableObject
 {
     private Video _video;
 
@@ -20,13 +26,15 @@ public class VideoViewerViewModel
         return result;
     }
 
+    [ObservableProperty]
+    public bool _isLoaded;
+    [ObservableProperty]
+    public bool _isLoading;
+
     public Video Video
     {
         get => _video;
-        set {
-            _video = value;
-            LoadData();
-        }
+        set => SetProperty(ref _video, value);
     }
 
     protected VideoViewerViewModel(Video video)
@@ -47,50 +55,48 @@ public class VideoViewerViewModel
         }
     }
 
-    public virtual void LoadData()
+    public virtual async Task LoadData()
     {
+        if (IsLoaded || IsLoading) return;
+        
+        IsLoading = true;
+        
         using var db = new DataContext();
-        db.Attach(Video);
-        db.Entry(Video).Collection(v => v.Genres).Load();
-        db.Entry(Video).Collection(v => v.Roles).Load();
-        foreach (var role in Video.Roles)
-            db.Entry(role).Reference(r => r.Person).Load();
+        Video = await db.Videos
+            .Include(v => v.Genres)
+            .Include(v => v.Roles).ThenInclude(r => r.Person)
+            .Include(v => v.Seasons).ThenInclude(s => s.Episodes)
+            .SingleAsync(v => v.Id == Video.Id);
+
+        IsLoading = false;
+        IsLoaded = true;
     }
 }
 
-public class MovieViewerViewModel : VideoViewerViewModel
+public partial class MovieViewerViewModel : VideoViewerViewModel
 {
     public MovieViewerViewModel(Video video) : base(video) { }
 }
 
-public class TVShowViewerViewModel : VideoViewerViewModel
+public partial class TVShowViewerViewModel : VideoViewerViewModel
 {
+    [ObservableProperty]
+    private object _currentPage = null!;
+
     public TVShowViewerViewModel(Video video) : base(video) { }
 
     public IEnumerable<object> Pages { get; set; } = null!;
-    public object CurrentPage { get; set; } = null!;
 
-    public override void LoadData()
+    public override async Task LoadData()
     {
-        using var db = new DataContext();
-        db.Attach(Video);
-        db.Entry(Video).Collection(v => v.Genres).Load();
-        db.Entry(Video).Collection(v => v.Roles).Load();
-        foreach (var role in Video.Roles)
-            db.Entry(role).Reference(r => r.Person).Load();
-        if (Video is Video tv)
-        {
-            db.Entry(tv).Collection(v => v.Seasons).Load();
-            foreach (var season in tv.Seasons)
-                db.Entry(season).Collection(s => s.Episodes).Load();
+        await base.LoadData();
 
-            var list = new List<object>
+        var list = new List<object>
             {
-                tv
+                Video
             };
-            list.AddRange(tv.Seasons);
-            Pages = list;
-            CurrentPage = Pages.First();
-        }
+        list.AddRange(Video.Seasons);
+        Pages = list;
+        CurrentPage = Pages.First();
     }
 }

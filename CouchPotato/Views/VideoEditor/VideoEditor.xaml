@@ -4,6 +4,7 @@
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:c="clr-namespace:CouchPotato.Converters"
     xmlns:clr="clr-namespace:System;assembly=mscorlib"
+    xmlns:cv="clr-namespace:CouchPotato.Views.CommonViews"
     xmlns:db="clr-namespace:CouchPotato.DbModel"
     xmlns:dd="urn:gong-wpf-dragdrop"
     xmlns:e="clr-namespace:CouchPotato.Extensions"
@@ -38,9 +39,9 @@
                 Command="{Binding SyncCommand}"
                 Content="{md:PackIcon Kind=WebSync}"
                 ToolTip="{Binding Source={x:Static p:Loc.Sync}}"
-                Visibility="{Binding Video.Type,
+                Visibility="{Binding Type,
                                      Converter={c:MediaTypeToVisibilityConverter}}" />
-            <Separator Visibility="{Binding Video.Type, Converter={c:MediaTypeToVisibilityConverter}}" />
+            <Separator Visibility="{Binding Type, Converter={c:MediaTypeToVisibilityConverter}}" />
             <Button
                 Margin="0,0,10,0"
                 Command="{Binding DeleteCommand}"
@@ -71,25 +72,22 @@
                     <Button
                         Height="400"
                         Margin="0,0,0,20"
+                        Background="{Binding Video.PosterUrl,
+                                             Converter={c:ImageBrushConverter}}"
                         BorderThickness="0"
                         Command="{Binding ChangePosterCommand}"
                         ToolTip="{x:Static p:Loc.ChangePoster}"
-                        ToolTipService.InitialShowDelay="0">
-                        <Button.Background>
-                            <ImageBrush ImageSource="{Binding Video.PosterUrl, Converter={c:ImageConverter}}" Stretch="UniformToFill" />
-                        </Button.Background>
-                    </Button>
+                        ToolTipService.InitialShowDelay="0" />
                     <Button
                         Height="400"
                         Margin="0,0,0,20"
+                        Background="{Binding Video.BackgroundUrl,
+                                             Converter={c:ImageBrushConverter},
+                                             IsAsync=True}"
                         BorderThickness="0"
                         Command="{Binding ChangeBackgroundCommand}"
                         ToolTip="{x:Static p:Loc.ChangeBackground}"
-                        ToolTipService.InitialShowDelay="0">
-                        <Button.Background>
-                            <ImageBrush ImageSource="{Binding Video.BackgroundUrl, Converter={c:ImageConverter}}" Stretch="Uniform" />
-                        </Button.Background>
-                    </Button>
+                        ToolTipService.InitialShowDelay="0" />
                 </StackPanel>
 
                 <ScrollViewer
@@ -104,7 +102,7 @@
                             </Style>
                         </StackPanel.Resources>
                         <TextBox
-                            Margin="5,0,5,5"
+                            Margin="5,5,5,5"
                             md:HintAssist.Hint="{x:Static p:Loc.Title}"
                             FontSize="24"
                             Text="{Binding Video.Title}" />
@@ -215,7 +213,7 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type l:RoleViewModel}">
                                     <Grid Background="Transparent">
-                                        <ContentPresenter Content="{Binding Role}" />
+                                        <ContentControl Content="{Binding}" ContentTemplate="{StaticResource role}" />
                                         <StackPanel>
                                             <StackPanel.Style>
                                                 <Style TargetType="StackPanel">
@@ -461,13 +459,13 @@
                     <ContentPresenter.Style>
                         <Style TargetType="ContentPresenter">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Video.Type}" Value="Unknown">
+                                <DataTrigger Binding="{Binding Type}" Value="Unknown">
                                     <Setter Property="ContentTemplate" Value="{StaticResource VideoTypeSelector}" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding Video.Type}" Value="Movie">
+                                <DataTrigger Binding="{Binding Type}" Value="Movie">
                                     <Setter Property="ContentTemplate" Value="{StaticResource VideoInfo}" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding Video.Type}" Value="TVShow">
+                                <DataTrigger Binding="{Binding Type}" Value="TVShow">
                                     <Setter Property="ContentTemplate" Value="{StaticResource TVEditor}" />
                                 </DataTrigger>
                             </Style.Triggers>

@@ -77,13 +77,13 @@
                                 <Border
                                     Width="154"
                                     Height="231"
+                                    Background="{Binding PortraitUrl,
+                                                         Converter={c:ImageBrushConverter {StaticResource MaterialDesignCardBackground}},
+                                                         IsAsync=True}"
                                     CornerRadius="20,0,0,0">
                                     <Border.Effect>
                                         <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
                                     </Border.Effect>
-                                    <Border.Background>
-                                        <ImageBrush ImageSource="{Binding PortraitUrl, Converter={c:ImageConverter}, IsAsync=True}" />
-                                    </Border.Background>
                                     <TextBlock
                                         VerticalAlignment="Bottom"
                                         Background="#b000"
@@ -97,8 +97,9 @@
 
                     <v:WebView
                         Grid.Column="1"
-                        Source="{Binding Url}" 
-                        Visibility="{Binding Searching, Converter={c:VisibilityConverter Reversed=True}}"/>
+                        Source="{Binding Url}"
+                        Visibility="{Binding Searching,
+                                             Converter={c:VisibilityConverter Reversed=True}}" />
 
                     <Control
                         Grid.ColumnSpan="2"

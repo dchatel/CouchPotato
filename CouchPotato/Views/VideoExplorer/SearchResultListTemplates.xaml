@@ -31,11 +31,7 @@
                         </Storyboard>
                     </BeginStoryboard>
                 </DataTrigger.ExitActions>
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <ImageBrush ImageSource="{Binding Video.PosterUrl, Converter={c:ImageConverter}}" />
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="Background" Value="{Binding Video.PosterUrl, Converter={c:ImageBrushConverter}, IsAsync=True}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>

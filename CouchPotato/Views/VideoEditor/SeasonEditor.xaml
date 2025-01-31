@@ -216,7 +216,8 @@
                     Grid.Column="0"
                     Width="200"
                     Source="{Binding Episode.ImageUrl,
-                                     Converter={c:ImageConverter}}" />
+                                     Converter={c:ImageConverter},
+                                     IsAsync=True}" />
                 <Button
                     Grid.Row="0"
                     Grid.RowSpan="3"
