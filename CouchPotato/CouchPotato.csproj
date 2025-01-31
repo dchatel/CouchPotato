@@ -26,10 +26,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="boring-coach-potato.gif" />
 		<None Remove="logo.png" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<Resource Include="boring-coach-potato.gif" />
 		<Content Include="logo.ico" />
 	</ItemGroup>
 

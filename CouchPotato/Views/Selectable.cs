@@ -32,3 +32,28 @@ public partial class Selectable<T> : ObservableObject
         _selectionChanged = selectionChanged;
     }
 }
+
+public partial class Togglable<T> : ObservableObject
+{
+    private bool? _isSelected;
+    private readonly Action<T, bool?>? _selectionChanged;
+
+    public T Value { get; }
+    public bool? IsSelected
+    {
+        get => _isSelected;
+        set {
+            if (SetProperty(ref _isSelected, value))
+            {
+                _selectionChanged?.Invoke(Value, value);
+            }
+        }
+    }
+
+    public Togglable(T value, bool? isSelected = false, Action<T, bool?>? selectionChanged = null)
+    {
+        Value = value;
+        IsSelected = isSelected;
+        _selectionChanged = selectionChanged;
+    }
+}

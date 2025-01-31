@@ -55,14 +55,15 @@ public partial class VideoEditorViewModel : ContentViewModel, IDropTarget
     public ObservableCollection<RoleViewModel> Roles { get; }
     public ObservableCollection<SeasonViewModel> Seasons { get; }
 
-    VideoType _type;
-
     public VideoType Type
     {
-        get => _type;
+        get => Video.Type;
         set {
-            if (SetProperty(ref _type, value))
+            if (Video.Type != value)
+            {
                 Video.Type = value;
+                OnPropertyChanged();
+            }
         }
     }
 

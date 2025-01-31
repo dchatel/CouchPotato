@@ -68,6 +68,7 @@
                     Width="48"
                     Height="48"
                     Padding="0"
+                    VerticalAlignment="Top"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
                     Foreground="White"
@@ -101,7 +102,7 @@
                 </TextBlock>
 
                 <ContentPresenter
-                    Name="toolbar"
+                    Name="Toolbar"
                     Grid.Column="2"
                     Margin="5"
                     Content="{Binding CurrentPage}"
@@ -174,7 +175,7 @@
                                 </b:Interaction.Triggers>
                             </Grid>
                             <ContentPresenter
-                                Name="content"
+                                Name="View"
                                 Content="{Binding}"
                                 ContentTemplateSelector="{StaticResource contentDataTemplateSelector}" />
                         </Grid>
@@ -224,7 +225,7 @@
                 OpenMode="Modal">
                 <md:DrawerHost.LeftDrawerContent>
                     <ContentPresenter
-                        Name="menu"
+                        Name="Menu"
                         Margin="5"
                         Content="{Binding CurrentPage}"
                         ContentTemplateSelector="{StaticResource contentDataTemplateSelector}" />

@@ -86,9 +86,6 @@ public class ImageBrushConverter : ImageLoaderBase
 
         BitmapImage? bitmap = GetImage(str);
 
-        if (bitmap is null)
-            return _fallbackBrush;
-
-        return new ImageBrush(bitmap);
+        return bitmap is null ? _fallbackBrush : new ImageBrush(bitmap);
     }
 }

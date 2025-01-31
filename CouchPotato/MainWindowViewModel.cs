@@ -15,11 +15,11 @@ using Microsoft.Extensions.DependencyModel;
 
 namespace CouchPotato;
 
-public partial class MainWindowViewModel:ObservableObject
+public partial class MainWindowViewModel : ObservableObject
 {
     [ObservableProperty]
     private ContentViewModel? _currentPage;
-
+    
     public MainWindowViewModel()
     {
         OnLoadedCommand = new AsyncRelayCommand(OnLoaded);

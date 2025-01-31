@@ -18,6 +18,7 @@
 
                 <ResourceDictionary Source="Styles/ScrollBars/RoundScrollBar.xaml" />
                 <ResourceDictionary Source="Styles/BusyAnimation.xaml" />
+                <ResourceDictionary Source="Styles/CheckBoxes.xaml" />
 
                 <ResourceDictionary Source="Views/CommonViews/CommonViews.xaml" />
                 <ResourceDictionary Source="Views/DummyTestDialog/DummyTest.xaml" />
