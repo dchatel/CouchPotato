@@ -67,6 +67,30 @@ public partial class VideoEditorViewModel : ContentViewModel, IDropTarget
         }
     }
 
+    public string? PosterUrl
+    {
+        get => Video.PosterUrl;
+        set {
+            if (Video.PosterUrl != value)
+            {
+                Video.PosterUrl = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    public string? BackgroundUrl
+    {
+        get => Video.BackgroundUrl;
+        set {
+            if (Video.BackgroundUrl != value)
+            {
+                Video.BackgroundUrl = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
     public VideoEditorViewModel(DataContext db, Video video, bool editionMode) : base(autoClose: false)
     {
         _db = db;

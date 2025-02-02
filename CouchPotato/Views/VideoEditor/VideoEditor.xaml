@@ -72,7 +72,7 @@
                     <Button
                         Height="400"
                         Margin="0,0,0,20"
-                        Background="{Binding Video.PosterUrl,
+                        Background="{Binding PosterUrl,
                                              Converter={c:ImageBrushConverter}}"
                         BorderThickness="0"
                         Command="{Binding ChangePosterCommand}"
@@ -81,7 +81,7 @@
                     <Button
                         Height="400"
                         Margin="0,0,0,20"
-                        Background="{Binding Video.BackgroundUrl,
+                        Background="{Binding BackgroundUrl,
                                              Converter={c:ImageBrushConverter},
                                              IsAsync=True}"
                         BorderThickness="0"
