@@ -3,6 +3,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
 
+    <Color x:Key="UncheckedThreeStateCheckboxBackgroundColor">#2e3c43</Color>
+    <SolidColorBrush x:Key="UncheckedThreeStateCheckboxBrush" Color="{StaticResource UncheckedThreeStateCheckboxBackgroundColor}" />
+    <Color x:Key="CheckYesThreeStateCheckboxForegroundColor">#61ccf0</Color>
+    <Color x:Key="CheckedYesThreeStateCheckboxBackgroundColor">#25485d</Color>
+    <Color x:Key="CheckNoThreeStateCheckboxForegroundColor">Orange</Color>
+    <Color x:Key="CheckedNoThreeStateCheckboxBackgroundColor">DarkRed</Color>
     <Style x:Key="ThreeStateCheckbox" TargetType="CheckBox">
         <Setter Property="Template">
             <Setter.Value>
@@ -10,7 +16,7 @@
                     <Border
                         x:Name="border"
                         Margin="5"
-                        Background="DarkSlateGray"
+                        Background="{StaticResource UncheckedThreeStateCheckboxBrush}"
                         CornerRadius="16">
                         <Border
                             Name="innerborder"
@@ -28,7 +34,9 @@
                                 <TextBlock
                                     x:Name="text"
                                     Margin="0,0,0,0"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                     FontSize="14"
+                                    Foreground="White"
                                     Text="{TemplateBinding Content}" />
                             </Grid>
                         </Border>
@@ -43,7 +51,7 @@
                                         <DoubleAnimation
                                             Storyboard.TargetName="innerborder"
                                             Storyboard.TargetProperty="Background.(SolidColorBrush.Opacity)"
-                                            To="0.5" />
+                                            To="0.15" />
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
@@ -59,7 +67,17 @@
                                         <ColorAnimation
                                             Storyboard.TargetName="border"
                                             Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
-                                            To="DarkViolet"
+                                            To="{StaticResource CheckedYesThreeStateCheckboxBackgroundColor}"
+                                            Duration="0:0:0.25" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="icon"
+                                            Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
+                                            To="{StaticResource CheckYesThreeStateCheckboxForegroundColor}"
+                                            Duration="0:0:0.25" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="text"
+                                            Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
+                                            To="{StaticResource CheckYesThreeStateCheckboxForegroundColor}"
                                             Duration="0:0:0.25" />
                                         <DoubleAnimation
                                             Storyboard.TargetName="icon"
@@ -81,7 +99,17 @@
                                         <ColorAnimation
                                             Storyboard.TargetName="border"
                                             Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
-                                            To="DarkSlateGray"
+                                            To="{StaticResource UncheckedThreeStateCheckboxBackgroundColor}"
+                                            Duration="0:0:0.25" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="icon"
+                                            Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
+                                            To="White"
+                                            Duration="0:0:0.25" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="text"
+                                            Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
+                                            To="White"
                                             Duration="0:0:0.25" />
                                         <DoubleAnimation
                                             Storyboard.TargetName="icon"
@@ -106,7 +134,17 @@
                                         <ColorAnimation
                                             Storyboard.TargetName="border"
                                             Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
-                                            To="DarkRed"
+                                            To="{StaticResource CheckedNoThreeStateCheckboxBackgroundColor}"
+                                            Duration="0:0:0.25" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="icon"
+                                            Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
+                                            To="{StaticResource CheckNoThreeStateCheckboxForegroundColor}"
+                                            Duration="0:0:0.25" />
+                                        <ColorAnimation
+                                            Storyboard.TargetName="text"
+                                            Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
+                                            To="{StaticResource CheckNoThreeStateCheckboxForegroundColor}"
                                             Duration="0:0:0.25" />
                                         <DoubleAnimation
                                             Storyboard.TargetName="icon"

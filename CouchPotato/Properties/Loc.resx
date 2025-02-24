@@ -288,4 +288,10 @@
   <data name="Genres" xml:space="preserve">
     <value>Genres</value>
   </data>
+  <data name="More" xml:space="preserve">
+    <value>More</value>
+  </data>
+  <data name="Less" xml:space="preserve">
+    <value>Less</value>
+  </data>
 </root>

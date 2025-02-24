@@ -21,18 +21,66 @@ public partial class VideoExplorerViewModel : ContentViewModel
     [ObservableProperty]
     private bool _isAdvancedSearchDialogOpened;
     [ObservableProperty]
-    private bool _isSearching;
+    private bool _isSearching = false;
     [ObservableProperty]
     private ObservableCollection<VideoSearchResultViewModel>? _searchResults;
     [ObservableProperty]
-    private string _title;
+    private string _title = "";
     [ObservableProperty]
-    private string _actors;
+    private string _actors = "";
     [ObservableProperty]
-    private string _roles;
+    private string _roles = "";
+    private bool _dateActive = false;
+    public bool DateActive
+    {
+        get => _dateActive;
+        set {
+            SetProperty(ref _dateActive, value);
+            IsDateBefore = false;
+            Year = null;
+        }
+    }
+    [ObservableProperty]
+    private bool _isDateBefore = false;
+    [ObservableProperty]
+    private int? _year = null;
+    [ObservableProperty]
+    private string _digitalStorageCode = "";
+    [ObservableProperty]
+    private string _digitalResolution = "";
+    private bool _tmdbRatingActive = false;
+    public bool TmdbRatingActive
+    {
+        get => _tmdbRatingActive;
+        set {
+            SetProperty(ref _tmdbRatingActive, value);
+            IsTmdbRatingLesser = false;
+            TmdbRating = null;
+        }
+    }
+    [ObservableProperty]
+    private bool _isTmdbRatingLesser = false;
+    [ObservableProperty]
+    private double? _tmdbRating = null;
+    private bool _personalRatingActive = false;
+    public bool PersonalRatingActive
+    {
+        get => _personalRatingActive;
+        set {
+            SetProperty(ref _personalRatingActive, value);
+            IsPersonalRatingLesser = false;
+            PersonalRating = null;
+        }
+    }
+    [ObservableProperty]
+    private bool _isPersonalRatingLesser = false;
+    [ObservableProperty]
+    private int? _personalRating = null;
+    [ObservableProperty]
+    private int? _runtime = null;
 
     private VideoSearchResultViewModel? _selectedResult;
-    private string _searchText;
+    private string _searchText = "";
 
     public ICommand AddCommand { get; }
     public ICommand EditCommand { get; }
@@ -67,11 +115,6 @@ public partial class VideoExplorerViewModel : ContentViewModel
         EditCommand = new AsyncRelayCommand(Edit);
         AdvancedSearchButtonClickedCommand = new RelayCommand(AdvancedSearchButtonClicked);
         AdvancedSearchCommand = new AsyncRelayCommand(AdvancedSearch);
-        IsSearching = false;
-        _searchText = "";
-        _title = "";
-        _actors = "";
-        _roles = "";
         using var db = new DataContext();
         Genres = db.Genres.ToArray().Select(genre => new Togglable<Genre>(genre, isSelected: false)).ToArray();
     }
@@ -81,6 +124,11 @@ public partial class VideoExplorerViewModel : ContentViewModel
         Title = "";
         Actors = "";
         Roles = "";
+        DateActive = false;
+        DigitalStorageCode = "";
+        DigitalResolution = "";
+        TmdbRatingActive = false;
+        PersonalRatingActive = false;
         foreach (var item in Genres)
         {
             item.IsSelected = false;
@@ -144,7 +192,7 @@ public partial class VideoExplorerViewModel : ContentViewModel
 
         using var db = new DataContext();
         SearchResults = new ObservableCollection<VideoSearchResultViewModel>(await Task.Run(() => db.Videos
-            .Where(video => video.Title.ToLower().Contains((SearchText ?? "").ToLower()))
+            .Where(video => video.Title.Contains(SearchText))
             .Select(video => new VideoSearchResultViewModel(VideoViewerViewModel.Create(video)))
             .ToArray()));
         IsSearching = false;
@@ -158,19 +206,30 @@ public partial class VideoExplorerViewModel : ContentViewModel
         var selectedGenres = Genres.Where(g => g.IsSelected == true).Select(g => g.Value.Id).ToArray();
         var unselectedGenres = Genres.Where(g => g.IsSelected is null).Select(g => g.Value.Id).ToArray();
 
-        SearchResults = new ObservableCollection<VideoSearchResultViewModel>(await db.Videos
-            .Where(video => video.Title.ToLower().Contains((Title ?? "").ToLower())
-            && Actors.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).All(actor => video.Roles.Any(role => role.Person.Name.ToLower().Contains(actor.ToLower())))
-            && Roles.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).All(role => video.Roles.Any(r => !string.IsNullOrEmpty(r.Characters) && r.Characters.ToLower().Contains(role.ToLower())))
-            && selectedGenres.All(g => video.Genres.Any(vg => vg.Id == g))
-            && unselectedGenres.All(g => !video.Genres.Any(vg => vg.Id == g))
-            //&& video.Roles.Any(role => Actors.ToLower().Contains(role.Person.Name.ToLower()))
-            //&& video.Roles.Any(role => string.IsNullOrEmpty(role.Characters) && Roles.ToLower().Contains(role.Characters!.ToLower()))
-            //&& Genres.Where(g => g.IsSelected == true).ToArray().All(g => video.Genres.Contains(g.Value))
-            //&& Genres.Where(g => g.IsSelected == null).ToArray().All(g => !video.Genres.Contains(g.Value))
-            )
+        //SearchResults = new ObservableCollection<VideoSearchResultViewModel>(await db.Videos
+        //    .Where(video => video.Title.ToLower().Contains((Title ?? "").ToLower())
+        //    && Actors.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).All(actor => video.Roles.Any(role => role.Person.Name.ToLower().Contains(actor.ToLower())))
+        //    && Roles.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).All(role => video.Roles.Any(r => !string.IsNullOrEmpty(r.Characters) && r.Characters.ToLower().Contains(role.ToLower())))
+        //    && selectedGenres.All(g => video.Genres.Any(vg => vg.Id == g))
+        //    && unselectedGenres.All(g => !video.Genres.Any(vg => vg.Id == g))
+        //    )
+        //    .Select(video => new VideoSearchResultViewModel(VideoViewerViewModel.Create(video)))
+        //    .ToArrayAsync());
+
+        var query = db.Videos.AsQueryable();
+        if (!string.IsNullOrWhiteSpace(Title)) query = query.Where(video => EF.Functions.Collate(video.Title, "NO_ACCENTS") == EF.Functions.Collate(Title, "NO_ACCENTS"));
+        if (!string.IsNullOrWhiteSpace(Actors)) query = query.Where(video => Actors.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).All(actor => video.Roles.Any(role => role.Person.Name.Contains(actor))));
+        if (!string.IsNullOrWhiteSpace(Roles)) query = query.Where(video => Roles.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).All(role => video.Roles.Any(r => !string.IsNullOrEmpty(r.Characters) && r.Characters.Contains(role))));
+        if (selectedGenres.Length != 0) query = query.Where(video => selectedGenres.All(g => video.Genres.Any(vg => vg.Id == g)));
+        if (unselectedGenres.Length != 0) query = query.Where(video => unselectedGenres.All(g => !video.Genres.Any(vg => vg.Id == g)));
+        if (DateActive && IsDateBefore && Year is not null) query = query.Where(video => video.ReleaseDate < new DateTime((int)Year, 1, 1, 0, 0, 0));
+        if (DateActive && !IsDateBefore && Year is not null) query = query.Where(video => video.ReleaseDate > new DateTime((int)Year, 12, 31, 23, 59, 59));
+
+        var results = await query
             .Select(video => new VideoSearchResultViewModel(VideoViewerViewModel.Create(video)))
-            .ToArrayAsync());
+            .ToArrayAsync();
+
+        SearchResults = new ObservableCollection<VideoSearchResultViewModel>(results);
 
         IsSearching = false;
     }

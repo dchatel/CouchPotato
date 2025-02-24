@@ -101,8 +101,8 @@ public partial class VideoEditorViewModel : ContentViewModel, IDropTarget
         CancelCommand = new RelayCommand(() => Close(false));
         SyncCommand = new AsyncRelayCommand(Sync);
         DeleteCommand = new RelayCommand(Delete);
-        ChangePosterCommand = new RelayCommand(() => Video.PosterUrl = ImageChange.AddImageChange(Video.PosterUrl, Video.Title, "poster", width: 200));
-        ChangeBackgroundCommand = new RelayCommand(() => Video.BackgroundUrl = ImageChange.AddImageChange(Video.BackgroundUrl, Video.Title, "background"));
+        ChangePosterCommand = new RelayCommand(() => PosterUrl = ImageChange.AddImageChange(Video.PosterUrl, Video.Title, "poster", width: 200));
+        ChangeBackgroundCommand = new RelayCommand(() => BackgroundUrl = ImageChange.AddImageChange(Video.BackgroundUrl, Video.Title, "background"));
         AddRoleCommand = new AsyncRelayCommand(AddRole);
         DeleteRoleCommand = new RelayCommand<RoleViewModel>(DeleteRole);
         AddSeasonCommand = new RelayCommand(AddSeason);

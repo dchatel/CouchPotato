@@ -54,7 +54,7 @@
                 Placement="Right"
                 PlacementTarget="{Binding ElementName=AdvancedSearchButton}"
                 PopupAnimation="Fade"
-                StaysOpen="False"
+                StaysOpen="True"
                 VerticalOffset="50">
                 <Border
                     Margin="20"
@@ -114,6 +114,106 @@
                                 </ItemsControl.ItemsPanel>
                             </ItemsControl>
                         </HeaderedContentControl>
+
+                        <Grid e:Grid.Cols="auto,*,auto,auto" e:Grid.Rows="auto,auto,auto">
+                            <GroupBox Grid.RowSpan="2" Margin="5">
+                                <GroupBox.Header>
+                                    <CheckBox
+                                        Content="{x:Static p:Loc.ReleaseDate}"
+                                        IsChecked="{Binding DateActive}"
+                                        Style="{StaticResource MaterialDesignUserForegroundCheckBox}" />
+                                </GroupBox.Header>
+                                <UniformGrid Columns="3" IsEnabled="{Binding DateActive, Mode=TwoWay}">
+                                    <RadioButton
+                                        Margin="5,0"
+                                        Content="Avant"
+                                        IsChecked="{Binding IsDateBefore,
+                                                            Mode=TwoWay}" />
+                                    <RadioButton
+                                        Margin="5,0"
+                                        Content="Après"
+                                        IsChecked="{Binding IsDateBefore,
+                                                            Mode=TwoWay,
+                                                            Converter={c:RevertBooleanConverter}}" />
+                                    <TextBox
+                                        Margin="5,0"
+                                        md:HintAssist.Hint="Année"
+                                        md:HintAssist.IsFloating="True"
+                                        Text="{Binding Year,
+                                                       Mode=TwoWay}"
+                                        TextAlignment="Center" />
+                                </UniformGrid>
+                            </GroupBox>
+                            <TextBox
+                                Grid.Column="1"
+                                Margin="5"
+                                md:HintAssist.Hint="{x:Static p:Loc.DigitalStorageCode}"
+                                md:HintAssist.IsFloating="True"
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                Text="{Binding DigitalStorageCode,
+                                               Mode=TwoWay}" />
+                            <TextBox
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="5"
+                                md:HintAssist.Hint="{x:Static p:Loc.DigitalResolution}"
+                                md:HintAssist.IsFloating="True"
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                Text="{Binding DigitalResolution,
+                                               Mode=TwoWay}" />
+                            <GroupBox
+                                Grid.RowSpan="2"
+                                Grid.Column="2"
+                                Margin="5">
+                                <GroupBox.Header>
+                                    <CheckBox
+                                        Content="{x:Static p:Loc.TmdbRating}"
+                                        IsChecked="{Binding TmdbRatingActive,
+                                                            Mode=TwoWay}"
+                                        Style="{StaticResource MaterialDesignUserForegroundCheckBox}" />
+                                </GroupBox.Header>
+                                <StackPanel IsEnabled="{Binding TmdbRatingActive}" Orientation="Horizontal">
+                                    <RadioButton
+                                        Margin="5,0"
+                                        Content="{x:Static p:Loc.Less}"
+                                        IsChecked="{Binding IsTmdbRatingLesser,
+                                                            Mode=TwoWay}" />
+                                    <RadioButton
+                                        Margin="5,0"
+                                        Content="{x:Static p:Loc.More}"
+                                        IsChecked="{Binding IsTmdbRatingLesser,
+                                                            Mode=TwoWay,
+                                                            Converter={c:RevertBooleanConverter}}" />
+                                    <md:RatingBar Max="10" Value="{Binding TmdbRating, Mode=TwoWay}" />
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox
+                                Grid.RowSpan="2"
+                                Grid.Column="3"
+                                Margin="5">
+                                <GroupBox.Header>
+                                    <CheckBox
+                                        Content="{x:Static p:Loc.PersonalRating}"
+                                        IsChecked="{Binding PersonalRatingActive,
+                                                            Mode=TwoWay}"
+                                        Style="{StaticResource MaterialDesignUserForegroundCheckBox}" />
+                                </GroupBox.Header>
+                                <StackPanel IsEnabled="{Binding PersonalRatingActive}" Orientation="Horizontal">
+                                    <RadioButton
+                                        Margin="5,0"
+                                        Content="{x:Static p:Loc.Less}"
+                                        IsChecked="{Binding IsPersonalRatingLesser,
+                                                            Mode=TwoWay}" />
+                                    <RadioButton
+                                        Margin="5,0"
+                                        Content="{x:Static p:Loc.More}"
+                                        IsChecked="{Binding IsPersonalRatingLesser,
+                                                            Mode=TwoWay,
+                                                            Converter={c:RevertBooleanConverter}}" />
+                                    <md:RatingBar Max="10" Value="{Binding PersonalRating, Mode=TwoWay}" />
+                                </StackPanel>
+                            </GroupBox>
+                        </Grid>
 
                         <Button
                             Margin="5"

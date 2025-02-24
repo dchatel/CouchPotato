@@ -72,22 +72,41 @@
                     <Button
                         Height="400"
                         Margin="0,0,0,20"
-                        Background="{Binding PosterUrl,
-                                             Converter={c:ImageBrushConverter}}"
                         BorderThickness="0"
                         Command="{Binding ChangePosterCommand}"
+                        Style="{StaticResource MaterialDesignFlatButton}"
                         ToolTip="{x:Static p:Loc.ChangePoster}"
-                        ToolTipService.InitialShowDelay="0" />
+                        ToolTipService.InitialShowDelay="0">
+                        <Grid>
+                            <Image Source="{Binding PosterUrl, Converter={c:ImageConverter}, IsAsync=True, Mode=TwoWay}" Stretch="Uniform" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="{x:Static p:Loc.ChangePoster}"
+                                Visibility="{Binding PosterUrl,
+                                                     Converter={c:VisibilityConverter Reversed=True},
+                                                     Mode=TwoWay}" />
+                        </Grid>
+                    </Button>
                     <Button
                         Height="400"
                         Margin="0,0,0,20"
-                        Background="{Binding BackgroundUrl,
-                                             Converter={c:ImageBrushConverter},
-                                             IsAsync=True}"
                         BorderThickness="0"
                         Command="{Binding ChangeBackgroundCommand}"
+                        Style="{StaticResource MaterialDesignFlatButton}"
                         ToolTip="{x:Static p:Loc.ChangeBackground}"
-                        ToolTipService.InitialShowDelay="0" />
+                        ToolTipService.InitialShowDelay="0">
+                        <Grid>
+                            <Image Source="{Binding BackgroundUrl, Converter={c:ImageConverter}, IsAsync=True, Mode=TwoWay}" Stretch="Uniform" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="{x:Static p:Loc.ChangeBackground}"
+                                Visibility="{Binding BackgroundUrl,
+                                                     Converter={c:VisibilityConverter Reversed=True},
+                                                     Mode=TwoWay}" />
+                        </Grid>
+                    </Button>
                 </StackPanel>
 
                 <ScrollViewer
