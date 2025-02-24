@@ -191,10 +191,10 @@ public partial class VideoExplorerViewModel : ContentViewModel
         IsSearching = true;
 
         using var db = new DataContext();
-        SearchResults = new ObservableCollection<VideoSearchResultViewModel>(await Task.Run(() => db.Videos
-            .Where(video => video.Title.Contains(SearchText))
+        SearchResults = [.. await db.Videos
+            .Where(video => EF.Functions.Collate(video.Title, "NO_ACCENTS") == SearchText)
             .Select(video => new VideoSearchResultViewModel(VideoViewerViewModel.Create(video)))
-            .ToArray()));
+            .ToArrayAsync()];
         IsSearching = false;
     }
 
@@ -217,19 +217,23 @@ public partial class VideoExplorerViewModel : ContentViewModel
         //    .ToArrayAsync());
 
         var query = db.Videos.AsQueryable();
-        if (!string.IsNullOrWhiteSpace(Title)) query = query.Where(video => EF.Functions.Collate(video.Title, "NO_ACCENTS") == EF.Functions.Collate(Title, "NO_ACCENTS"));
-        if (!string.IsNullOrWhiteSpace(Actors)) query = query.Where(video => Actors.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).All(actor => video.Roles.Any(role => role.Person.Name.Contains(actor))));
-        if (!string.IsNullOrWhiteSpace(Roles)) query = query.Where(video => Roles.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).All(role => video.Roles.Any(r => !string.IsNullOrEmpty(r.Characters) && r.Characters.Contains(role))));
+        if (!string.IsNullOrWhiteSpace(Title)) query = query.Where(video => EF.Functions.Collate(video.Title, "NO_ACCENTS") == Title);
+        if (!string.IsNullOrWhiteSpace(Actors)) query = query.Where(video => Actors.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).All(actor => video.Roles.Any(role => EF.Functions.Collate(role.Person.Name, "NO_ACCENTS") == actor)));
+        if (!string.IsNullOrWhiteSpace(Roles)) query = query.Where(video => Roles.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).All(role => video.Roles.Any(r => !string.IsNullOrEmpty(r.Characters) && EF.Functions.Collate(r.Characters, "NO_ACCENTS") == role)));
         if (selectedGenres.Length != 0) query = query.Where(video => selectedGenres.All(g => video.Genres.Any(vg => vg.Id == g)));
         if (unselectedGenres.Length != 0) query = query.Where(video => unselectedGenres.All(g => !video.Genres.Any(vg => vg.Id == g)));
         if (DateActive && IsDateBefore && Year is not null) query = query.Where(video => video.ReleaseDate < new DateTime((int)Year, 1, 1, 0, 0, 0));
         if (DateActive && !IsDateBefore && Year is not null) query = query.Where(video => video.ReleaseDate > new DateTime((int)Year, 12, 31, 23, 59, 59));
+        if (!string.IsNullOrWhiteSpace(DigitalStorageCode)) query = query.Where(video => EF.Functions.Collate(video.DigitalStorageCode, "NO_ACCENTS") == DigitalStorageCode);
+
+        if (TmdbRatingActive) query = query.Where(video => (video.TmdbRating < TmdbRating) == IsTmdbRatingLesser || video.TmdbRating == TmdbRating);
+        if(PersonalRatingActive) query = query.Where(Video=>(Video.PersonalRating < PersonalRating)== IsPersonalRatingLesser || Video.PersonalRating == PersonalRating);
 
         var results = await query
             .Select(video => new VideoSearchResultViewModel(VideoViewerViewModel.Create(video)))
             .ToArrayAsync();
 
-        SearchResults = new ObservableCollection<VideoSearchResultViewModel>(results);
+        SearchResults = [.. results];
 
         IsSearching = false;
     }

@@ -2,6 +2,8 @@
 using System.Globalization;
 using System.Text;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace CouchPotato;
 
 public class StringHelper
@@ -16,7 +18,6 @@ public class StringHelper
         var normalizedA = RemoveDiacritics(a).ToLowerInvariant();
         var normalizedB = RemoveDiacritics(b).ToLowerInvariant();
         return normalizedA.Contains(normalizedB) ? 0 : string.Compare(normalizedA, normalizedB, StringComparison.Ordinal);
-        //return string.Compare(normalizedA, normalizedB, StringComparison.Ordinal);
     }
 
     public static string RemoveDiacritics(string text)

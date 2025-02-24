@@ -1,7 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Globalization;
+using System.Text;
 using System.Windows;
 
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace CouchPotato.DbModel;
@@ -15,11 +21,6 @@ public partial class DataContext : DbContext
     public DbSet<Season> Seasons { get; set; } = null!;
     public DbSet<Video> Videos { get; set; } = null!;
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.UseCollation("NOCASE");
-    }
-
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Conventions.Remove(typeof(TableNameFromDbSetConvention));
@@ -27,6 +28,11 @@ public partial class DataContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite(@"Data Source=couchpotato.db");
+        var conn = new SqliteConnection(@"Data Source=couchpotato.db");
+        conn.Open();
+        conn.CreateCollation("NO_ACCENTS", StringHelper.AccentInsensitiveComparison);
+        optionsBuilder
+            .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning))
+            .UseSqlite(conn);
     }
 }
