@@ -237,9 +237,6 @@
   <data name="Save" xml:space="preserve">
     <value>Save</value>
   </data>
-  <data name="Season" xml:space="preserve">
-    <value>Season</value>
-  </data>
   <data name="SelectNewImage" xml:space="preserve">
     <value>Select new image</value>
   </data>
@@ -293,5 +290,20 @@
   </data>
   <data name="Less" xml:space="preserve">
     <value>Less</value>
+  </data>
+  <data name="Equals" xml:space="preserve">
+    <value>Equals</value>
+  </data>
+  <data name="InvalidResolution" xml:space="preserve">
+    <value>{0} is not a valid resolution.</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Season" xml:space="preserve">
+    <value>Season</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
   </data>
 </root>

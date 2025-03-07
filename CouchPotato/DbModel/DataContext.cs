@@ -31,6 +31,9 @@ public partial class DataContext : DbContext
         var conn = new SqliteConnection(@"Data Source=couchpotato.db");
         conn.Open();
         conn.CreateCollation("NO_ACCENTS", StringHelper.AccentInsensitiveComparison);
+        conn.CreateCollation("RESOLUTION_LESSER", StringHelper.IsResolutionLesser);
+        conn.CreateCollation("RESOLUTION_EQUAL", StringHelper.IsResolutionEqual);
+        conn.CreateCollation("RESOLUTION_GREATER", StringHelper.IsResolutionGreater);
         optionsBuilder
             .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning))
             .UseSqlite(conn);

@@ -41,7 +41,6 @@
             <ToggleButton
                 x:Name="AdvancedSearchButton"
                 Grid.Column="3"
-                Command="{Binding AdvancedSearchButtonClickedCommand}"
                 Content="{md:PackIcon Kind=MovieSearchOutline}"
                 IsChecked="{Binding IsAdvancedSearchDialogOpened}"
                 Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" />
@@ -115,119 +114,218 @@
                             </ItemsControl>
                         </HeaderedContentControl>
 
-                        <Grid e:Grid.Cols="auto,*,auto,auto" e:Grid.Rows="auto,auto,auto">
-                            <GroupBox Grid.RowSpan="2" Margin="5">
-                                <GroupBox.Header>
+                        <Grid e:Grid.Cols="auto,*,auto,auto,auto" e:Grid.Rows="auto">
+                            <Grid.Resources>
+                                <Style BasedOn="{StaticResource MaterialDesignFlatToggleButton}" TargetType="CheckBox">
+                                    <Setter Property="Width" Value="32" />
+                                    <Setter Property="Height" Value="32" />
+                                    <Setter Property="Margin" Value="10,5" />
+                                </Style>
+                            </Grid.Resources>
+                            <Border
+                                Grid.Column="0"
+                                Margin="5"
+                                BorderBrush="{StaticResource MaterialDesign.Brush.Primary.Dark}"
+                                BorderThickness="1"
+                                CornerRadius="0,15,0,0">
+                                <Grid e:Grid.Cols="auto,auto,auto,*" e:Grid.Rows="*,*">
+                                    <Border
+                                        Grid.Column="3"
+                                        Padding="5"
+                                        HorizontalAlignment="Right"
+                                        Background="{StaticResource MaterialDesign.Brush.Primary.Dark}"
+                                        CornerRadius="0,15,0,15">
+                                        <TextBlock VerticalAlignment="Center" Text="{x:Static p:Loc.ReleaseDate}" />
+                                    </Border>
                                     <CheckBox
-                                        Content="{x:Static p:Loc.ReleaseDate}"
-                                        IsChecked="{Binding DateActive}"
-                                        Style="{StaticResource MaterialDesignUserForegroundCheckBox}" />
-                                </GroupBox.Header>
-                                <UniformGrid Columns="3" IsEnabled="{Binding DateActive, Mode=TwoWay}">
-                                    <RadioButton
-                                        Margin="5,0"
-                                        Content="Avant"
-                                        IsChecked="{Binding IsDateBefore,
+                                        Grid.Column="0"
+                                        Content="{md:PackIcon Kind=LessThan}"
+                                        IsChecked="{Binding HasDateBefore,
                                                             Mode=TwoWay}" />
-                                    <RadioButton
-                                        Margin="5,0"
-                                        Content="Après"
-                                        IsChecked="{Binding IsDateBefore,
-                                                            Mode=TwoWay,
-                                                            Converter={c:RevertBooleanConverter}}" />
+                                    <CheckBox
+                                        Grid.Column="1"
+                                        Content="{md:PackIcon Kind=Equal}"
+                                        IsChecked="{Binding HasDateEquals,
+                                                            Mode=TwoWay}" />
+                                    <CheckBox
+                                        Grid.Column="2"
+                                        Content="{md:PackIcon Kind=GreaterThan}"
+                                        IsChecked="{Binding HasDateAfter,
+                                                            Mode=TwoWay}" />
                                     <TextBox
-                                        Margin="5,0"
-                                        md:HintAssist.Hint="Année"
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="4"
+                                        Margin="5"
+                                        md:HintAssist.Hint="{x:Static p:Loc.ReleaseDate}"
                                         md:HintAssist.IsFloating="True"
+                                        IsEnabled="{Binding DateActive}"
                                         Text="{Binding Year,
+                                                       TargetNullValue='',
                                                        Mode=TwoWay}"
                                         TextAlignment="Center" />
-                                </UniformGrid>
-                            </GroupBox>
+                                </Grid>
+                            </Border>
+
                             <TextBox
                                 Grid.Column="1"
-                                Margin="5"
+                                Margin="5,45,5,10"
                                 md:HintAssist.Hint="{x:Static p:Loc.DigitalStorageCode}"
                                 md:HintAssist.IsFloating="True"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                 Text="{Binding DigitalStorageCode,
-                                               Mode=TwoWay}" />
-                            <TextBox
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                Margin="5"
-                                md:HintAssist.Hint="{x:Static p:Loc.DigitalResolution}"
-                                md:HintAssist.IsFloating="True"
-                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                Text="{Binding DigitalResolution,
-                                               Mode=TwoWay}" />
-                            <GroupBox
-                                Grid.RowSpan="2"
+                                               Mode=TwoWay}"
+                                TextAlignment="Center" />
+
+                            <Border
                                 Grid.Column="2"
-                                Margin="5">
-                                <GroupBox.Header>
+                                Margin="5"
+                                BorderBrush="{StaticResource MaterialDesign.Brush.Primary.Dark}"
+                                BorderThickness="1"
+                                CornerRadius="0,15,0,0">
+                                <Grid e:Grid.Cols="auto,auto,auto,*" e:Grid.Rows="*,*">
+                                    <Border
+                                        Grid.Column="3"
+                                        Padding="5"
+                                        HorizontalAlignment="Right"
+                                        Background="{StaticResource MaterialDesign.Brush.Primary.Dark}"
+                                        CornerRadius="0,15,0,15">
+                                        <TextBlock VerticalAlignment="Center" Text="{x:Static p:Loc.DigitalResolution}" />
+                                    </Border>
                                     <CheckBox
-                                        Content="{x:Static p:Loc.TmdbRating}"
-                                        IsChecked="{Binding TmdbRatingActive,
-                                                            Mode=TwoWay}"
-                                        Style="{StaticResource MaterialDesignUserForegroundCheckBox}" />
-                                </GroupBox.Header>
-                                <StackPanel IsEnabled="{Binding TmdbRatingActive}" Orientation="Horizontal">
-                                    <RadioButton
-                                        Margin="5,0"
-                                        Content="{x:Static p:Loc.Less}"
-                                        IsChecked="{Binding IsTmdbRatingLesser,
+                                        Grid.Column="0"
+                                        Content="{md:PackIcon Kind=LessThan}"
+                                        IsChecked="{Binding HasDigitalResolutionLesser,
                                                             Mode=TwoWay}" />
-                                    <RadioButton
-                                        Margin="5,0"
-                                        Content="{x:Static p:Loc.More}"
-                                        IsChecked="{Binding IsTmdbRatingLesser,
-                                                            Mode=TwoWay,
-                                                            Converter={c:RevertBooleanConverter}}" />
-                                    <md:RatingBar Max="10" Value="{Binding TmdbRating, Mode=TwoWay}" />
-                                </StackPanel>
-                            </GroupBox>
-                            <GroupBox
-                                Grid.RowSpan="2"
+                                    <CheckBox
+                                        Grid.Column="1"
+                                        Content="{md:PackIcon Kind=Equal}"
+                                        IsChecked="{Binding HasDigitalResolutionEquals,
+                                                            Mode=TwoWay}" />
+                                    <CheckBox
+                                        Grid.Column="2"
+                                        Content="{md:PackIcon Kind=GreaterThan}"
+                                        IsChecked="{Binding HasDigitalResolutionGreater,
+                                                            Mode=TwoWay}" />
+                                    <TextBox
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="4"
+                                        Margin="5"
+                                        md:HintAssist.Hint="{x:Static p:Loc.DigitalResolution}"
+                                        md:HintAssist.IsFloating="True"
+                                        IsEnabled="{Binding DigitalResolutionActive}"
+                                        Text="{Binding DigitalResolution,
+                                                       TargetNullValue='',
+                                                       Mode=TwoWay}"
+                                        TextAlignment="Center" />
+                                </Grid>
+                            </Border>
+
+                            <Border
                                 Grid.Column="3"
-                                Margin="5">
-                                <GroupBox.Header>
+                                Margin="5"
+                                BorderBrush="{StaticResource MaterialDesign.Brush.Primary.Dark}"
+                                BorderThickness="1"
+                                CornerRadius="0,15,0,0">
+                                <Grid e:Grid.Cols="auto,auto,auto,*" e:Grid.Rows="*,*">
+                                    <Border
+                                        Grid.Column="3"
+                                        Padding="5"
+                                        HorizontalAlignment="Right"
+                                        Background="{StaticResource MaterialDesign.Brush.Primary.Dark}"
+                                        CornerRadius="0,15,0,15">
+                                        <TextBlock VerticalAlignment="Center" Text="{x:Static p:Loc.TmdbRating}" />
+                                    </Border>
                                     <CheckBox
-                                        Content="{x:Static p:Loc.PersonalRating}"
-                                        IsChecked="{Binding PersonalRatingActive,
-                                                            Mode=TwoWay}"
-                                        Style="{StaticResource MaterialDesignUserForegroundCheckBox}" />
-                                </GroupBox.Header>
-                                <StackPanel IsEnabled="{Binding PersonalRatingActive}" Orientation="Horizontal">
-                                    <RadioButton
-                                        Margin="5,0"
-                                        Content="{x:Static p:Loc.Less}"
-                                        IsChecked="{Binding IsPersonalRatingLesser,
+                                        Grid.Column="0"
+                                        Content="{md:PackIcon Kind=LessThan}"
+                                        IsChecked="{Binding HasTmdbRatingLesser,
                                                             Mode=TwoWay}" />
-                                    <RadioButton
-                                        Margin="5,0"
-                                        Content="{x:Static p:Loc.More}"
-                                        IsChecked="{Binding IsPersonalRatingLesser,
-                                                            Mode=TwoWay,
-                                                            Converter={c:RevertBooleanConverter}}" />
-                                    <md:RatingBar Max="10" Value="{Binding PersonalRating, Mode=TwoWay}" />
-                                </StackPanel>
-                            </GroupBox>
+                                    <CheckBox
+                                        Grid.Column="1"
+                                        Content="{md:PackIcon Kind=Equal}"
+                                        IsChecked="{Binding HasTmdbRatingEquals,
+                                                            Mode=TwoWay}" />
+                                    <CheckBox
+                                        Grid.Column="2"
+                                        Content="{md:PackIcon Kind=GreaterThan}"
+                                        IsChecked="{Binding HasTmdbRatingGreater,
+                                                            Mode=TwoWay}" />
+                                    <md:RatingBar
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="4"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        IsEnabled="{Binding TmdbRatingActive}"
+                                        Max="10"
+                                        Value="{Binding TmdbRating,
+                                                        Mode=TwoWay}" />
+                                </Grid>
+                            </Border>
+
+                            <Border
+                                Grid.Column="4"
+                                Margin="5"
+                                BorderBrush="{StaticResource MaterialDesign.Brush.Primary.Dark}"
+                                BorderThickness="1"
+                                CornerRadius="0,15,0,0">
+                                <Grid e:Grid.Cols="auto,auto,auto,*" e:Grid.Rows="*,*">
+                                    <Border
+                                        Grid.Column="3"
+                                        Padding="5"
+                                        HorizontalAlignment="Right"
+                                        Background="{StaticResource MaterialDesign.Brush.Primary.Dark}"
+                                        CornerRadius="0,15,0,15">
+                                        <TextBlock VerticalAlignment="Center" Text="{x:Static p:Loc.PersonalRating}" />
+                                    </Border>
+                                    <CheckBox
+                                        Grid.Column="0"
+                                        Content="{md:PackIcon Kind=LessThan}"
+                                        IsChecked="{Binding HasPersonalRatingLesser,
+                                                            Mode=TwoWay}" />
+                                    <CheckBox
+                                        Grid.Column="1"
+                                        Content="{md:PackIcon Kind=Equal}"
+                                        IsChecked="{Binding HasPersonalRatingEquals,
+                                                            Mode=TwoWay}" />
+                                    <CheckBox
+                                        Grid.Column="2"
+                                        Content="{md:PackIcon Kind=GreaterThan}"
+                                        IsChecked="{Binding HasPersonalRatingGreater,
+                                                            Mode=TwoWay}" />
+                                    <md:RatingBar
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="4"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        IsEnabled="{Binding PersonalRatingActive}"
+                                        Max="10"
+                                        Value="{Binding PersonalRating,
+                                                        Mode=TwoWay}" />
+                                </Grid>
+                            </Border>
                         </Grid>
 
-                        <Button
-                            Margin="5"
-                            Command="{Binding AdvancedSearchCommand}"
-                            Content="Rechercher">
-                            <b:Interaction.Triggers>
-                                <b:EventTrigger EventName="Click">
-                                    <b:ChangePropertyAction
-                                        PropertyName="IsChecked"
-                                        TargetName="AdvancedSearchButton"
-                                        Value="False" />
-                                </b:EventTrigger>
-                            </b:Interaction.Triggers>
-                        </Button>
+                        <Grid e:Grid.Cols="3*,*">
+                            <Button
+                                Margin="5"
+                                Command="{Binding AdvancedSearchCommand}"
+                                Content="{x:Static p:Loc.Search}">
+                                <b:Interaction.Triggers>
+                                    <b:EventTrigger EventName="Click">
+                                        <b:ChangePropertyAction
+                                            PropertyName="IsChecked"
+                                            TargetName="AdvancedSearchButton"
+                                            Value="False" />
+                                    </b:EventTrigger>
+                                </b:Interaction.Triggers>
+                            </Button>
+
+                            <Button
+                                Grid.Column="1"
+                                Margin="5"
+                                Command="{Binding ResetAdvancedSearchCommand}"
+                                Content="{x:Static p:Loc.Reset}" />
+                        </Grid>
 
                     </StackPanel>
                 </Border>

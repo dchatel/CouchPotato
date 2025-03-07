@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -30,52 +30,62 @@ public partial class VideoExplorerViewModel : ContentViewModel
     private string _actors = "";
     [ObservableProperty]
     private string _roles = "";
-    private bool _dateActive = false;
-    public bool DateActive
-    {
-        get => _dateActive;
-        set {
-            SetProperty(ref _dateActive, value);
-            IsDateBefore = false;
-            Year = null;
-        }
-    }
+
+    public bool DateActive => HasDateEquals || HasDateBefore || HasDateAfter;
     [ObservableProperty]
-    private bool _isDateBefore = false;
+    [NotifyPropertyChangedFor(nameof(DateActive))]
+    private bool _hasDateBefore = false;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DateActive))]
+    private bool _hasDateEquals = false;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DateActive))]
+    private bool _hasDateAfter = false;
     [ObservableProperty]
     private int? _year = null;
+
     [ObservableProperty]
     private string _digitalStorageCode = "";
+
+    public bool DigitalResolutionActive => HasDigitalResolutionLesser || HasDigitalResolutionEquals || HasDigitalResolutionGreater;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DigitalResolutionActive))]
+    private bool _hasDigitalResolutionLesser = false;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DigitalResolutionActive))]
+    private bool _hasDigitalResolutionEquals = false;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DigitalResolutionActive))]
+    private bool _hasDigitalResolutionGreater = false;
     [ObservableProperty]
     private string _digitalResolution = "";
-    private bool _tmdbRatingActive = false;
-    public bool TmdbRatingActive
-    {
-        get => _tmdbRatingActive;
-        set {
-            SetProperty(ref _tmdbRatingActive, value);
-            IsTmdbRatingLesser = false;
-            TmdbRating = null;
-        }
-    }
+
+    public bool TmdbRatingActive => HasTmdbRatingEquals || HasTmdbRatingLesser || HasTmdbRatingGreater;
     [ObservableProperty]
-    private bool _isTmdbRatingLesser = false;
+    [NotifyPropertyChangedFor(nameof(TmdbRatingActive))]
+    private bool _hasTmdbRatingLesser = false;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(TmdbRatingActive))]
+    private bool _hasTmdbRatingEquals = false;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(TmdbRatingActive))]
+    private bool _hasTmdbRatingGreater = false;
     [ObservableProperty]
     private double? _tmdbRating = null;
-    private bool _personalRatingActive = false;
-    public bool PersonalRatingActive
-    {
-        get => _personalRatingActive;
-        set {
-            SetProperty(ref _personalRatingActive, value);
-            IsPersonalRatingLesser = false;
-            PersonalRating = null;
-        }
-    }
+
+    public bool PersonalRatingActive => HasPersonalRatingEquals || HasPersonalRatingLesser || HasPersonalRatingGreater;
     [ObservableProperty]
-    private bool _isPersonalRatingLesser = false;
+    [NotifyPropertyChangedFor(nameof(PersonalRatingActive))]
+    private bool _hasPersonalRatingLesser = false;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PersonalRatingActive))]
+    private bool _hasPersonalRatingEquals = false;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PersonalRatingActive))]
+    private bool _hasPersonalRatingGreater = false;
     [ObservableProperty]
     private int? _personalRating = null;
+
     [ObservableProperty]
     private int? _runtime = null;
 
@@ -85,8 +95,8 @@ public partial class VideoExplorerViewModel : ContentViewModel
     public ICommand AddCommand { get; }
     public ICommand EditCommand { get; }
     public ICommand SearchCommand { get; }
-    public ICommand AdvancedSearchButtonClickedCommand { get; }
     public ICommand AdvancedSearchCommand { get; }
+    public ICommand ResetAdvancedSearchCommand { get; }
 
     public VideoSearchResultViewModel? SelectedResult
     {
@@ -110,29 +120,48 @@ public partial class VideoExplorerViewModel : ContentViewModel
 
     public VideoExplorerViewModel() : base(autoClose: false)
     {
+        PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(DateActive) && !DateActive) Year = null;
+            if (e.PropertyName == nameof(DigitalResolutionActive) && !DigitalResolutionActive) DigitalResolution = "";
+            if (e.PropertyName == nameof(TmdbRatingActive) && !TmdbRatingActive) TmdbRating = null;
+            if (e.PropertyName == nameof(PersonalRatingActive) && !PersonalRatingActive) PersonalRating = null;
+        };
         SearchCommand = new AsyncRelayCommand(SearchAsync);
         AddCommand = new AsyncRelayCommand(Add);
         EditCommand = new AsyncRelayCommand(Edit);
-        AdvancedSearchButtonClickedCommand = new RelayCommand(AdvancedSearchButtonClicked);
         AdvancedSearchCommand = new AsyncRelayCommand(AdvancedSearch);
+        ResetAdvancedSearchCommand = new RelayCommand(ResetAdvancedSearch);
         using var db = new DataContext();
         Genres = db.Genres.ToArray().Select(genre => new Togglable<Genre>(genre, isSelected: false)).ToArray();
     }
 
-    private void AdvancedSearchButtonClicked()
+    private void ResetAdvancedSearch()
     {
         Title = "";
         Actors = "";
         Roles = "";
-        DateActive = false;
-        DigitalStorageCode = "";
-        DigitalResolution = "";
-        TmdbRatingActive = false;
-        PersonalRatingActive = false;
         foreach (var item in Genres)
         {
             item.IsSelected = false;
         }
+        Year = null;
+        HasDateBefore = false;
+        HasDateEquals = false;
+        HasDateAfter = false;
+        DigitalStorageCode = "";
+        DigitalResolution = "";
+        HasDigitalResolutionLesser = false;
+        HasDigitalResolutionEquals = false;
+        HasDigitalResolutionGreater = false;
+        TmdbRating = null;
+        HasTmdbRatingLesser = false;
+        HasTmdbRatingEquals = false;
+        HasTmdbRatingGreater = false;
+        PersonalRating = null;
+        HasPersonalRatingLesser = false;
+        HasPersonalRatingEquals = false;
+        HasPersonalRatingGreater = false;
     }
 
     private async Task Add()
@@ -206,28 +235,51 @@ public partial class VideoExplorerViewModel : ContentViewModel
         var selectedGenres = Genres.Where(g => g.IsSelected == true).Select(g => g.Value.Id).ToArray();
         var unselectedGenres = Genres.Where(g => g.IsSelected is null).Select(g => g.Value.Id).ToArray();
 
-        //SearchResults = new ObservableCollection<VideoSearchResultViewModel>(await db.Videos
-        //    .Where(video => video.Title.ToLower().Contains((Title ?? "").ToLower())
-        //    && Actors.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).All(actor => video.Roles.Any(role => role.Person.Name.ToLower().Contains(actor.ToLower())))
-        //    && Roles.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).All(role => video.Roles.Any(r => !string.IsNullOrEmpty(r.Characters) && r.Characters.ToLower().Contains(role.ToLower())))
-        //    && selectedGenres.All(g => video.Genres.Any(vg => vg.Id == g))
-        //    && unselectedGenres.All(g => !video.Genres.Any(vg => vg.Id == g))
-        //    )
-        //    .Select(video => new VideoSearchResultViewModel(VideoViewerViewModel.Create(video)))
-        //    .ToArrayAsync());
-
         var query = db.Videos.AsQueryable();
         if (!string.IsNullOrWhiteSpace(Title)) query = query.Where(video => EF.Functions.Collate(video.Title, "NO_ACCENTS") == Title);
         if (!string.IsNullOrWhiteSpace(Actors)) query = query.Where(video => Actors.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).All(actor => video.Roles.Any(role => EF.Functions.Collate(role.Person.Name, "NO_ACCENTS") == actor)));
         if (!string.IsNullOrWhiteSpace(Roles)) query = query.Where(video => Roles.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).All(role => video.Roles.Any(r => !string.IsNullOrEmpty(r.Characters) && EF.Functions.Collate(r.Characters, "NO_ACCENTS") == role)));
+
         if (selectedGenres.Length != 0) query = query.Where(video => selectedGenres.All(g => video.Genres.Any(vg => vg.Id == g)));
         if (unselectedGenres.Length != 0) query = query.Where(video => unselectedGenres.All(g => !video.Genres.Any(vg => vg.Id == g)));
-        if (DateActive && IsDateBefore && Year is not null) query = query.Where(video => video.ReleaseDate < new DateTime((int)Year, 1, 1, 0, 0, 0));
-        if (DateActive && !IsDateBefore && Year is not null) query = query.Where(video => video.ReleaseDate > new DateTime((int)Year, 12, 31, 23, 59, 59));
+
+        if (DateActive && Year is not null)
+        {
+            var pred = PredicateBuilder.False<Video>();
+            if (HasDateBefore) pred = pred.Or(video => video.ReleaseDate < new DateTime((int)Year, 1, 1, 0, 0, 0));
+            if (HasDateEquals) pred = pred.Or(video => video.ReleaseDate >= new DateTime((int)Year, 1, 1, 0, 0, 0) && video.ReleaseDate <= new DateTime((int)Year, 12, 31, 23, 59, 59));
+            if (HasDateAfter) pred = pred.Or(video => video.ReleaseDate > new DateTime((int)Year, 12, 31, 23, 59, 59));
+            query = query.Where(pred);
+        }
+
         if (!string.IsNullOrWhiteSpace(DigitalStorageCode)) query = query.Where(video => EF.Functions.Collate(video.DigitalStorageCode, "NO_ACCENTS") == DigitalStorageCode);
 
-        if (TmdbRatingActive) query = query.Where(video => (video.TmdbRating < TmdbRating) == IsTmdbRatingLesser || video.TmdbRating == TmdbRating);
-        if(PersonalRatingActive) query = query.Where(Video=>(Video.PersonalRating < PersonalRating)== IsPersonalRatingLesser || Video.PersonalRating == PersonalRating);
+        if (DigitalResolutionActive)
+        {
+            var pred = PredicateBuilder.False<Video>();
+            if (HasDigitalResolutionLesser) pred = pred.Or(video => EF.Functions.Collate(video.DigitalResolution, "RESOLUTION_LESSER") == DigitalResolution);
+            if (HasDigitalResolutionEquals) pred = pred.Or(video => EF.Functions.Collate(video.DigitalResolution, "RESOLUTION_EQUAL") == DigitalResolution);
+            if (HasDigitalResolutionGreater) pred = pred.Or(video => EF.Functions.Collate(video.DigitalResolution, "RESOLUTION_GREATER") == DigitalResolution);
+            query = query.Where(pred);
+        }
+
+        if (TmdbRatingActive && TmdbRating is not null)
+        {
+            var pred = PredicateBuilder.False<Video>();
+            if (HasTmdbRatingLesser) pred = pred.Or(video => video.TmdbRating < TmdbRating * 10);
+            if (HasTmdbRatingEquals) pred = pred.Or(video => video.TmdbRating == TmdbRating * 10);
+            if (HasTmdbRatingGreater) pred = pred.Or(video => video.TmdbRating > TmdbRating * 10);
+            query = query.Where(pred);
+        }
+
+        if (PersonalRatingActive && PersonalRating is not null)
+        {
+            var pred = PredicateBuilder.False<Video>();
+            if (HasPersonalRatingLesser) pred = pred.Or(video => video.PersonalRating < PersonalRating);
+            if (HasPersonalRatingEquals) pred = pred.Or(video => video.PersonalRating == PersonalRating);
+            if (HasPersonalRatingGreater) pred = pred.Or(video => video.PersonalRating > PersonalRating);
+            query = query.Where(pred);
+        }
 
         var results = await query
             .Select(video => new VideoSearchResultViewModel(VideoViewerViewModel.Create(video)))

@@ -286,6 +286,15 @@ namespace CouchPotato.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Equals.
+        /// </summary>
+        public static string Equals {
+            get {
+                return ResourceManager.GetString("Equals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Select the folder containing Videlib images.
         /// </summary>
         public static string FileSystemSelectVidelibImageFolder {
@@ -318,6 +327,15 @@ namespace CouchPotato.Properties {
         public static string InputCharacterRole {
             get {
                 return ResourceManager.GetString("InputCharacterRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à {0} is not a valid resolution..
+        /// </summary>
+        public static string InvalidResolution {
+            get {
+                return ResourceManager.GetString("InvalidResolution", resourceCulture);
             }
         }
         
@@ -457,6 +475,15 @@ namespace CouchPotato.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Reset.
+        /// </summary>
+        public static string Reset {
+            get {
+                return ResourceManager.GetString("Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Roles.
         /// </summary>
         public static string Roles {
@@ -471,6 +498,15 @@ namespace CouchPotato.Properties {
         public static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Search.
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
             }
         }
         
