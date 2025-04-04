@@ -381,7 +381,7 @@ public class SeasonViewModel
 
     public SeasonViewModel(VideoEditorViewModel videoEditorViewModel, Season season)
     {
-        AddEpisodeCommand = new AsyncRelayCommand(AddEpisode);
+        AddEpisodeCommand = new AsyncRelayCommand<Season>(AddEpisode);
         EditEpisodeCommand = new AsyncRelayCommand<Episode>(EditEpisode);
         DeleteEpisodeCommand = new RelayCommand<Episode>(RemoveEpisode);
         _videoEditorViewModel = videoEditorViewModel;
@@ -421,9 +421,15 @@ public class SeasonViewModel
         }
     }
 
-    private async Task AddEpisode()
+    private async Task AddEpisode(Season? season)
     {
-        var episode = new Episode();
+        if (season is null) return;
+
+        var episode = new Episode
+        {
+            Season = season,
+            EpisodeNumber = Episodes.Count == 0 ? 1 : Episodes.Max(e => e.EpisodeNumber) + 1,
+        };
         if (await new EpisodeEditorViewModel(_videoEditorViewModel, episode).Show())
         {
             Episodes.Add(episode);
@@ -453,6 +459,14 @@ public class EpisodeEditorViewModel : ContentViewModel
     private readonly VideoEditorViewModel _videoEditorViewModel;
 
     public Episode Episode { get; set; }
+    public string? ImageUrl
+    {
+        get => Episode.ImageUrl;
+        set {
+            Episode.ImageUrl = value;
+            OnPropertyChanged();
+        }
+    }
     public ICommand ChangeEpisodeImageCommand { get; }
 
     public EpisodeEditorViewModel(VideoEditorViewModel videoEditorViewModel, Episode episode) : base(true)
@@ -460,7 +474,7 @@ public class EpisodeEditorViewModel : ContentViewModel
         _videoEditorViewModel = videoEditorViewModel;
         Episode = episode;
 
-        ChangeEpisodeImageCommand = new RelayCommand(() => Episode.ImageUrl = ImageChange.AddImageChange(
+        ChangeEpisodeImageCommand = new RelayCommand(() => ImageUrl = ImageChange.AddImageChange(
             Episode.ImageUrl,
             $"{_videoEditorViewModel.Video.Title}",
             $"S{Episode.Season.SeasonNumber}E{Episode.EpisodeNumber}"

@@ -72,6 +72,7 @@
                                 Margin="5"
                                 md:ButtonAssist.CornerRadius="20,0,0,0"
                                 Command="{Binding AddEpisodeCommand}"
+                                CommandParameter="{Binding Season}"
                                 Content="{md:PackIcon Kind=Add,
                                                       Size=24}"
                                 Style="{StaticResource MaterialDesignFlatButton}" />
@@ -215,7 +216,8 @@
                     Grid.RowSpan="3"
                     Grid.Column="0"
                     Width="200"
-                    Source="{Binding Episode.ImageUrl,
+                    Source="{Binding ImageUrl,
+                                     Mode=TwoWay,
                                      Converter={c:ImageConverter},
                                      IsAsync=True}" />
                 <Button
