@@ -10,7 +10,7 @@
 
     <DataTemplate x:Key="header" DataType="{x:Type l:VideoViewerViewModel}">
         <Border VerticalAlignment="Top" Background="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}, Path=Background}">
-            <Grid e:Grid.Cols="auto,auto,auto,*,auto,auto,auto" e:Grid.Rows="auto,auto,auto,auto">
+            <Grid e:Grid.Cols="auto,auto,auto,auto,*,auto,auto,auto" e:Grid.Rows="auto,auto,auto,auto">
                 <Grid.Resources>
                     <Style TargetType="TextBlock">
                         <Setter Property="FontSize" Value="18" />
@@ -69,6 +69,12 @@
                 <HeaderedContentControl
                     Grid.Row="2"
                     Grid.Column="2"
+                    Header="{x:Static p:Loc.Runtime}">
+                    <TextBlock FontSize="18" Text="{Binding Video.Runtime, StringFormat=\{0\} min}" />
+                </HeaderedContentControl>
+                <HeaderedContentControl
+                    Grid.Row="2"
+                    Grid.Column="3"
                     HorizontalAlignment="Center"
                     Header="{x:Static p:Loc.TmdbRating}">
                     <StackPanel Orientation="Horizontal">
@@ -81,7 +87,7 @@
 
                 <HeaderedContentControl
                     Grid.Row="2"
-                    Grid.Column="4"
+                    Grid.Column="5"
                     HorizontalAlignment="Center"
                     Foreground="Yellow"
                     Header="{x:Static p:Loc.PersonalRating}">
@@ -98,7 +104,7 @@
                 </HeaderedContentControl>
                 <HeaderedContentControl
                     Grid.Row="2"
-                    Grid.Column="5"
+                    Grid.Column="6"
                     Foreground="Yellow"
                     Header="{x:Static p:Loc.PhysicalStorage}">
                     <TextBlock FontSize="18">
@@ -108,7 +114,7 @@
                 </HeaderedContentControl>
                 <HeaderedContentControl
                     Grid.Row="2"
-                    Grid.Column="6"
+                    Grid.Column="7"
                     Foreground="Yellow"
                     Header="{x:Static p:Loc.DigitalStorageCode}">
                     <TextBlock FontSize="18">
@@ -120,7 +126,7 @@
 
                 <HeaderedContentControl
                     Grid.Row="3"
-                    Grid.ColumnSpan="7"
+                    Grid.ColumnSpan="8"
                     Margin="20,0,10,10"
                     Header="Genres">
                     <HeaderedContentControl.Resources>

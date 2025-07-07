@@ -493,6 +493,15 @@ namespace CouchPotato.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Runtime.
+        /// </summary>
+        public static string Runtime {
+            get {
+                return ResourceManager.GetString("Runtime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Save.
         /// </summary>
         public static string Save {

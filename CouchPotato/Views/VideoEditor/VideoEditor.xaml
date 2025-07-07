@@ -126,7 +126,7 @@
                             FontSize="24"
                             Text="{Binding Video.Title}" />
                         <TextBox md:HintAssist.Hint="{x:Static p:Loc.OriginalTitle}" Text="{Binding Video.OriginalTitle}" />
-                        <Grid e:Grid.Cols="*,*,*,*,auto,2*,auto,3*">
+                        <Grid e:Grid.Cols="auto,auto,auto,auto,auto,auto,2*,auto,3*">
                             <TextBox
                                 Grid.Column="0"
                                 md:HintAssist.Hint="{x:Static p:Loc.Version}"
@@ -137,6 +137,7 @@
                                 Text="{Binding Video.Origin}" />
                             <DatePicker
                                 Grid.Column="2"
+                                Margin="5"
                                 md:HintAssist.Hint="{x:Static p:Loc.ReleaseDate}"
                                 FontSize="16"
                                 SelectedDate="{Binding Video.ReleaseDate}"
@@ -145,11 +146,17 @@
                                 Grid.Column="3"
                                 md:HintAssist.Hint="{x:Static p:Loc.Status}"
                                 Text="{Binding Video.Status}" />
-                            <Separator
+                            <TextBox
                                 Grid.Column="4"
+                                md:HintAssist.Hint="{x:Static p:Loc.Runtime}"
+                                md:TextFieldAssist.SuffixText=" min"
+                                Text="{Binding Video.Runtime}"
+                                TextAlignment="Right" />
+                            <Separator
+                                Grid.Column="5"
                                 BorderThickness="1"
                                 Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-                            <UniformGrid Grid.Column="5" Rows="1">
+                            <UniformGrid Grid.Column="6" Rows="1">
                                 <TextBox
                                     md:HintAssist.Hint="{x:Static p:Loc.PhysicalStorage}"
                                     Foreground="Yellow"
@@ -160,10 +167,10 @@
                                     Text="{Binding Video.PhysicalStorageCode}" />
                             </UniformGrid>
                             <Separator
-                                Grid.Column="6"
+                                Grid.Column="7"
                                 BorderThickness="1"
                                 Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-                            <UniformGrid Grid.Column="7" Rows="1">
+                            <UniformGrid Grid.Column="8" Rows="1">
                                 <TextBox
                                     md:HintAssist.Hint="{x:Static p:Loc.DigitalStorageCode}"
                                     Foreground="Yellow"

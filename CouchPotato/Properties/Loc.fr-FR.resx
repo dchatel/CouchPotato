@@ -306,4 +306,7 @@
   <data name="Reset" xml:space="preserve">
     <value>Réinitialiser</value>
   </data>
+  <data name="Runtime" xml:space="preserve">
+    <value>Durée</value>
+  </data>
 </root>

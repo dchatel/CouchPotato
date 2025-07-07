@@ -89,7 +89,9 @@
                 <Border
                     Grid.Column="1"
                     Margin="0,5,5,5"
-                    Background="{Binding ImageUrl, Converter={c:ImageBrushConverter}, IsAsync=True}"
+                    Background="{Binding ImageUrl,
+                                         Converter={c:ImageBrushConverter},
+                                         IsAsync=True}"
                     CornerRadius="5" />
                 <TextBlock
                     Grid.Row="1"
