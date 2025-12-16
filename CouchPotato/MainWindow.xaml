@@ -43,7 +43,7 @@
         <WindowChrome CaptionHeight="48" UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
     <Window.Resources>
-        <local:ContentDataTemplateSelector x:Key="contentDataTemplateSelector" />
+        <c:ContentDataTemplateSelector x:Key="contentDataTemplateSelector" />
     </Window.Resources>
     <b:Interaction.Triggers>
         <b:EventTrigger EventName="Loaded">
@@ -72,9 +72,9 @@
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
                     Foreground="White"
-                    IsEnabled="{Binding CurrentPage.HamburgerMenu,
-                                        Converter={c:NotNullConverter}}"
-                    IsTabStop="False"
+                    IsEnabled="{Binding CurrentPage, Converter={c:HasContentTemplateConverter Menu}}"
+
+                IsTabStop="False"
                     WindowChrome.IsHitTestVisibleInChrome="True">
                     <ToggleButton.Style>
                         <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="ToggleButton">

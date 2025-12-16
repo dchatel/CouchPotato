@@ -406,4 +406,11 @@
 
         </Grid>
     </DataTemplate>
+
+    <DataTemplate x:Key="VideoExplorerMenu" DataType="{x:Type l:VideoExplorerViewModel}">
+        <Menu>
+            <MenuItem Header="Scanner" />
+        </Menu>
+    </DataTemplate>
+
 </ResourceDictionary>

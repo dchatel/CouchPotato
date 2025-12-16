@@ -24,8 +24,8 @@ public abstract partial class ContentViewModel : ObservableObject
 
     [ObservableProperty]
     bool _canAutoClose;
-    [ObservableProperty]
-    object? _hamburgerMenu;
+    //[ObservableProperty]
+    //object? _hamburgerMenu;
 
     protected ContentViewModel(bool autoClose)
     {
