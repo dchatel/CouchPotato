@@ -339,8 +339,8 @@
                 </CollectionViewSource>
             </Grid.Resources>
 
-            <StackPanel Margin="20,0" Orientation="Vertical">
-                <Button Content="{x:Static p:Loc.TVShowInfo}">
+            <Grid e:Grid.Rows="auto,*,auto">
+                <Button Grid.Row="0" Content="{x:Static p:Loc.TVShowInfo}">
                     <b:Interaction.Triggers>
                         <b:EventTrigger EventName="Click">
                             <b:ChangePropertyAction
@@ -350,7 +350,10 @@
                         </b:EventTrigger>
                     </b:Interaction.Triggers>
                 </Button>
-                <ListBox x:Name="seasonlist" Margin="0,20,0,0">
+                <ListBox
+                    x:Name="seasonlist"
+                    Grid.Row="1"
+                    Margin="0,20,0,0">
                     <ListBox.ItemsSource>
                         <CompositeCollection>
                             <CollectionContainer Collection="{Binding Source={StaticResource Seasons}}" />
@@ -366,7 +369,7 @@
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                         </Style>
                     </ListBox.ItemContainerStyle>
-                    <ListBox.ItemTemplate>
+                    <ListBox.Resources>
                         <DataTemplate DataType="{x:Type l:SeasonViewModel}">
                             <Grid e:Grid.Cols="*, auto">
                                 <TextBlock
@@ -387,13 +390,14 @@
                                     Style="{StaticResource MaterialDesignFlatSecondaryButton}" />
                             </Grid>
                         </DataTemplate>
-                    </ListBox.ItemTemplate>
+                    </ListBox.Resources>
                 </ListBox>
                 <Button
+                    Grid.Row="2"
                     Command="{Binding AddSeasonCommand}"
                     Content="{md:PackIcon Kind=Add}"
                     Style="{StaticResource MaterialDesignFlatButton}" />
-            </StackPanel>
+            </Grid>
 
             <ContentControl Grid.Column="1">
                 <ContentControl.Style>
