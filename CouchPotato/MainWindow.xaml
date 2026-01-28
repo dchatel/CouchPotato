@@ -12,29 +12,19 @@
     xmlns:p="clr-namespace:CouchPotato.Properties"
     xmlns:v="clr-namespace:CouchPotato.Views"
     Title="Couch Potato"
-    Width="{Binding MainWindowWidth,
-                    Source={x:Static p:Config.Default},
-                    Mode=TwoWay}"
-    Height="{Binding MainWindowHeight,
-                     Source={x:Static p:Config.Default},
-                     Mode=TwoWay}"
+    Width="{Binding MainWindowWidth, Source={x:Static p:Config.Default}, Mode=TwoWay}"
+    Height="{Binding MainWindowHeight, Source={x:Static p:Config.Default}, Mode=TwoWay}"
     d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}"
-    Left="{Binding MainWindowLeft,
-                   Source={x:Static p:Config.Default},
-                   Mode=TwoWay}"
+    Left="{Binding MainWindowLeft, Source={x:Static p:Config.Default}, Mode=TwoWay}"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
-    Top="{Binding MainWindowTop,
-                  Source={x:Static p:Config.Default},
-                  Mode=TwoWay}"
-    WindowState="{Binding MainWindowState,
-                          Source={x:Static p:Config.Default},
-                          Mode=TwoWay}"
+    Top="{Binding MainWindowTop, Source={x:Static p:Config.Default}, Mode=TwoWay}"
+    WindowState="{Binding MainWindowState, Source={x:Static p:Config.Default}, Mode=TwoWay}"
     mc:Ignorable="d">
     <Window.DataContext>
         <local:MainWindowViewModel />
@@ -73,8 +63,7 @@
                     VerticalContentAlignment="Center"
                     Foreground="White"
                     IsEnabled="{Binding CurrentPage, Converter={c:HasContentTemplateConverter Menu}}"
-
-                IsTabStop="False"
+                    IsTabStop="False"
                     WindowChrome.IsHitTestVisibleInChrome="True">
                     <ToggleButton.Style>
                         <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="ToggleButton">
@@ -220,8 +209,7 @@
                 Grid.RowSpan="1"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                IsLeftDrawerOpen="{Binding ElementName=mainmenu_toggle,
-                                           Path=IsChecked}"
+                IsLeftDrawerOpen="{Binding ElementName=mainmenu_toggle, Path=IsChecked}"
                 OpenMode="Modal">
                 <md:DrawerHost.LeftDrawerContent>
                     <ContentPresenter

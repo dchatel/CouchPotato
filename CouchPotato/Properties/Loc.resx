@@ -274,9 +274,9 @@
     <value>Search</value>
   </data>
   <data name="DigitalLocation" xml:space="preserve">
-    <value />
+    <value>Digital Location</value>
   </data>
-  <data name="Actors" xml:space="preserve">
+  <data name="Dos" xml:space="preserve">
     <value>Actors</value>
   </data>
   <data name="Roles" xml:space="preserve">
@@ -308,5 +308,17 @@
   </data>
   <data name="Runtime" xml:space="preserve">
     <value>Runtime</value>
+  </data>
+  <data name="FileSystemSelectFolder" xml:space="preserve">
+    <value>Select a folder</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="ScanFolder" xml:space="preserve">
+    <value>Scan Folder</value>
+  </data>
+  <data name="Actors" xml:space="preserve">
+    <value>Actors</value>
   </data>
 </root>

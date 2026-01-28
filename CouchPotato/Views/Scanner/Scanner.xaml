@@ -1,0 +1,218 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:CouchPotato.Converters"
+    xmlns:e="clr-namespace:CouchPotato.Extensions"
+    xmlns:l="clr-namespace:CouchPotato.Views.Scanner"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:p="clr-namespace:CouchPotato.Properties"
+    xmlns:v="clr-namespace:CouchPotato.Views"
+    xmlns:web="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf">
+
+    <DataTemplate x:Key="ScannerToolbar" DataType="{x:Type l:ScannerViewModel}">
+        <StackPanel Orientation="Horizontal">
+            <StackPanel.Resources>
+                <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="{x:Type Button}">
+                    <Setter Property="Margin" Value="0,0,10,0" />
+                    <Setter Property="ToolTipService.InitialShowDelay" Value="0" />
+                </Style>
+            </StackPanel.Resources>
+
+            <Button
+                Command="{Binding SaveCommand}"
+                Content="{md:PackIcon Kind=ContentSave}"
+                ToolTip="{x:Static p:Loc.Save}" />
+            <Button
+                Command="{Binding CancelCommand}"
+                Content="{md:PackIcon Kind=Cancel}"
+                ToolTip="{x:Static p:Loc.Cancel}" />
+
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ScannerView" DataType="{x:Type l:ScannerViewModel}">
+        <Grid e:Grid.Rows="auto, *,auto">
+            <Grid
+                Margin="20"
+                e:Grid.Cols="400,*,auto"
+                e:Grid.Rows="auto, *, auto">
+                <TextBox
+                    Grid.Column="0"
+                    Margin="10"
+                    md:HintAssist.Hint="{x:Static p:Loc.DigitalStorageCode}"
+                    md:HintAssist.IsFloating="True"
+                    Text="{Binding DigitalStorageCode}" />
+                <TextBox
+                    Grid.Column="1"
+                    Margin="10"
+                    md:HintAssist.Hint="{x:Static p:Loc.Folder}"
+                    md:HintAssist.IsFloating="True"
+                    Text="{Binding Path}" />
+                <Button
+                    Grid.Column="2"
+                    Command="{Binding SelectFolderCommand}"
+                    Content="{md:PackIcon Kind=FolderSearch}" />
+            </Grid>
+            <DataGrid
+                x:Name="datagrid"
+                Grid.Row="1"
+                AutoGenerateColumns="False"
+                HorizontalScrollBarVisibility="Disabled"
+                ItemsSource="{Binding ScannedItems}">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Skip">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="l:ScannedItem">
+                                <RadioButton
+                                    Name="Skip"
+                                    GroupName="Action"
+                                    IsChecked="{Binding IsSkipped, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Add">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="l:ScannedItem">
+                                <RadioButton
+                                    Name="Add"
+                                    GroupName="Action"
+                                    IsChecked="{Binding IsAdded, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Update">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="l:ScannedItem">
+                                <RadioButton
+                                    Name="Update"
+                                    GroupName="Action"
+                                    IsChecked="{Binding IsUpdated, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Confidence" SortMemberPath="Confidence">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="l:ScannedItem">
+                                <ProgressBar
+                                    Maximum="1"
+                                    Minimum="0"
+                                    Value="{Binding Confidence, Mode=OneWay}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding SearchName}"
+                        Header="Name" />
+                    <DataGridTemplateColumn Width="*" Header="Title">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="l:ScannedItem">
+                                <ComboBox
+                                    DisplayMemberPath="Title"
+                                    ItemsSource="{Binding PossibleVideos}"
+                                    SelectedValue="{Binding Video, UpdateSourceTrigger=PropertyChanged, TargetNullValue={}}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn
+                        Binding="{Binding Video.DigitalStorageCode}"
+                        Header="{x:Static p:Loc.DigitalStorageCode}"
+                        IsReadOnly="True" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Grid
+                Grid.Row="2"
+                Height="300"
+                e:Grid.Cols="auto,auto,*"
+                DataContext="{Binding ElementName=datagrid, Path=SelectedItem}">
+                <web:WebView2
+                    Grid.Column="0"
+                    Width="400"
+                    v:VideoBehavior.FilePath="{Binding Filename}" />
+                <Image Grid.Column="1" Source="{Binding Video.PosterUrl, Converter={c:ImageConverter}, IsAsync=True}" />
+                <Grid
+                    Grid.Column="2"
+                    e:Grid.Cols="*,*,*,*,*,*"
+                    e:Grid.Rows="auto,auto,auto">
+                    <Grid.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontSize" Value="18" />
+                        </Style>
+                        <Style TargetType="HeaderedContentControl">
+                            <Setter Property="FontSize" Value="10" />
+                            <Setter Property="Margin" Value="10,10,10,0" />
+                        </Style>
+                    </Grid.Resources>
+
+                    <TextBlock
+                        Grid.ColumnSpan="6"
+                        Padding="20,10,20,0"
+                        HorizontalAlignment="Stretch"
+                        FontSize="48"
+                        FontWeight="Bold"
+                        Text="{Binding Video.Title}"
+                        TextAlignment="Left">
+                        <TextBlock.Effect>
+                            <DropShadowEffect />
+                        </TextBlock.Effect>
+                    </TextBlock>
+
+                    <HeaderedContentControl
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Margin="20,10,10,0"
+                        Header="{x:Static p:Loc.Version}">
+                        <TextBlock FontSize="18" Text="{Binding Video.Version}" />
+                    </HeaderedContentControl>
+                    <HeaderedContentControl
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Header="{x:Static p:Loc.Origin}">
+                        <TextBlock FontSize="18" Text="{Binding Video.Origin}" />
+                    </HeaderedContentControl>
+
+                    <HeaderedContentControl
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Margin="20,10"
+                        Header="{x:Static p:Loc.ReleaseDate}">
+                        <TextBlock FontSize="18" Text="{Binding Video.ReleaseDate, StringFormat='{}{0:MMMM yyyy}'}" />
+                    </HeaderedContentControl>
+                    <HeaderedContentControl
+                        Grid.Row="1"
+                        Grid.Column="3"
+                        Header="{x:Static p:Loc.Status}">
+                        <TextBlock FontSize="18" Text="{Binding Video.Status}" />
+                    </HeaderedContentControl>
+                    <HeaderedContentControl
+                        Grid.Row="1"
+                        Grid.Column="4"
+                        Header="{x:Static p:Loc.Runtime}">
+                        <TextBlock FontSize="18" Text="{Binding Video.Runtime, StringFormat=\{0\} min}" />
+                    </HeaderedContentControl>
+                    <HeaderedContentControl
+                        Grid.Row="1"
+                        Grid.Column="5"
+                        HorizontalAlignment="Center"
+                        Header="{x:Static p:Loc.TmdbRating}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock>
+                                <Run Text="{Binding Video.TmdbRating, StringFormat='{}{0} / 100', TargetNullValue='??'}" />
+                                <Run Text="{Binding Video.TmdbRatingCount, StringFormat='{} ({0})', TargetNullValue=''}" />
+                            </TextBlock>
+                        </StackPanel>
+                    </HeaderedContentControl>
+
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.ColumnSpan="6"
+                        Margin="20"
+                        Text="{Binding Video.Overview}"
+                        TextWrapping="Wrap" />
+                </Grid>
+            </Grid>
+        </Grid>
+    </DataTemplate>
+
+</ResourceDictionary>

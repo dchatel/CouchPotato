@@ -28,8 +28,7 @@
                         e:TextBox.IsInitiallyFocused="True"
                         md:HintAssist.Hint="{Binding HintMessage}"
                         md:HintAssist.IsFloating="True"
-                        Text="{Binding InputText,
-                                       UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Button
                         Grid.Row="1"

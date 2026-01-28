@@ -8,7 +8,8 @@
     xmlns:p="clr-namespace:CouchPotato.Properties"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase">
 
-    <DataTemplate x:Key="header" DataType="{x:Type l:VideoViewerViewModel}">
+    <DataTemplate x:Key="header">
+        <!--DataType="{x:Type l:VideoViewerViewModel}">-->
         <Border VerticalAlignment="Top" Background="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}, Path=Background}">
             <Grid e:Grid.Cols="auto,auto,auto,auto,*,auto,auto,auto" e:Grid.Rows="auto,auto,auto,auto">
                 <Grid.Resources>

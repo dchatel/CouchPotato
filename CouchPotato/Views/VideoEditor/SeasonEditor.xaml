@@ -113,8 +113,7 @@
                                             Margin="0,0,0,5"
                                             HorizontalAlignment="Right"
                                             VerticalAlignment="Top"
-                                            Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl},
-                                                              Path=DataContext.EditEpisodeCommand}"
+                                            Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.EditEpisodeCommand}"
                                             CommandParameter="{Binding}"
                                             Content="{md:PackIcon Kind=Edit,
                                                                   Size=24}"
@@ -122,8 +121,7 @@
                                         <Button
                                             HorizontalAlignment="Right"
                                             VerticalAlignment="Top"
-                                            Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl},
-                                                              Path=DataContext.DeleteEpisodeCommand}"
+                                            Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.DeleteEpisodeCommand}"
                                             CommandParameter="{Binding}"
                                             Content="{md:PackIcon Kind=Remove,
                                                                   Size=24}"
@@ -216,10 +214,7 @@
                     Grid.RowSpan="3"
                     Grid.Column="0"
                     Width="200"
-                    Source="{Binding ImageUrl,
-                                     Mode=TwoWay,
-                                     Converter={c:ImageConverter},
-                                     IsAsync=True}" />
+                    Source="{Binding ImageUrl, Mode=TwoWay, Converter={c:ImageConverter}, IsAsync=True}" />
                 <Button
                     Grid.Row="0"
                     Grid.RowSpan="3"
@@ -235,22 +230,19 @@
                     Grid.Row="0"
                     Grid.Column="1"
                     md:HintAssist.Hint="{x:Static p:Loc.Number}"
-                    Text="{Binding Episode.EpisodeNumber,
-                                   UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding Episode.EpisodeNumber, UpdateSourceTrigger=PropertyChanged}" />
                 <TextBox
                     Grid.Row="1"
                     Grid.Column="1"
                     md:HintAssist.Hint="{x:Static p:Loc.Name}"
-                    Text="{Binding Episode.Name,
-                                   UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding Episode.Name, UpdateSourceTrigger=PropertyChanged}" />
                 <TextBox
                     Grid.Row="2"
                     Grid.Column="1"
                     md:HintAssist.Hint="{x:Static p:Loc.Overview}"
                     AcceptsReturn="True"
                     HorizontalScrollBarVisibility="Disabled"
-                    Text="{Binding Episode.Overview,
-                                   UpdateSourceTrigger=PropertyChanged}"
+                    Text="{Binding Episode.Overview, UpdateSourceTrigger=PropertyChanged}"
                     TextWrapping="Wrap"
                     VerticalScrollBarVisibility="Auto" />
             </Grid>

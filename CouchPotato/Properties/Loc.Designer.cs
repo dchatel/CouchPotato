@@ -250,7 +250,7 @@ namespace CouchPotato.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à .
+        ///   Recherche une chaîne localisée semblable à Digital Location.
         /// </summary>
         public static string DigitalLocation {
             get {
@@ -277,6 +277,15 @@ namespace CouchPotato.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Actors.
+        /// </summary>
+        public static string Dos {
+            get {
+                return ResourceManager.GetString("Dos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Edit.
         /// </summary>
         public static string Edit {
@@ -295,11 +304,29 @@ namespace CouchPotato.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Select a folder.
+        /// </summary>
+        public static string FileSystemSelectFolder {
+            get {
+                return ResourceManager.GetString("FileSystemSelectFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Select the folder containing Videlib images.
         /// </summary>
         public static string FileSystemSelectVidelibImageFolder {
             get {
                 return ResourceManager.GetString("FileSystemSelectVidelibImageFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Folder.
+        /// </summary>
+        public static string Folder {
+            get {
+                return ResourceManager.GetString("Folder", resourceCulture);
             }
         }
         
@@ -507,6 +534,15 @@ namespace CouchPotato.Properties {
         public static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Scan Folder.
+        /// </summary>
+        public static string ScanFolder {
+            get {
+                return ResourceManager.GetString("ScanFolder", resourceCulture);
             }
         }
         

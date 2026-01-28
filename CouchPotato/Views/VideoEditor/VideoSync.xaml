@@ -60,15 +60,13 @@
                     <CheckBox IsChecked="{Binding PosterUrl.Update}">
                         <Image
                             Height="400"
-                            Source="{Binding PosterUrl.Selected,
-                                             Converter={c:ImageConverter}}"
+                            Source="{Binding PosterUrl.Selected, Converter={c:ImageConverter}}"
                             Stretch="Uniform" />
                     </CheckBox>
                     <CheckBox IsChecked="{Binding BackgroundUrl.Update}">
                         <Image
                             Height="400"
-                            Source="{Binding BackgroundUrl.Selected,
-                                             Converter={c:ImageConverter}}"
+                            Source="{Binding BackgroundUrl.Selected, Converter={c:ImageConverter}}"
                             Stretch="Uniform" />
                     </CheckBox>
                 </StackPanel>

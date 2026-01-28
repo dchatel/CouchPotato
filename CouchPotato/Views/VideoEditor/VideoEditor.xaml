@@ -39,8 +39,7 @@
                 Command="{Binding SyncCommand}"
                 Content="{md:PackIcon Kind=WebSync}"
                 ToolTip="{Binding Source={x:Static p:Loc.Sync}}"
-                Visibility="{Binding Type,
-                                     Converter={c:MediaTypeToVisibilityConverter}}" />
+                Visibility="{Binding Type, Converter={c:MediaTypeToVisibilityConverter}}" />
             <Separator Visibility="{Binding Type, Converter={c:MediaTypeToVisibilityConverter}}" />
             <Button
                 Margin="0,0,10,0"
@@ -83,9 +82,7 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Text="{x:Static p:Loc.ChangePoster}"
-                                Visibility="{Binding PosterUrl,
-                                                     Converter={c:VisibilityConverter Reversed=True},
-                                                     Mode=TwoWay}" />
+                                Visibility="{Binding PosterUrl, Converter={c:VisibilityConverter Reversed=True}, Mode=TwoWay}" />
                         </Grid>
                     </Button>
                     <Button
@@ -102,9 +99,7 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Text="{x:Static p:Loc.ChangeBackground}"
-                                Visibility="{Binding BackgroundUrl,
-                                                     Converter={c:VisibilityConverter Reversed=True},
-                                                     Mode=TwoWay}" />
+                                Visibility="{Binding BackgroundUrl, Converter={c:VisibilityConverter Reversed=True}, Mode=TwoWay}" />
                         </Grid>
                     </Button>
                 </StackPanel>
@@ -263,8 +258,7 @@
                                             <Button
                                                 HorizontalAlignment="Right"
                                                 VerticalAlignment="Top"
-                                                Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl},
-                                                                  Path=DataContext.DeleteRoleCommand}"
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.DeleteRoleCommand}"
                                                 CommandParameter="{Binding}"
                                                 Content="{md:PackIcon Kind=PersonRemove,
                                                                       Size=24}"
@@ -383,8 +377,7 @@
                                     Height="32"
                                     Padding="0"
                                     HorizontalAlignment="Right"
-                                    Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox},
-                                                      Path=DataContext.DeleteSeasonCommand}"
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.DeleteSeasonCommand}"
                                     CommandParameter="{Binding}"
                                     Content="{md:PackIcon Kind=Remove}"
                                     Style="{StaticResource MaterialDesignFlatSecondaryButton}" />

@@ -45,9 +45,7 @@
                     md:TextFieldAssist.HasClearButton="True"
                     md:TextFieldAssist.HasLeadingIcon="True"
                     md:TextFieldAssist.LeadingIcon="Search"
-                    Text="{Binding Title,
-                                   UpdateSourceTrigger=PropertyChanged,
-                                   Delay=800}" />
+                    Text="{Binding Title, UpdateSourceTrigger=PropertyChanged, Delay=800}" />
                 <TextBox
                     Grid.Column="1"
                     Margin="10,0,0,0"
@@ -56,9 +54,7 @@
                     md:HintAssist.Hint="{x:Static p:Loc.ReleaseDate}"
                     md:HintAssist.IsFloating="True"
                     md:TextFieldAssist.HasClearButton="True"
-                    Text="{Binding Year,
-                                   UpdateSourceTrigger=PropertyChanged,
-                                   Delay=800}" />
+                    Text="{Binding Year, UpdateSourceTrigger=PropertyChanged, Delay=800}" />
             </Grid>
         </StackPanel>
     </DataTemplate>
@@ -101,10 +97,8 @@
                                         <md:PackIcon
                                             Width="24"
                                             Height="24"
-                                            Foreground="{Binding MediaType,
-                                                                 Converter={c:MediaTypeToColorConverter}}"
-                                            Kind="{Binding MediaType,
-                                                           Converter={c:MediaTypeToIconConverter}}" />
+                                            Foreground="{Binding MediaType, Converter={c:MediaTypeToColorConverter}}"
+                                            Kind="{Binding MediaType, Converter={c:MediaTypeToIconConverter}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -136,8 +130,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Style="{StaticResource BusyAnimationStyle}"
-                        Visibility="{Binding Searching,
-                                             Converter={c:VisibilityConverter}}" />
+                        Visibility="{Binding Searching, Converter={c:VisibilityConverter}}" />
                 </Grid>
             </Border>
         </md:TransitioningContent>

@@ -276,7 +276,7 @@
   <data name="DigitalLocation" xml:space="preserve">
     <value>Emplacement (digital)</value>
   </data>
-  <data name="Actors" xml:space="preserve">
+  <data name="Dos" xml:space="preserve">
     <value>Acteurs</value>
   </data>
   <data name="Roles" xml:space="preserve">
@@ -308,5 +308,17 @@
   </data>
   <data name="Runtime" xml:space="preserve">
     <value>Durée</value>
+  </data>
+  <data name="FileSystemSelectFolder" xml:space="preserve">
+    <value>Sélectionnez un dossier</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Dossier</value>
+  </data>
+  <data name="ScanFolder" xml:space="preserve">
+    <value>Scanner un dossier</value>
+  </data>
+  <data name="Actors" xml:space="preserve">
+    <value>Acteurs</value>
   </data>
 </root>

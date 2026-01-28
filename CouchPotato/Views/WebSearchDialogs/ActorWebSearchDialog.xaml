@@ -37,9 +37,7 @@
                 e:TextBox.IsInitiallyFocused="True"
                 md:HintAssist.Hint="{Binding Source={x:Static p:Loc.InputActorName}}"
                 md:HintAssist.IsFloating="True"
-                Text="{Binding SearchText,
-                               UpdateSourceTrigger=PropertyChanged,
-                               Delay=800}" />
+                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Delay=800}" />
         </StackPanel>
     </DataTemplate>
 
@@ -65,8 +63,7 @@
                         ItemsSource="{Binding SearchResults}"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                         SelectedValue="{Binding SelectedPerson}"
-                        Visibility="{Binding Searching,
-                                             Converter={c:VisibilityConverter Reversed=True}}">
+                        Visibility="{Binding Searching, Converter={c:VisibilityConverter Reversed=True}}">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel HorizontalAlignment="Center" />
@@ -77,9 +74,7 @@
                                 <Border
                                     Width="154"
                                     Height="231"
-                                    Background="{Binding PortraitUrl,
-                                                         Converter={c:ImageBrushConverter {StaticResource MaterialDesignCardBackground}},
-                                                         IsAsync=True}"
+                                    Background="{Binding PortraitUrl, Converter={c:ImageBrushConverter {StaticResource MaterialDesignCardBackground}}, IsAsync=True}"
                                     CornerRadius="20,0,0,0">
                                     <Border.Effect>
                                         <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
@@ -98,16 +93,14 @@
                     <v:WebView
                         Grid.Column="1"
                         Source="{Binding Url}"
-                        Visibility="{Binding Searching,
-                                             Converter={c:VisibilityConverter Reversed=True}}" />
+                        Visibility="{Binding Searching, Converter={c:VisibilityConverter Reversed=True}}" />
 
                     <Control
                         Grid.ColumnSpan="2"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Style="{StaticResource BusyAnimationStyle}"
-                        Visibility="{Binding Searching,
-                                             Converter={c:VisibilityConverter}}" />
+                        Visibility="{Binding Searching, Converter={c:VisibilityConverter}}" />
                 </Grid>
             </Border>
         </md:TransitioningContent>

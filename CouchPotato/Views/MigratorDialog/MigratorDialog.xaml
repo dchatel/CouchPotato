@@ -21,27 +21,21 @@
                 <TextBlock
                     Margin="0,60,0,0"
                     FontSize="16"
-                    Text="{Binding TaskName,
-                                   Mode=OneWay}"
+                    Text="{Binding TaskName, Mode=OneWay}"
                     TextAlignment="Center"
                     TextWrapping="Wrap"
-                    Visibility="{Binding TaskName,
-                                         Converter={c:VisibilityConverter}}" />
+                    Visibility="{Binding TaskName, Converter={c:VisibilityConverter}}" />
                 <ProgressBar
                     Height="8"
                     Margin="0"
                     Background="Gray"
                     BorderBrush="Transparent"
                     Foreground="Orange"
-                    IsIndeterminate="{Binding TaskIsIndeterminate,
-                                              Mode=OneWay}"
-                    Maximum="{Binding TaskMaximum,
-                                      Mode=OneWay}"
+                    IsIndeterminate="{Binding TaskIsIndeterminate, Mode=OneWay}"
+                    Maximum="{Binding TaskMaximum, Mode=OneWay}"
                     Style="{StaticResource MaterialDesignLinearProgressBar}"
-                    Visibility="{Binding TaskName,
-                                         Converter={c:VisibilityConverter}}"
-                    Value="{Binding TaskProgression,
-                                    Mode=OneWay}" />
+                    Visibility="{Binding TaskName, Converter={c:VisibilityConverter}}"
+                    Value="{Binding TaskProgression, Mode=OneWay}" />
             </StackPanel>
         </Border>
     </DataTemplate>

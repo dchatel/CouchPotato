@@ -13,8 +13,7 @@
         <Border>
             <Border.Background>
                 <ImageBrush
-                    ImageSource="{Binding Video.BackgroundUrl,
-                                          Converter={c:ImageConverter}}"
+                    ImageSource="{Binding Video.BackgroundUrl, Converter={c:ImageConverter}}"
                     Opacity=".2"
                     Stretch="UniformToFill" />
             </Border.Background>

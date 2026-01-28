@@ -98,6 +98,13 @@ public partial class VideoExplorerViewModel : ContentViewModel
     public ICommand AdvancedSearchCommand { get; }
     public ICommand ResetAdvancedSearchCommand { get; }
 
+    [RelayCommand]
+    private void OpenScanner()
+    {
+        var scanner = new Scanner.ScannerViewModel();
+        _ = scanner.Show();
+    }
+
     public VideoSearchResultViewModel? SelectedResult
     {
         get {

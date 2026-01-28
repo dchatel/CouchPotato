@@ -11,7 +11,7 @@
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase">
 
     <DataTemplate x:Key="VideoExplorerToolbar" DataType="{x:Type l:VideoExplorerViewModel}">
-        <Grid e:Grid.Cols="auto,auto,*,auto">
+        <Grid e:Grid.Cols="auto,auto,auto,*,auto">
             <Button
                 Grid.Column="0"
                 Command="{Binding AddCommand}"
@@ -26,21 +26,25 @@
                 Style="{StaticResource MaterialDesignFlatButton}"
                 ToolTip="{Binding Source={x:Static p:Loc.Edit}}"
                 ToolTipService.InitialShowDelay="0" />
-            <TextBox
+            <Button
                 Grid.Column="2"
+                Command="{Binding OpenScannerCommand}"
+                Content="{md:PackIcon Kind=FolderSearch}"
+                Style="{StaticResource MaterialDesignFlatButton}"
+                ToolTip="{x:Static p:Loc.ScanFolder}"
+                ToolTipService.InitialShowDelay="0" />
+            <TextBox
+                Grid.Column="3"
                 VerticalAlignment="Center"
                 VerticalContentAlignment="Center"
                 md:HintAssist.Hint="{x:Static p:Loc.VideoExplorerSearchHint}"
                 md:TextFieldAssist.HasClearButton="True"
                 md:TextFieldAssist.HasLeadingIcon="True"
                 md:TextFieldAssist.LeadingIcon="Search"
-                Text="{Binding SearchText,
-                               Mode=TwoWay,
-                               Delay=800,
-                               UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding SearchText, Mode=TwoWay, Delay=800, UpdateSourceTrigger=PropertyChanged}" />
             <ToggleButton
                 x:Name="AdvancedSearchButton"
-                Grid.Column="3"
+                Grid.Column="4"
                 Content="{md:PackIcon Kind=MovieSearchOutline}"
                 IsChecked="{Binding IsAdvancedSearchDialogOpened}"
                 Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" />
@@ -48,8 +52,7 @@
                 Width="1280"
                 AllowsTransparency="True"
                 HorizontalOffset="50"
-                IsOpen="{Binding ElementName=AdvancedSearchButton,
-                                 Path=IsChecked}"
+                IsOpen="{Binding ElementName=AdvancedSearchButton, Path=IsChecked}"
                 Placement="Right"
                 PlacementTarget="{Binding ElementName=AdvancedSearchButton}"
                 PopupAnimation="Fade"
@@ -60,9 +63,7 @@
                     Padding="10"
                     Background="{StaticResource MaterialDesignCardBackground}"
                     CornerRadius="20,0,0,0"
-                    Visibility="{Binding ElementName=AdvancedSearchButton,
-                                         Path=IsChecked,
-                                         Converter={c:VisibilityConverter}}">
+                    Visibility="{Binding ElementName=AdvancedSearchButton, Path=IsChecked, Converter={c:VisibilityConverter}}">
                     <Border.Effect>
                         <DropShadowEffect BlurRadius="20" ShadowDepth="2" />
                     </Border.Effect>
@@ -72,20 +73,17 @@
                             md:HintAssist.Hint="{x:Static p:Loc.Title}"
                             md:HintAssist.IsFloating="True"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding Title,
-                                           Mode=TwoWay}" />
+                            Text="{Binding Title, Mode=TwoWay}" />
                         <TextBox
                             Margin="5"
                             md:HintAssist.Hint="{x:Static p:Loc.Actors}"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding Actors,
-                                           Mode=TwoWay}" />
+                            Text="{Binding Actors, Mode=TwoWay}" />
                         <TextBox
                             Margin="5"
                             md:HintAssist.Hint="{x:Static p:Loc.Roles}"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding Roles,
-                                           Mode=TwoWay}" />
+                            Text="{Binding Roles, Mode=TwoWay}" />
 
                         <HeaderedContentControl Margin="20" Header="{x:Static p:Loc.Genres}">
                             <HeaderedContentControl.Resources>
@@ -100,8 +98,7 @@
                                     <DataTemplate>
                                         <CheckBox
                                             Content="{Binding Value.Name}"
-                                            IsChecked="{Binding IsSelected,
-                                                                Mode=TwoWay}"
+                                            IsChecked="{Binding IsSelected, Mode=TwoWay}"
                                             IsThreeState="True"
                                             Style="{StaticResource ThreeStateCheckbox}" />
                                     </DataTemplate>
@@ -140,18 +137,15 @@
                                     <CheckBox
                                         Grid.Column="0"
                                         Content="{md:PackIcon Kind=LessThan}"
-                                        IsChecked="{Binding HasDateBefore,
-                                                            Mode=TwoWay}" />
+                                        IsChecked="{Binding HasDateBefore, Mode=TwoWay}" />
                                     <CheckBox
                                         Grid.Column="1"
                                         Content="{md:PackIcon Kind=Equal}"
-                                        IsChecked="{Binding HasDateEquals,
-                                                            Mode=TwoWay}" />
+                                        IsChecked="{Binding HasDateEquals, Mode=TwoWay}" />
                                     <CheckBox
                                         Grid.Column="2"
                                         Content="{md:PackIcon Kind=GreaterThan}"
-                                        IsChecked="{Binding HasDateAfter,
-                                                            Mode=TwoWay}" />
+                                        IsChecked="{Binding HasDateAfter, Mode=TwoWay}" />
                                     <TextBox
                                         Grid.Row="1"
                                         Grid.ColumnSpan="4"
@@ -159,9 +153,7 @@
                                         md:HintAssist.Hint="{x:Static p:Loc.ReleaseDate}"
                                         md:HintAssist.IsFloating="True"
                                         IsEnabled="{Binding DateActive}"
-                                        Text="{Binding Year,
-                                                       TargetNullValue='',
-                                                       Mode=TwoWay}"
+                                        Text="{Binding Year, TargetNullValue='', Mode=TwoWay}"
                                         TextAlignment="Center" />
                                 </Grid>
                             </Border>
@@ -172,8 +164,7 @@
                                 md:HintAssist.Hint="{x:Static p:Loc.DigitalStorageCode}"
                                 md:HintAssist.IsFloating="True"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                Text="{Binding DigitalStorageCode,
-                                               Mode=TwoWay}"
+                                Text="{Binding DigitalStorageCode, Mode=TwoWay}"
                                 TextAlignment="Center" />
 
                             <Border
@@ -194,18 +185,15 @@
                                     <CheckBox
                                         Grid.Column="0"
                                         Content="{md:PackIcon Kind=LessThan}"
-                                        IsChecked="{Binding HasDigitalResolutionLesser,
-                                                            Mode=TwoWay}" />
+                                        IsChecked="{Binding HasDigitalResolutionLesser, Mode=TwoWay}" />
                                     <CheckBox
                                         Grid.Column="1"
                                         Content="{md:PackIcon Kind=Equal}"
-                                        IsChecked="{Binding HasDigitalResolutionEquals,
-                                                            Mode=TwoWay}" />
+                                        IsChecked="{Binding HasDigitalResolutionEquals, Mode=TwoWay}" />
                                     <CheckBox
                                         Grid.Column="2"
                                         Content="{md:PackIcon Kind=GreaterThan}"
-                                        IsChecked="{Binding HasDigitalResolutionGreater,
-                                                            Mode=TwoWay}" />
+                                        IsChecked="{Binding HasDigitalResolutionGreater, Mode=TwoWay}" />
                                     <TextBox
                                         Grid.Row="1"
                                         Grid.ColumnSpan="4"
@@ -213,9 +201,7 @@
                                         md:HintAssist.Hint="{x:Static p:Loc.DigitalResolution}"
                                         md:HintAssist.IsFloating="True"
                                         IsEnabled="{Binding DigitalResolutionActive}"
-                                        Text="{Binding DigitalResolution,
-                                                       TargetNullValue='',
-                                                       Mode=TwoWay}"
+                                        Text="{Binding DigitalResolution, TargetNullValue='', Mode=TwoWay}"
                                         TextAlignment="Center" />
                                 </Grid>
                             </Border>
@@ -238,18 +224,15 @@
                                     <CheckBox
                                         Grid.Column="0"
                                         Content="{md:PackIcon Kind=LessThan}"
-                                        IsChecked="{Binding HasTmdbRatingLesser,
-                                                            Mode=TwoWay}" />
+                                        IsChecked="{Binding HasTmdbRatingLesser, Mode=TwoWay}" />
                                     <CheckBox
                                         Grid.Column="1"
                                         Content="{md:PackIcon Kind=Equal}"
-                                        IsChecked="{Binding HasTmdbRatingEquals,
-                                                            Mode=TwoWay}" />
+                                        IsChecked="{Binding HasTmdbRatingEquals, Mode=TwoWay}" />
                                     <CheckBox
                                         Grid.Column="2"
                                         Content="{md:PackIcon Kind=GreaterThan}"
-                                        IsChecked="{Binding HasTmdbRatingGreater,
-                                                            Mode=TwoWay}" />
+                                        IsChecked="{Binding HasTmdbRatingGreater, Mode=TwoWay}" />
                                     <md:RatingBar
                                         Grid.Row="1"
                                         Grid.ColumnSpan="4"
@@ -257,8 +240,7 @@
                                         VerticalAlignment="Center"
                                         IsEnabled="{Binding TmdbRatingActive}"
                                         Max="10"
-                                        Value="{Binding TmdbRating,
-                                                        Mode=TwoWay}" />
+                                        Value="{Binding TmdbRating, Mode=TwoWay}" />
                                 </Grid>
                             </Border>
 
@@ -280,18 +262,15 @@
                                     <CheckBox
                                         Grid.Column="0"
                                         Content="{md:PackIcon Kind=LessThan}"
-                                        IsChecked="{Binding HasPersonalRatingLesser,
-                                                            Mode=TwoWay}" />
+                                        IsChecked="{Binding HasPersonalRatingLesser, Mode=TwoWay}" />
                                     <CheckBox
                                         Grid.Column="1"
                                         Content="{md:PackIcon Kind=Equal}"
-                                        IsChecked="{Binding HasPersonalRatingEquals,
-                                                            Mode=TwoWay}" />
+                                        IsChecked="{Binding HasPersonalRatingEquals, Mode=TwoWay}" />
                                     <CheckBox
                                         Grid.Column="2"
                                         Content="{md:PackIcon Kind=GreaterThan}"
-                                        IsChecked="{Binding HasPersonalRatingGreater,
-                                                            Mode=TwoWay}" />
+                                        IsChecked="{Binding HasPersonalRatingGreater, Mode=TwoWay}" />
                                     <md:RatingBar
                                         Grid.Row="1"
                                         Grid.ColumnSpan="4"
@@ -299,8 +278,7 @@
                                         VerticalAlignment="Center"
                                         IsEnabled="{Binding PersonalRatingActive}"
                                         Max="10"
-                                        Value="{Binding PersonalRating,
-                                                        Mode=TwoWay}" />
+                                        Value="{Binding PersonalRating, Mode=TwoWay}" />
                                 </Grid>
                             </Border>
                         </Grid>
@@ -359,8 +337,7 @@
                 ItemsSource="{Binding Source={StaticResource searchResults}}"
                 SelectedItem="{Binding SelectedResult}"
                 Style="{StaticResource MaterialDesignNavigationListBox}"
-                Visibility="{Binding IsSearching,
-                                     Converter={c:VisibilityConverter Reversed=True}}">
+                Visibility="{Binding IsSearching, Converter={c:VisibilityConverter Reversed=True}}">
                 <ListBox.Resources>
                     <ResourceDictionary>
                         <ResourceDictionary.MergedDictionaries>
@@ -386,8 +363,7 @@
             <ContentControl
                 Grid.Column="1"
                 Content="{Binding SelectedResult.VideoViewer}"
-                Visibility="{Binding IsSearching,
-                                     Converter={c:VisibilityConverter Reversed=True}}">
+                Visibility="{Binding IsSearching, Converter={c:VisibilityConverter Reversed=True}}">
                 <ContentControl.Resources>
                     <ResourceDictionary>
                         <ResourceDictionary.MergedDictionaries>
@@ -400,17 +376,16 @@
             <ContentControl
                 Grid.ColumnSpan="2"
                 Style="{StaticResource BusyAnimationStyle}"
-                Visibility="{Binding IsSearching,
-                                     Converter={c:VisibilityConverter}}" />
+                Visibility="{Binding IsSearching, Converter={c:VisibilityConverter}}" />
 
 
         </Grid>
     </DataTemplate>
 
-    <DataTemplate x:Key="VideoExplorerMenu" DataType="{x:Type l:VideoExplorerViewModel}">
+    <!--<DataTemplate x:Key="VideoExplorerMenu" DataType="{x:Type l:VideoExplorerViewModel}">
         <Menu>
-            <MenuItem Header="Scanner" />
+            <MenuItem Command="{Binding OpenScannerCommand}" Header="Scanner" />
         </Menu>
-    </DataTemplate>
+    </DataTemplate>-->
 
 </ResourceDictionary>

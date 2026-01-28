@@ -75,8 +75,7 @@
             <Button
                 Width="64"
                 Height="64"
-                Command="{Binding RelativeSource={RelativeSource AncestorType=Grid},
-                                  Path=DataContext.EditCommand}"
+                Command="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.EditCommand}"
                 Content="{md:PackIcon Kind=Edit,
                                       Size=32}"
                 Style="{StaticResource MaterialDesignOutlinedSecondaryButton}"

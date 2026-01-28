@@ -30,6 +30,7 @@
                 <ResourceDictionary Source="Views/InputDialog/InputDialog.xaml" />
                 <ResourceDictionary Source="Views/WebSearchDialogs/ActorWebSearchDialog.xaml" />
                 <ResourceDictionary Source="Views/WebSearchDialogs/VideoWebSearchDialog.xaml" />
+                <ResourceDictionary Source="Views/Scanner/Scanner.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 
