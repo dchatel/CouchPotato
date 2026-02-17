@@ -23,7 +23,7 @@ namespace CouchPotato.Views.Scanner;
 
 public partial class ScannerViewModel : ContentViewModel
 {
-    private static readonly string[] _videoExtensions = { ".mkv", ".mp4", ".avi", ".mov", ".wmv" };
+    private static readonly string[] _videoExtensions = { ".mkv", ".mp4", ".avi", ".mov", ".wmv", ".ts" };
 
     [ObservableProperty]
     private string _path = string.Empty;
