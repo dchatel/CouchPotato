@@ -19,6 +19,7 @@ public abstract class ImageLoaderBase : MarkupExtension, IValueConverter
         var bitmap = new BitmapImage();
         bitmap.BeginInit();
         bitmap.UriSource = new Uri(url, UriKind.RelativeOrAbsolute);
+        bitmap.CreateOptions = BitmapCreateOptions.IgnoreColorProfile;
         bitmap.CacheOption = BitmapCacheOption.OnLoad;
         bitmap.DownloadCompleted += (s, e) =>
         {
